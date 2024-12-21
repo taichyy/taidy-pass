@@ -70,11 +70,11 @@ const MainTable = ({
                             </TableCell>
                             <TableCell className="truncate">
                                 <div className="flex items-center gap-1">
-                                    <ButtonCopy value={acc.username} />
+                                    {verified && <ButtonCopy value={acc.username} />}
                                     帳號：{acc.username}
                                 </div>
                                 <div className="flex items-center mt-2 gap-1">
-                                    <ButtonCopy value={acc.password} />
+                                    {verified && <ButtonCopy value={acc.password} />}
                                     密碼：
                                     {verified
                                         ? acc.password.length > 20 ? acc.password.slice(0, 20) + '...' : acc.password
