@@ -1,11 +1,15 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import { Toaster } from "react-hot-toast";
-import Head from 'next/head';
+import type { Metadata, Viewport } from 'next'
 
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
+ 
+export const viewport: Viewport = {
+    themeColor: 'black',
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    minimumScale: 1,
+}
 
 export const metadata: Metadata = {
     title: 'Taiccounts | ME',
@@ -19,9 +23,6 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-            </Head>
             <body>
                 <Toaster />
                 {children}
