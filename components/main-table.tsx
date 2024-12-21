@@ -82,7 +82,7 @@ const MainTable = ({
                                     }
                                 </div>
                             </TableCell>
-                            <TableCell className="text-right sticky right-0">
+                            <TableCell className="text-right sticky right-0 bg-white">
                                 {verified
                                     ? <EditForm id={acc._id} />
                                     : <TwoFA id={acc._id} verified={verified} setVerified={setVerified} Icon={Pen} />
