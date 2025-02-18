@@ -17,7 +17,6 @@ import { Button } from "./ui/button";
 
 const AddForm = () => {
     const router = useRouter()
-    const [msg, setMsg] = useState("")
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -74,7 +73,6 @@ const AddForm = () => {
                         </DialogClose>
                     </form>
                 </DialogHeader>
-                <DialogDescription className="text-red-700">{msg}</DialogDescription>
             </DialogContent>
         </Dialog>
     );

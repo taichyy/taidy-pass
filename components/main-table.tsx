@@ -78,14 +78,14 @@ const MainTable = ({
                                     密碼：
                                     {verified
                                         ? acc.password.length > 20 ? acc.password.slice(0, 20) + '...' : acc.password
-                                        : <TwoFA id={acc._id} verified={verified} setVerified={setVerified} Icon={Eye} />
+                                        : <TwoFA setVerified={setVerified} Icon={Eye} />
                                     }
                                 </div>
                             </TableCell>
                             <TableCell className="text-right sticky right-0 bg-white">
                                 {verified
                                     ? <EditForm id={acc._id} />
-                                    : <TwoFA id={acc._id} verified={verified} setVerified={setVerified} Icon={Pen} />
+                                    : <TwoFA setVerified={setVerified} Icon={Pen} />
                                 }
                             </TableCell>
                         </TableRow>

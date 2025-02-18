@@ -12,7 +12,7 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-const Edit = ({ id, verified, setVerified, Icon }) => {
+const Edit = ({ setVerified, Icon }) => {
 
     const [msg, setMsg] = useState("")
 
