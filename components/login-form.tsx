@@ -81,7 +81,7 @@ export default function LoginForm() {
     return (
         <Card className="w-full relative">
             <CardHeader>
-                <CardTitle>taichyy's admin</CardTitle>
+                <CardTitle>taichyy&apos;s admin</CardTitle>
             </CardHeader>
             <form onSubmit={handleSubmit}>
                 <CardContent>
