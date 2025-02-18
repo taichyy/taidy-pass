@@ -27,6 +27,7 @@ Secondly, add a .env file at the root folder, and add the following values:
 3. DATA_KEY => For data encoding.
 4. LOGIN_ACCOUNT
 5. LOGIN_PASSWORD
+6. NEXT_PUBLIC_2FA_PASSWORD => For hide or show your credentials on the screen only.
 
 Thirdly, run the development server:
 

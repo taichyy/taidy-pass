@@ -18,7 +18,7 @@ const Edit = ({ setVerified, Icon }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (e.target['password'].value == '7768') {
+        if (e.target['password'].value == process.env.NEXT_PUBLIC_2FA_PASSWORD) {
             setVerified(true)
         } else {
             setMsg("密碼錯誤！")
