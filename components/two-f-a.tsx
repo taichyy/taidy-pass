@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 import {
     Dialog,
@@ -12,13 +12,23 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-const Edit = ({ setVerified, Icon }) => {
+const Edit = ({ 
+    setVerified, 
+    Icon 
+}:{ 
+    setVerified: (verift: boolean) => void, 
+    Icon: any, 
+}) => {
 
     const [msg, setMsg] = useState("")
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (e.target['password'].value == process.env.NEXT_PUBLIC_2FA_PASSWORD) {
+        
+        const form = e.target as HTMLFormElement;
+        const password = (form.elements.namedItem("password") as HTMLInputElement).value
+
+        if (password == process.env.NEXT_PUBLIC_2FA_PASSWORD) {
             setVerified(true)
         } else {
             setMsg("密碼錯誤！")
