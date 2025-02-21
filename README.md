@@ -7,6 +7,8 @@
 * JWT 加密登入驗證
 * crypto-js 不論傳輸、儲存皆進行加密，提高安全性
 
+測試帳密： 123/123
+
 ## Introduction
 
 This is a simple, user-friendly, and highly secure account and password manager. With just a few steps, you can easily install it, allowing you to quickly store and retrieve your account credentials anytime, anywhere.
@@ -15,6 +17,8 @@ This project utilizes the following tools:
 * MongoDB: A highly flexible NoSQL database
 * JWT: Encrypted login authentication
 * crypto-js: Encryption for both data transmission and storage, enhancing security
+
+Demo credentials: 123/123.
 
 ## Getting Started
 
