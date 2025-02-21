@@ -19,8 +19,6 @@ A simple, user-friendly, and highly secure password manager that allows you to s
 For demo website, you can use:
 Username: 123 Password: 123
 
----
-
 ## 📖 Getting Started
 
 ### 1️⃣ MongoDB Setup MongoDB
@@ -65,8 +63,6 @@ This project is open-source and available under the MIT License.
 ## 🎮 測試帳密
 
 DEMO 網站的測試帳密皆為「123」
-
----
 
 ## 📖 開始使用
 
