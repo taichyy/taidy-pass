@@ -23,7 +23,7 @@
     "lucide-react": "^0.288.0",
     "mongodb": "^6.1.0",
     "mongoose": "^7.6.3",
-    "next": "^14.2.3",
+    "next": "^14.2.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.47.0",
