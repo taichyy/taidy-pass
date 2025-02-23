@@ -38,6 +38,24 @@ LOGIN_PASSWORD=your-login-password
 NEXT_PUBLIC_2FA_PASSWORD=your-2fa-password
 ```
 
+### 3️⃣ Run locally
+Run the following command based on your package manager:
+
+```bash
+npm install
+```
+
+then
+
+```bash
+npm run dev  # Using npm
+yarn dev     # Using Yarn
+pnpm dev     # Using pnpm
+bun dev      # Using Bun
+```
+
+Then, open http://localhost:3000 in your browser.
+
 📜 License
 This project is open-source and available under the MIT License.
 
@@ -83,8 +101,23 @@ LOGIN_PASSWORD=your-login-password
 NEXT_PUBLIC_2FA_PASSWORD=your-2fa-password
 ```
 
+### 3️⃣ 架設於本機端
+使用以下指令：
+
+```bash
+npm install
+```
+
+然後
+
+```bash
+npm run dev  # Using npm
+yarn dev     # Using Yarn
+pnpm dev     # Using pnpm
+bun dev      # Using Bun
+```
+
+打開瀏覽器，並至 http://localhost:3000 即可。
+
 📜 授權條款
 本專案為開源軟體，採用 MIT 授權許可證。
-
-
-
