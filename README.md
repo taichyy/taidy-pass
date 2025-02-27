@@ -30,12 +30,12 @@ Create a **MongoDB database**, cluster, and collection. If you're new to MongoDB
 Create a `.env` file in the root directory and add the following values:
 
 ```env
-MONGODB_URI=your-mongodb-connection-string
-JWT_SECRET=your-jwt-secret
-DATA_KEY=your-data-encryption-key
-LOGIN_ACCOUNT=your-login-username
-LOGIN_PASSWORD=your-login-password
-NEXT_PUBLIC_2FA_PASSWORD=your-2fa-password
+MONGODB_URI = your-mongodb-connection-string.
+JWT_SECRET = your-jwt-secret, set any value as you like.
+DATA_KEY = your-data-encryption-key, set any value as you like.
+DEFAULT_LOGIN_ACCOUNT = your-default-login-username, or not set to use "" to login.
+DEFAULT_LOGIN_PASSWORD = your-default-login-password, or not set to use "" to login.
+NEXT_PUBLIC_2FA_PASSWORD = your-2fa-password to show data on screen, not safe, just doing double check.
 ```
 
 ### 3️⃣ Run locally
@@ -93,12 +93,12 @@ DEMO 網站的測試帳密皆為「123」
 建立 .env 檔案並設定以下變數
 
 ```env
-MONGODB_URI=your-mongodb-connection-string
-JWT_SECRET=your-jwt-secret
-DATA_KEY=your-data-encryption-key
-LOGIN_ACCOUNT=your-login-username
-LOGIN_PASSWORD=your-login-password
-NEXT_PUBLIC_2FA_PASSWORD=your-2fa-password
+MONGODB_URI = MongoDB connection string
+JWT_SECRET = JWT secret，可隨意設置
+DATA_KEY = 資料加密 key，可隨意設置
+DEFAULT_LOGIN_ACCOUNT = 預設登入帳號，或者不設置，直接點選登入按鈕
+DEFAULT_LOGIN_PASSWORD = 預設登入密碼，或者不設置，直接點選登入按鈕
+NEXT_PUBLIC_2FA_PASSWORD = 雙重驗證密碼，用於正確將資料顯示於螢幕上，並沒有實際系統安全作用。
 ```
 
 ### 3️⃣ 架設於本機端

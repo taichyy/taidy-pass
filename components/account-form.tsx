@@ -1,13 +1,12 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { PenBoxIcon, PlusCircle } from "lucide-react";
+import { useState, useEffect, FormEvent } from "react";
 
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogHeader,
     DialogTitle,
@@ -18,14 +17,38 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface AccountFormProps {
-    type: "edit" | "add";
+    type?: "edit" | "add" | "key";
     id?: string; // Required for edit mode
 }
 
-const AccountForm = ({ type, id }: AccountFormProps) => {
+const AccountForm = ({ type = "edit", id }: AccountFormProps) => {
     const router = useRouter();
     const [opened, setOpened] = useState(false);
-    const [formData, setFormData] = useState({ title: "", username: "", password: "" });
+    const [formData, setFormData] = useState({ title: "", username: "", password: "", confirmPassword: "" });
+
+    // Set default values as EDIT mode
+    let submitUrl = `/api/accounts/${id}`;
+    let submitMethod = "PUT"
+    let tooltipText = "編輯紀錄"
+    let dialogTitle = "編輯紀錄"
+    let btnText = "編輯"
+    let confirmText = ""
+    switch (type) {
+        case "key":
+            submitUrl = id ? `/api/accounts/${id}` : "/api/accounts"
+            submitMethod = id ? "PUT" : "POST"
+            tooltipText = id ? "修改密碼" : "建立帳密"
+            dialogTitle = id ? "修改密碼" : "建立帳密"
+            btnText = id ? "編輯" : "建立"
+            confirmText =  `確定要${id ? "修改" : "建立"}密碼嗎？\n確定${id ? "修改" : "建立"}前請先確定記住了帳號密碼。`
+            break;
+        case "add":
+            submitUrl = ""
+            submitMethod = "POST"
+            tooltipText = "新增紀錄"
+            dialogTitle = "新增紀錄"
+            break;
+    }
 
     // Fetch existing data for edit mode
     const { data, error, isLoading, mutate } = useSWR(
@@ -40,6 +63,7 @@ const AccountForm = ({ type, id }: AccountFormProps) => {
                 title: data.title,
                 username: data.username,
                 password: data.password,
+                confirmPassword: "",
             });
         }
     }, [data, type]);
@@ -53,23 +77,34 @@ const AccountForm = ({ type, id }: AccountFormProps) => {
     // Handle form submission (POST for add, PUT for edit)
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const url = type === "edit" ? `/api/accounts/${id}` : "/api/accounts/";
-        const method = type === "edit" ? "PUT" : "POST";
 
-        try {
-            await fetch(url, {
-                method,
-                body: JSON.stringify(formData),
-            });
-
-            await mutate();
-            router.refresh();
-            toast.success(type === "edit" ? "更改成功！" : "新增成功！");
-            setOpened(false);
-        } catch (err) {
-            console.error(err);
-            toast.error(type === "edit" ? "更改失敗！" : "新增失敗！");
+        if (type === "key" && formData.password !== formData.confirmPassword) {
+            toast.error("密碼不一致");
+            return;
         }
+
+        if (type == "key"){
+            setFormData((prev) => ({ ...prev, type: "key" }));
+            console.log(formData);
+        }
+
+        if (type != "key" || (type === "key" && confirm(confirmText))) {
+            try {
+                await fetch(submitUrl, {
+                    method: submitMethod,
+                    body: JSON.stringify(formData),
+                });
+
+                await mutate();
+                router.refresh();
+                toast.success("操作成功");
+                setOpened(false);
+            } catch (err) {
+                console.error(err);
+                toast.error("操作失敗");
+            }
+        }
+
     };
 
     // Handle delete (only for edit mode)
@@ -78,8 +113,10 @@ const AccountForm = ({ type, id }: AccountFormProps) => {
             try {
                 await fetch(`/api/accounts/${id}`, { method: "DELETE" });
                 await mutate();
+
                 router.refresh();
                 toast.success("刪除成功！");
+                setOpened(false);
             } catch (err) {
                 console.error(err);
             }
@@ -87,52 +124,69 @@ const AccountForm = ({ type, id }: AccountFormProps) => {
     };
 
     return (
-        <Dialog onOpenChange={(e) => setOpened(e)}>
+        <Dialog onOpenChange={(e) => setOpened(e)} open={opened}>
             <Tooltip>
                 <TooltipTrigger asChild>
                     <DialogTrigger>
-                        {type === "edit" ? <PenBoxIcon /> : <PlusCircle className="cursor-pointer" size={24} />}
+                        {["edit", "key"].includes(type)
+                            ? <PenBoxIcon />
+                            : <PlusCircle className="cursor-pointer" size={24} />
+                        }
                     </DialogTrigger>
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p>{type === "edit" ? "編輯紀錄" : "新增紀錄"}</p>
+                    <p>
+                        {tooltipText}
+                    </p>
                 </TooltipContent>
             </Tooltip>
             <DialogContent className="w-[90%]">
                 <DialogHeader>
-                    <DialogTitle>{type === "edit" ? "更改資料" : "新增資料"}</DialogTitle>
-                    {isLoading && type === "edit" && opened ? (
+                    <DialogTitle>
+                        {dialogTitle}
+                    </DialogTitle>
+                    {isLoading && ["edit", "key"].includes(type) && opened ? (
                         "Loading..."
                     ) : (
-                        <form onSubmit={handleSubmit} className="text-left">
-                            <div>
-                                <h2>項目名稱</h2>
-                                <Input name="title" className="mt-2" value={formData.title} onChange={handleChange} />
-                            </div>
+                        <form onSubmit={handleSubmit} className="text-left flex flex-col gap-3">
+                            {["edit", "add"].includes(type) && (
+                                <div>
+                                    <h2>項目名稱</h2>
+                                    <Input name="title" className="mt-1" value={formData.title} onChange={handleChange} />
+                                </div>
+                            )}
                             <div>
                                 <h2>帳號</h2>
-                                <Input name="username" className="mt-2" value={formData.username} onChange={handleChange} />
+                                <Input name="username" className="mt-1" value={formData.username} onChange={handleChange} />
                             </div>
                             <div>
                                 <h2>密碼</h2>
-                                <Input name="password" className="mt-2" value={formData.password} onChange={handleChange} />
+                                <Input name="password" className="mt-1" value={formData.password} onChange={handleChange} />
                             </div>
-                            <DialogClose asChild>
-                                <Button type="submit" className="mt-4 w-full">
-                                    {type === "edit" ? "確定編輯" : "確定新增"}
+                            {type == "key" && (
+                                <div>
+                                    <h2>確認密碼</h2>
+                                    <Input name="confirmPassword" className="mt-1" value={formData.confirmPassword} onChange={handleChange} />
+                                </div>
+                            )}
+                            <div className=" flex justify-end gap-3">
+                                <Button type="submit" className="mt-4">
+                                    {btnText}
                                 </Button>
-                            </DialogClose>
-                            {type === "edit" && (
-                                <DialogClose asChild>
-                                    <Button variant="destructive" className="mt-4 w-full" onClick={handleDelete}>
+                                {type === "edit" && (
+                                    <Button type="button" variant="destructive" className="mt-4" onClick={handleDelete}>
                                         刪除
                                     </Button>
-                                </DialogClose>
-                            )}
+                                )}
+                            </div>
                         </form>
                     )}
                 </DialogHeader>
-                {error && <p className="text-red-700">Error fetching data</p>}
+                {error && (
+                    <p className="text-red-700">
+                        資料獲取錯誤
+                    </p>
+                )}
             </DialogContent>
         </Dialog>
     );

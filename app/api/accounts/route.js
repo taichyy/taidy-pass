@@ -10,17 +10,18 @@ export const GET = async (request) => {
 
         const accounts = await Account.find()
 
-        const modifiedAccounts = accounts.map((account) => {
+        const parsedAccounts = accounts.map((account) => {
             return {
                 ...account,
                 _id: account._id,
+                type: account.type,
                 title: CryptoJS.AES.decrypt(account.title, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
                 username: CryptoJS.AES.decrypt(account.username, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
                 password: CryptoJS.AES.decrypt(account.password, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
             };
         });
 
-        return new NextResponse(JSON.stringify(modifiedAccounts), {
+        return new NextResponse(JSON.stringify(parsedAccounts), {
             status: 200
         })
     } catch (error) {
@@ -41,7 +42,8 @@ export const POST = async (request) => {
     const data = {
         title: encryptedTitle,
         username: encryptedUsername,
-        password: encryptedPassword
+        password: encryptedPassword,
+        type: body.type,
     }
 
     const newAccount = new Account(data)

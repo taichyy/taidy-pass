@@ -14,10 +14,12 @@ import { Button } from "./ui/button";
 
 const Edit = ({ 
     setVerified, 
-    Icon 
+    Icon,
+    size,
 }:{ 
     setVerified: (verift: boolean) => void, 
     Icon: any, 
+    size?: number,
 }) => {
 
     const [msg, setMsg] = useState("")
@@ -38,7 +40,7 @@ const Edit = ({
     return (
         <Dialog>
             <DialogTrigger>
-                <Icon size={16} />
+                <Icon size={size || 16} />
             </DialogTrigger>
             <DialogContent className="max-w-[300px]">
                 <DialogHeader>

@@ -1,6 +1,6 @@
 "use client"
-import { Eye, Pen } from "lucide-react"
 import { useEffect, useState } from "react"
+import { Eye, Pen, PlusCircle, UserCog } from "lucide-react"
 
 import {
     Table,
@@ -14,11 +14,13 @@ import { Input } from "./ui/input"
 import ButtonCopy from "./button-copy"
 import TwoFA from "@/components/two-f-a"
 import AccountForm from "./account-form"
+import ButtonLogout from "./button-logout"
 
 export const dynamic = 'force-dynamic'
 
 type TAccount = {
     _id: string
+    type?: string,
     title: string
     username: string
     password: string
@@ -34,12 +36,13 @@ const MainTable = ({
 
     useEffect(() => {
         if (accounts) {
+            console.log(accounts)
             if (search === '') {
-                setFiltered(accounts);
+                setFiltered(accounts.filter(record => record.type != "key"));
             } else {
                 setFiltered(accounts.filter(record =>
-                    record.title.toLowerCase().includes(search.toLowerCase()) ||
-                    record.username.toLowerCase().includes(search.toLowerCase())
+                    (record.title.toLowerCase().includes(search.toLowerCase()) || record.username.toLowerCase().includes(search.toLowerCase())) &&
+                    record.type != "key"
                 ));
             }
         }
@@ -47,6 +50,19 @@ const MainTable = ({
 
     return (
         <div>
+            <nav className="flex justify-between mb-4 space-x-2">
+                <div className=" flex justify-center items-center gap-2">
+                {verified
+                    ? <AccountForm type="add" />
+                    : <TwoFA setVerified={setVerified} Icon={PlusCircle} size={24} />
+                }
+                {verified
+                    ? <AccountForm type="key" id={accounts?.filter( item => item.type == "key")?.[0]?._id} />
+                    : <TwoFA setVerified={setVerified} Icon={UserCog} size={24} />
+                }
+                </div>
+                <ButtonLogout />
+            </nav>
             <Input 
                 defaultValue={search} 
                 onChange={(e) => (setSearch(e.target.value))} 

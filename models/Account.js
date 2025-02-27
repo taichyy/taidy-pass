@@ -7,6 +7,11 @@ const accountSchema = new Schema({
         type: String,
         required: true,
     },
+    type: {
+        type: String,
+        required: false,
+        enum: ["key"],
+    },
     username: {
         type: String,
         required: true,

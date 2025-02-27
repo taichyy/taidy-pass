@@ -1,12 +1,41 @@
+import CryptoJS from "crypto-js";
 import { sign } from "jsonwebtoken";
+import { NextResponse } from "next/server";
+
+import connect from "@/lib/db"
+import Account from "@/models/Account";
 
 const MAX_AGE = 60 * 60 * 24 * 14; // days;
 
 export async function POST(request) {
+    let keyAccounts = []
+
+    // Check if there is a key account
+    try {
+        await connect();
+    
+        // Find accounts where type is "key"
+        const accounts = await Account.find({ type: "key" });
+
+        keyAccounts = accounts.map((account) => {
+            return {
+                ...account.toObject(), // Ensure it's a plain object
+                _id: account._id,
+                title: CryptoJS.AES.decrypt(account.title, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
+                username: CryptoJS.AES.decrypt(account.username, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
+                password: CryptoJS.AES.decrypt(account.password, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
+            };
+        });
+    
+    } catch (error) {
+        return new NextResponse("Error fetching key account: " + error, {
+            status: 500
+        });
+    }
 
     // Login info
-    const authAccount = process.env.LOGIN_ACCOUNT
-    const authPassword = process.env.LOGIN_PASSWORD
+    const authAccount = keyAccounts?.[0]?.username || process.env.DEFAULT_LOGIN_ACCOUNT || ""
+    const authPassword = keyAccounts?.[0]?.username || process.env.DEFAULT_LOGIN_PASSWORD || ""
 
     // Get data
     const body = await request.json();
@@ -19,23 +48,6 @@ export async function POST(request) {
     let response = {
         msg: null,
     };
-
-    // Check if empty
-    if (username == "") {
-        response.state = false
-        response.msg = "請輸入帳號"
-
-        return new Response(JSON.stringify(response), {
-            status: 200,
-        });
-    } else if (password == "") {
-        response.state = false
-        response.msg = "請輸入密碼"
-
-        return new Response(JSON.stringify(response), {
-            status: 200,
-        });
-    }
 
     // Get users from database
     if (username == authAccount && password == authPassword) {
@@ -59,6 +71,4 @@ export async function POST(request) {
     return new Response(JSON.stringify(response), {
         status: 200,
     });
-
-
 }

@@ -1,7 +1,7 @@
 "use client"
-import toast from 'react-hot-toast'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import toast from "react-hot-toast"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 import {
     Card,
@@ -24,12 +24,6 @@ export default function LoginForm() {
         const form = e.target as HTMLFormElement
         const username = form['username'].value
         const password = form['password'].value
-
-        if (!username || !password) {
-            !username && toast.error('請輸入帳號')
-            !password && toast.error('請輸入密碼')
-            return
-        }
 
         const data = { username, password }
 
