@@ -2,7 +2,8 @@ import { Toaster } from "react-hot-toast";
 import type { Metadata, Viewport } from 'next'
 
 import './globals.css'
- 
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 export const viewport: Viewport = {
     themeColor: 'black',
     width: 'device-width',
@@ -25,7 +26,9 @@ export default function RootLayout({
         <html lang="en">
             <body>
                 <Toaster />
-                {children}
+                <TooltipProvider>
+                    {children}
+                </TooltipProvider>
             </body>
         </html>
     )
