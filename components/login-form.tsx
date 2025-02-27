@@ -17,9 +17,11 @@ import { Button } from "@/components/ui/button"
 export default function LoginForm() {
     const router = useRouter()
     const [isMounted, setIsMounted] = useState(false)
+    const [ isLoading, setIsLoading ] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setIsLoading(true)
 
         const form = e.target as HTMLFormElement
         const username = form['username'].value
@@ -48,6 +50,8 @@ export default function LoginForm() {
             console.error(error)
             toast.error('發生錯誤，請稍後再試')
         }
+
+        setIsLoading(false)
     }
 
     const inputs = [
@@ -89,7 +93,9 @@ export default function LoginForm() {
                     </div>
                 </CardContent>
                 <CardFooter className="flex flex-col items-end">
-                    <Button className='text-lg' type="submit">登入</Button>
+                    <Button className='text-lg' type="submit" disabled={isLoading}>
+                        {isLoading ? "載入中" : "登入"}
+                    </Button>
                 </CardFooter>
             </form>
         </Card>
