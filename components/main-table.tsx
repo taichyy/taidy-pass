@@ -13,7 +13,7 @@ import {
 import { Input } from "./ui/input"
 import ButtonCopy from "./button-copy"
 import TwoFA from "@/components/two-f-a"
-import EditForm from "@/components/edit-form"
+import AccountForm from "./account-form"
 
 export const dynamic = 'force-dynamic'
 
@@ -84,7 +84,7 @@ const MainTable = ({
                             </TableCell>
                             <TableCell className="text-right sticky right-0 bg-white">
                                 {verified
-                                    ? <EditForm id={acc._id} />
+                                    ? <AccountForm type="edit" id={acc._id} />
                                     : <TwoFA setVerified={setVerified} Icon={Pen} />
                                 }
                             </TableCell>
