@@ -43,7 +43,7 @@ const AccountForm = ({ type = "edit", id }: AccountFormProps) => {
             confirmText =  `確定要${id ? "修改" : "建立"}密碼嗎？\n確定${id ? "修改" : "建立"}前請先確定記住了帳號密碼。`
             break;
         case "add":
-            submitUrl = ""
+            submitUrl = "/api/accounts"
             submitMethod = "POST"
             tooltipText = "新增紀錄"
             dialogTitle = "新增紀錄"
