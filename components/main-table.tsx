@@ -47,7 +47,11 @@ const MainTable = ({
 
     return (
         <div>
-            <Input defaultValue={search} onChange={(e) => (setSearch(e.target.value))} />
+            <Input 
+                defaultValue={search} 
+                onChange={(e) => (setSearch(e.target.value))} 
+                placeholder="搜尋......"
+            />
             <Table className=" my-4">
                 <TableHeader className="border-t-2 border-b-2">
                     <TableRow>
