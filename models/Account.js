@@ -7,11 +7,6 @@ const accountSchema = new Schema({
         type: String,
         required: true,
     },
-    type: {
-        type: String,
-        required: false,
-        enum: ["key"],
-    },
     username: {
         type: String,
         required: true,
@@ -20,6 +15,27 @@ const accountSchema = new Schema({
         type: String,
         required: false,
     },
+    remark: {
+        type: String,
+        required: false,
+    },
+
+    label: {
+        type: [String],
+    },
+    userId: {
+        type: String,
+        required: true,
+    },
+    // Null, or UUID, null for default password key chain, UUID for custom password key chain.
+    keychainId: {
+        type: String,
+        default: null,
+    },
+    // "validation" or null
+    type: {
+        type: String,
+    }
 })
 
 module.exports = mongoose.models.Account || mongoose.model('Account', accountSchema);

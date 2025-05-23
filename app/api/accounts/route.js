@@ -1,65 +1,136 @@
-import CryptoJS from "crypto-js"
 import { NextResponse } from "next/server"
 
 import connect from "@/lib/db"
+import Label from "@/models/Label"
 import Account from "@/models/Account"
-
-export const GET = async (request) => {
-    try {
-        await connect()
-
-        const accounts = await Account.find()
-
-        const parsedAccounts = accounts.map((account) => {
-            return {
-                ...account,
-                _id: account._id,
-                type: account.type,
-                title: CryptoJS.AES.decrypt(account.title, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
-                username: CryptoJS.AES.decrypt(account.username, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
-                password: CryptoJS.AES.decrypt(account.password, process.env.DATA_KEY).toString(CryptoJS.enc.Utf8),
-            };
-        });
-
-        return new NextResponse(JSON.stringify(parsedAccounts), {
-            status: 200
-        })
-    } catch (error) {
-        return new NextResponse("Error fetching: " + error, {
-            status: 500
-        })
-    }
-}
+import { getUserId } from "@/lib/actions"
 
 export const POST = async (request) => {
+    // POST /api/accounts => create a new account
+    // POST /api/accounts?method=get => get all accounts
+
+    const userId = await getUserId()
+
+    if (!userId) {
+        const status = 401
+        const response = {
+            status: false,
+            type: "user",
+            message: "User not found.",
+        }
+
+        return NextResponse.json(
+            response,
+            { status }
+        )
+    }
+
+    const url = new URL(request.url)
+    const method = url.searchParams.get("method")
 
     const body = await request.json()
 
-    const encryptedTitle = CryptoJS.AES.encrypt(body.title, process.env.DATA_KEY).toString()
-    const encryptedUsername = CryptoJS.AES.encrypt(body.username, process.env.DATA_KEY).toString()
-    const encryptedPassword = CryptoJS.AES.encrypt(body.password, process.env.DATA_KEY).toString()
+    let status = null;
+    let response = {
+        status: false,
+        type: null,
+        message: null,
+        data: null,
+    };
 
-    const data = {
-        title: encryptedTitle,
-        username: encryptedUsername,
-        password: encryptedPassword,
-        type: body.type,
+    if (method === "get") {
+        // GET /api/accounts?method=get => get all accounts
+        try {
+            // Labels for filtering.
+            const { labels, keychainId } = body || {}
+
+            await connect()
+    
+            const query = { userId };
+
+            if (labels.length > 0) {
+                query.label = { $in: labels };
+            }
+            if (keychainId) {
+                query.keychainId = keychainId;
+            } else {
+                // Null, isn't null, but default key chain
+                query.keychainId = null; 
+            }
+
+            const accounts = await Account.find(query);
+
+            // Collect all used label key
+            const allLabelKeys = Array.from(new Set(accounts.flatMap(acc => acc.label)));
+
+            // Kind of join operation here
+            const labelDocs = await Label.find({ key: { $in: allLabelKeys } });
+            const labelMap = new Map(labelDocs.map(label => [label.key, label.name]));
+            const accountsWithLabelNames = accounts.map(acc => ({
+                ...acc.toObject(),
+                label: acc.label.map(key => labelMap.get(key) || key) // fallback to key if name not found
+            }));
+
+            status = 200
+            response.status = true
+            response.type = "success"
+            response.message = "Account fetched successfully"
+            response.data = accountsWithLabelNames
+        } catch (error) {
+            console.error("Error fetching account records:", error);
+
+            status = 500
+            response.status = false
+            response.message = "Account record fetching error."
+
+            return NextResponse.json(
+                response,
+                { status }
+            )
+        }
+    } else if ( !method ) {
+        // POST /api/accounts => create a new account
+        // This is encrypted data, by user at client.
+        const { title, username, password, remark, label, keychainId } = body || {}
+
+        const data = {
+            title,
+            username,
+            password,
+            remark,
+            userId,
+            label,
+            keychainId,
+        }
+
+        const newAccount = new Account(data)
+    
+        // Fetch
+        try {
+            // From utils/db.js
+            await connect()
+            await newAccount.save()
+    
+            status = 200
+            response.status = true
+            response.type = "success"
+            response.message = "Account has been created"
+        } catch (error) {
+            console.error("Error creating account records:", error);
+
+            status = 500
+            response.status = false
+            response.message = "Account record creating error."
+
+            return NextResponse.json(
+                response,
+                { status }
+            )
+        }
     }
 
-    const newAccount = new Account(data)
-
-    // Fetch
-    try {
-        // From utils/db.js
-        await connect()
-        await newAccount.save()
-
-        return new NextResponse("Account has been created", {
-            status: 201
-        })
-    } catch (err) {
-        return new NextResponse("Database Error", {
-            status: 500,
-        })
-    }
+    return NextResponse.json(
+        response,
+        { status }
+    )
 }

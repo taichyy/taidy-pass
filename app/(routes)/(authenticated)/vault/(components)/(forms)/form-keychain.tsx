@@ -1,0 +1,240 @@
+"use client"
+import toast from "react-hot-toast";
+import { FormEvent, useState } from "react";
+import { ClipLoader } from "react-spinners";
+import { Check, Eye, EyeOffIcon } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
+import { Button } from "@/components/ui/button";
+import { generateUserPrivateKey } from "@/lib/utils";
+import ControlledInput from "@/components/controlled-input";
+import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
+
+// This is not the main component, but a subcomponent for the button, main below.
+const ButtonKeyGenerator = ({
+    copied,
+    userKey,
+    setUserKey,
+}: {
+    copied: boolean;
+    userKey: string | null;
+    setUserKey: (key: string | null) => void;
+}) => {
+    const [mode, setMode] = useState<"copy" | "generate">("generate");
+    const [show, setShow] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const Icon = show ? EyeOffIcon : Eye;
+
+    const before = !userKey && mode == "copy"
+
+    const generate = async () => {
+        setLoading(true);
+        setMode("copy");
+
+        try {
+            // Really generate the key
+            const { base64Key } = await generateUserPrivateKey();
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            setUserKey(base64Key);
+        } catch (error) {
+            toast.error("產生金鑰失敗");
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <>
+            {/* Animation while generating, designed by LottieFiles. */}
+            <span className="hidden">This animation is downloaded from LottieFiles, designed by Raksha S.</span>
+            {before && (
+                <DotLottieReact
+                    src="https://lottie.host/d69f7921-6e7b-4bfc-9391-b223de86e131/0S2McFCc8W.lottie"
+                    loop
+                    autoplay
+                />
+            )}
+            {/* Button */}
+            {!userKey && (
+                <Button className="w-full" onClick={generate} disabled={loading}>
+                    {loading ? (
+                        <div className="flex items-center justify-center gap-2">
+                            <ClipLoader size={18} color="#ffffff" />
+                            <span>產生中...</span>
+                        </div>
+                    ) : (
+                        "🔐 產生我的金鑰"
+                    )}
+                </Button>
+            )}
+            {/* Main area */}
+            {userKey && (
+                <div>
+                    <div className="flex gap-3 flex-col-reverse xl:flex-row">
+                        {/* Key */}
+                        <div className="pt-10 pl-2 xl:w-3/5">
+                            <div className="flex justify-between items-center mb-2">
+                                <p className="text-green-700 text-sm font-medium">
+                                    {">"} 這是你的私人金鑰，請立即儲存。
+                                </p>
+                                <Icon
+                                    onClick={() => setShow(!show)}
+                                    className="cursor-pointer text-gray-500 hover:text-gray-700"
+                                />
+                            </div>
+                            <div className="border p-3 mb-4 rounded font-mono text-sm break-all transition-all duration-150 bg-gray-100 text-gray-800">
+                                {show ? userKey : userKey.replace(/./g, "*")}
+                            </div>
+                        </div>
+                        {/* Animation after generated (looks like). */}
+                        <div className="rounded-full w-1/4 flex justify-center items-center aspect-[1/1] bg-green-400/90 overflow-hidden mx-auto mt-6">
+                            <Check
+                                size={70}
+                                strokeWidth="3"
+                                data-aos="zoom-in"
+                                data-aos-anchor-placement="top-center"
+                                data-aos-delay={150}
+                                className="text-white scale-150"
+                            />
+                        </div>
+                    </div>
+                    <p className="text-red-500 text-xs mt-2">
+                        ⚠️ {!copied ? "此金鑰僅顯示一次！" : "進入首頁後將不會再顯示。"}
+                    </p>
+                </div>
+            )}
+        </>
+    );
+};
+
+type TFormData = {
+    name: string;
+    secret: string;
+};
+const FormKeychain = ({
+    mutate,
+    setOpened,
+}:{
+    mutate?: () => void;
+    setOpened: (opened: boolean) => void;
+}) => {
+    const { setOpen } = useDoubleCheckStore()
+
+    const [copied, setCopied] = useState<boolean>(false);
+    const [userKey, setUserKey] = useState<string | null>(null);
+
+    const [formData, setFormData] = useState<TFormData>({
+        name: "",
+        secret: "",
+    });
+
+
+    const inputs = [
+        {
+            id: "name",
+            type: "text",
+            value: formData.name,
+            label: "鑰匙圈名稱"
+        },
+    ]
+    
+    // Handle form input changes
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    // For Add and edit
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        const url = `/api/keychains/`
+        const method = "POST"
+
+        if (!e.target) {
+            return;
+        }
+
+        const form = e.target as HTMLFormElement;
+        const name = (form.elements.namedItem("name") as HTMLInputElement).value
+
+        try {
+            await fetch(url, {
+                method,
+                body: JSON.stringify({
+                    name
+                })
+            })
+
+            toast.success("新增成功")
+            setOpened(false)
+            mutate && mutate()
+        } catch (err) {
+            console.log(err)
+            toast.error("新增失敗")
+        }
+    }
+
+    const copyToClipboard = async (key?: string) => {
+        if (!key || key.length < 1) {
+            toast.error("金鑰不存在");
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(key);
+
+            setCopied(true);
+            toast.success("已複製金鑰");
+        } catch (err) {
+            toast.error("複製失敗");
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="text-left flex flex-col gap-3">
+        {inputs.map((input) => (
+            <ControlledInput
+                key={input.id}
+                id={input.id}
+                type={input.type as "text" | "email" | "password" | "textarea"}
+                label={input.label}
+                value={input.value}
+                onChange={handleChange}
+            />
+        ))}
+        {formData.name && (
+            <ButtonKeyGenerator
+                copied={copied}
+                userKey={userKey}
+                setUserKey={setUserKey}
+            />
+        )}
+        <div className=" flex justify-end gap-3">
+            <Button type="button" variant="outline" onClick={() => {
+                setCopied(false)
+                setOpen(true)
+            }}>
+                取消
+            </Button>
+            {!copied && userKey ? (
+                <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => copyToClipboard(userKey || "")}
+                >
+                    📋 複製金鑰
+                </Button>
+            ) : copied && (
+                <Button type="submit">
+                    新增
+                </Button>
+            )}
+        </div>
+    </form>
+    );
+}
+ 
+export default FormKeychain;

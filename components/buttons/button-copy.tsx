@@ -2,10 +2,14 @@
 import { Copy } from "lucide-react"
 import toast from "react-hot-toast"
 
+import { cn } from "@/lib/utils"
+
 const ButtonCopy = ({
     value,
+    className,
 }:{
-    value: string
+    value: string,
+    className?: string,
 }) => {
     const handleClick = () => {
         navigator.clipboard.writeText(value.trim())
@@ -13,7 +17,14 @@ const ButtonCopy = ({
     }
 
     return (
-        <Copy onClick={() => handleClick()} size={16} className="cursor-pointer" />
+        <Copy 
+            onClick={() => handleClick()} 
+            size={16} 
+            className={cn(
+                "cursor-pointer",
+                className
+            )}
+        />
     );
 }
  

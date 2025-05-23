@@ -3,6 +3,9 @@ import type { Metadata, Viewport } from 'next'
 
 import './globals.css'
 import { TooltipProvider } from "@/components/ui/tooltip";
+import ProviderAOS from "@/components/providers/provider-aos";
+import { ProviderTheme } from "@/components/providers/provider-theme";
+import { ProviderKey } from "@/components/providers/provider-key";
 
 export const viewport: Viewport = {
     themeColor: 'black',
@@ -13,8 +16,8 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-    title: 'Password Manager | Taichyy',
-    description: 'A Next.js 14 password manager developed by Tai-Cheng, Yen.',
+    title: 'TaidyPass | 最安全的密碼管理器',
+    description: 'TaidyPass is a password manager that helps you securely store and manage your credentials. Developed by TaiChee Digital Technology.',
 }
 
 export default function RootLayout({
@@ -23,12 +26,22 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body>
-                <Toaster />
-                <TooltipProvider>
-                    {children}
-                </TooltipProvider>
+                <ProviderTheme
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                >
+                    <ProviderAOS>
+                        <Toaster />
+                        <TooltipProvider>
+                            <ProviderKey>
+                                {children}
+                            </ProviderKey>
+                        </TooltipProvider>
+                    </ProviderAOS>
+                </ProviderTheme>
             </body>
         </html>
     )
