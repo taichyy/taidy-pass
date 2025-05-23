@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/login-form.tsx", "components/login-form.tsx", "components/main-table.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/login-form.tsx", "components/login-form.tsx", "components/main-table/table-client.tsx", "app/api/session/route.js"],
   "exclude": ["node_modules"]
 }
