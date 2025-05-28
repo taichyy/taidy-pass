@@ -15,7 +15,7 @@ const main : TMain = {
     title: "隱私性最高的密碼管理器",
     description: "我們採用 0-Knowledge 架構，除了你以外，沒有人知道你的密碼。",
     buttonText: "瞭解更多",
-    buttonUrl: "https://shadcnblocks.com",
+    buttonUrl: "/blog/0-knowledge",
 }
 
 // Review section.
@@ -113,11 +113,6 @@ const RootPage = () => {
                             >
                                 <p className="text-muted-foreground">&ldquo;{testimonial.quote}&rdquo;</p>
                                 <div className="flex items-center gap-4 mt-auto">
-                                    <img
-                                        src={testimonial.avatar}
-                                        alt={testimonial.name}
-                                        className="h-10 w-10 rounded-full object-cover"
-                                    />
                                     <div className="text-sm">
                                         <p className="font-medium">{testimonial.name}</p>
                                         <p className="text-muted-foreground">{testimonial.role}</p>

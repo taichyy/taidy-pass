@@ -17,10 +17,15 @@ const NavResponsive = () => {
         {
             id: "2",
             url: "/contact",
-            label: "聯絡我們",
+            label: "聯絡",
         },
         {
             id: "3",
+            url: "/pricing",
+            label: "方案",
+        },
+        {
+            id: "4",
             url: "/login",
             label: "進入系統",
         },

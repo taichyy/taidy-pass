@@ -105,42 +105,39 @@ const DialogPrivacy = () => {
 const Footer = ({
     menuItems = [
         {
-            title: "Product",
-            links: [
-                { text: "Overview", url: "#" },
-                { text: "Pricing", url: "#" },
-                { text: "Marketplace", url: "#" },
-                { text: "Features", url: "#" },
-                { text: "Integrations", url: "#" },
-                { text: "Pricing", url: "#" },
-            ],
+            // "title": "資源",
+            "title": "",
+            "links": [
+                // { "text": "協助", "url": "#" },
+                // { "text": "銷售", "url": "#" },
+                // { "text": "廣告", "url": "#" }
+            ]
         },
         {
-            title: "Company",
-            links: [
-                { text: "About", url: "#" },
-                { text: "Team", url: "#" },
-                { text: "Blog", url: "#" },
-                { text: "Careers", url: "#" },
-                { text: "Contact", url: "#" },
-                { text: "Privacy", url: "#" },
-            ],
+            "title": "產品",
+            "links": [
+                // { "text": "概覽", "url": "#" },
+                // { "text": "價格", "url": "#" },
+                // { "text": "市集", "url": "#" },
+                // { "text": "功能", "url": "#" },
+                // { "text": "整合", "url": "#" },
+                { "text": "產品定價", "url": "/pricing" }
+            ]
         },
         {
-            title: "Resources",
-            links: [
-                { text: "Help", url: "#" },
-                { text: "Sales", url: "#" },
-                { text: "Advertise", url: "#" },
-            ],
+            "title": "公司",
+            "links": [
+                { "text": "關於我們", "url": "/about" },
+                { "text": "聯絡我們", "url": "/contact" },
+            ]
         },
         {
-            title: "Social",
-            links: [
-                { text: "Twitter", url: "#" },
-                { text: "Instagram", url: "#" },
-                { text: "LinkedIn", url: "#" },
-            ],
+            "title": "相關文章",
+            "links": [
+                { "text": "0-Knowledge 架構", "url": "/blog/0-knowledge" },
+                // { "text": "Instagram", "url": "#" },
+                // { "text": "LinkedIn", "url": "#" }
+            ]
         },
     ],
     copyright = copyrightText,
