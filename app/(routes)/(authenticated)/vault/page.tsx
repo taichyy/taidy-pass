@@ -5,10 +5,13 @@ import LogoText from "@/components/logo-text";
 import { TJWTPayload, TLabel } from "@/lib/types";
 import TableMain from "./(components)/table-main";
 import { Separator } from "@/components/ui/separator";
-import DialogSettings from "./(components)/(dialogs)/dialog-settings";
 import ButtonBackToTop from "@/components/buttons/button-back-to-top";
 import { StickyHeaderWrapper } from "./(components)/sticky-header-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Pencil } from "lucide-react";
+import Link from "next/link";
 
 const getLabels = async (token: string) => {
     const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/labels?method=get`, {
@@ -48,10 +51,24 @@ const VaultPage = async () => {
                     <span className="text-bold">
                         {username}
                     </span>
-                    <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                        <AvatarFallback>Tai</AvatarFallback>
-                    </Avatar>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                                <Link href="/settings">
+                                    <Avatar className="border-2 border-slate-400 dark:border-white rounded-full flex justify-center items-center group cursor-pointer">
+                                        <Pencil className="hidden group-hover:block" />
+                                        <AvatarImage
+                                            src="/logo.png"
+                                            alt="@user"
+                                            className="block group-hover:hidden"
+                                        />
+                                        <AvatarFallback>Taidy</AvatarFallback>
+                                    </Avatar>
+                                </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            使用者設定
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
             </StickyHeaderWrapper>
             {/* // Use fixed width insteawd of %, because Dialog opening somehow change the width. */}
@@ -60,7 +77,7 @@ const VaultPage = async () => {
                 {/* This includes admin settings, add, logout, and switch key buttons. */}
                 {/* The children would be placed in front of the add button. */}
                 <TableMain labels={labels}>
-                    <DialogSettings
+                    <DialogAdminSettings
                         role={role}
                         labels={labels}
                     />

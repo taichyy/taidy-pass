@@ -16,11 +16,13 @@ const DialogDoubleCheck = ({
     title,
     desc,
     doFunction,
+    disabled = false,
     server = false,
 }:{
     title: string,
     desc?: string,
     doFunction: any
+    disabled?: boolean,
     server?: boolean
 }) => {
     const router = useRouter()
@@ -60,12 +62,14 @@ const DialogDoubleCheck = ({
                             className=" text-black px-4 py-2"
                             onClick={() => setOpen(false)}
                             variant="outline"
+                            disabled={disabled}
                         >
                             取消
                         </Button>
                         <Button
-                            className="bg-red-500 text-white px-4 py-2"
+                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2"
                             onClick={handleSubmit}
+                            disabled={disabled}
                         >
                             確定
                         </Button>

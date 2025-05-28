@@ -41,6 +41,7 @@ const FormAccount = ({
     const { key } = useKey();
     const { setOpen } = useDoubleCheckStore()
 
+    const [loading, setLoading] = useState(false);
     const [searchKeys, setSearchKeys] = useState<string[]>([]);
     const [formData, setFormData] = useState<TFormData>({
         title: "",
@@ -91,6 +92,11 @@ const FormAccount = ({
 
     // For Add and edit
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        if ( loading ) {
+            return;
+        }
+        
+        setLoading(true);
         e.preventDefault()
 
         const userId = await getUserId()
@@ -136,6 +142,8 @@ const FormAccount = ({
             console.log(err)
             toast.error(errorText)
         }
+
+        setLoading(false);
     }
 
     // Handle delete (only for edit mode)
@@ -215,11 +223,16 @@ const FormAccount = ({
                                 variant="outline"
                                 className="mt-4"
                                 onClick={() => setOpen(true)}
+                                disabled={loading}
                             >
                                 刪除
                             </Button>
                         )}
-                        <Button type="submit" className="mt-4">
+                        <Button 
+                            type="submit" 
+                            disabled={loading}
+                            className="mt-4"
+                        >
                             {btnText}
                         </Button>
                     </div>
@@ -234,6 +247,7 @@ const FormAccount = ({
                 title="確定要刪除這筆資料嗎？"
                 doFunction={handleDelete}
                 server={true}
+                disabled={loading}
             />
         </>
     );

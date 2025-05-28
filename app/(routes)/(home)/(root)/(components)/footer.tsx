@@ -9,7 +9,7 @@ interface MenuItem {
     }[];
 }
 
-const copyrightText = `© ${new Date().getFullYear()} TaiChee Digital Technology. All rights reserved.`;
+const copyrightText = `© ${new Date().getFullYear()} TaiChe Software. All rights reserved.`;
 
 const DialogTerms = () => {
     return (

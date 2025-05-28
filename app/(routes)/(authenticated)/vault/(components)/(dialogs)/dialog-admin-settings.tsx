@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Keep this component server component, because it is confidential.
-const DialogSettings = async ({
+const DialogAdminSettings = async ({
     role,
     labels,
 }: {
@@ -66,4 +66,4 @@ const DialogSettings = async ({
     );
 }
 
-export default DialogSettings;
+export default DialogAdminSettings;
