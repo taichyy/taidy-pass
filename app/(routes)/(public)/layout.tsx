@@ -1,6 +1,6 @@
 import NavResponsive from "./(components)/navbar/nav-responsive";
 
-const HomeLayout = ({
+const PublicLayout = ({
     children,
 }: {
     children: React.ReactNode
@@ -13,4 +13,4 @@ const HomeLayout = ({
     );
 }
 
-export default HomeLayout;
+export default PublicLayout;
