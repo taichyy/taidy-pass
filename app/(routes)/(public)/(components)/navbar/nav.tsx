@@ -6,6 +6,7 @@ import { HiBars3BottomRight } from "react-icons/hi2";
 
 import { TNavItem } from "@/lib/types";
 import LogoText from "@/components/logo-text";
+import { cn } from "@/lib/utils";
 
 type Props = {
     navLinks: TNavItem[]
@@ -30,7 +31,10 @@ const Nav = ({
                 <div className="hidden md:flex items-center space-x-10">
                     {navLinks.map((link) => (
                         <Link href={link.url} key={link.id} onClick={() => setShowNav(false)}>
-                            <p className=" nav_link">
+                            <p className={cn(
+                                "nav_link",
+                                pathname === link.url ? "text-blue-700 font-bold" : "text-gray-600 hover:text-blue-700 transition-all duration-200"
+                            )}>
                                 {link.label}
                             </p>
                         </Link>
