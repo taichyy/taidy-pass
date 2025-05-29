@@ -34,7 +34,8 @@ const PricingPage = ({
 }: {
     searchParams: { isYearly?: string; };
 }) => {
-    const isYearly = searchParams.isYearly === "true";
+    // URL would be like: /pricing?isYearly, the searchParams will be { isYearly: "" }
+    const isYearly = searchParams.isYearly === "";
 
     const heading = "定價方案";
     const description = "探索我們實惠的定價方案";
@@ -106,6 +107,9 @@ const PricingPage = ({
                         {plans.map((plan, index) => (
                             <Card
                                 key={plan.id}
+                                data-aos="fade-left"
+                                data-aos-anchor-placement="center" 
+                                data-aos-delay={index * 100}
                                 className="flex w-80 flex-col justify-between text-left"
                             >
                                 <CardHeader>
