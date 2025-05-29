@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Cloudy, Lock, LockKeyhole, Tags, Wrench } from "lucide-react";
 
 import Footer from "./(components)/footer";
@@ -90,9 +91,9 @@ const RootPage = () => {
                                 <p className="text-muted-foreground">{main.description}</p>
                             </div>
                             <Button variant="outline" className="mr-auto" asChild>
-                                <a href={main.buttonUrl} target="_blank">
+                                <Link href={main?.buttonUrl || "/#"}>
                                     {main.buttonText}
-                                </a>
+                                </Link>
                             </Button>
                         </div>
                     </div>
@@ -134,7 +135,7 @@ const RootPage = () => {
                             {whyChooseDesc}
                         </p>
                     </div>
-                    <div className="mt-10 flex flex-wrap justify-between gap-10 text-center">
+                    <div className="mt-10 flex flex-col sm:flex-row flex-wrap justify-between gap-10 text-center">
                         {whyChoose.map((item, idx) => (
                             <div className="flex flex-col gap-4" key={item.label + idx}>
                                 <p>{item.label}</p>
