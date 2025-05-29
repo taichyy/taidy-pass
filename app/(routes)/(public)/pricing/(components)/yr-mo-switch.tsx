@@ -18,7 +18,7 @@ const YrMoSwitch = ({
                 onCheckedChange={() => router.push(
                     isYearly
                     ? `/pricing`
-                    : `/pricing?isYearly=true`
+                    : `/pricing?isYearly`
                 )}
             />
             年費
