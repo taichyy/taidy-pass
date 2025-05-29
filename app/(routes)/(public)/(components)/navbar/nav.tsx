@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { HiBars3BottomRight } from "react-icons/hi2";
 
+import { cn } from "@/lib/utils";
 import { TNavItem } from "@/lib/types";
 import LogoText from "@/components/logo-text";
-import { cn } from "@/lib/utils";
 
 type Props = {
     navLinks: TNavItem[]
