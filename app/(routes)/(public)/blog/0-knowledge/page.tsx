@@ -6,10 +6,12 @@ import {
     ListChecks,
     RefreshCcw,
 } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import DesignedByFreepik from "@/components/designed-by-freepik";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -57,8 +59,7 @@ const ZeroKnowledgePage = () => {
     };
 
     return (
-        <section className="py-32">
-            <div className="container max-w-7xl">
+       
                 <div className="relative grid-cols-3 gap-20 lg:grid">
                     <div className="lg:col-span-2">
                         <div>
@@ -70,11 +71,14 @@ const ZeroKnowledgePage = () => {
                                 在數位安全的世界裡，Zero-Knowledge (零知識) 架構是一種強大的技術，讓使用者可以驗證資料的真實性，而不必暴露任何機密資訊。TaidyPass
                                 採用這種架構，確保使用者的密碼與金鑰，只有使用者自己能看到和掌控。
                             </p>
-                            <img
-                                src="https://shadcnblocks.com/images/block/placeholder-1.svg"
+                            <Image
+                                width={800}
+                                height={450}
+                                src="/0-knowledge.jpg"
                                 alt="Zero-Knowledge Illustration"
-                                className="my-8 aspect-video w-full rounded-md object-cover"
+                                className="mt-8 my-1 aspect-video w-full rounded-md object-cover"
                             />
+                            <DesignedByFreepik />
                         </div>
 
                         <section
@@ -266,8 +270,7 @@ const ZeroKnowledgePage = () => {
                         </nav>
                     </div>
                 </div>
-            </div>
-        </section>
+
     );
 }
 
