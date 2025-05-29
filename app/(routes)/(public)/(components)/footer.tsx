@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import LogoText from "@/components/logo-text";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -9,7 +10,7 @@ interface MenuItem {
     }[];
 }
 
-const copyrightText = `© ${new Date().getFullYear()} TaiChe Software. All rights reserved.`;
+const copyrightText = `© ${new Date().getFullYear()} TaiChe Software Co., Ltd. All rights reserved.`;
 
 const DialogTerms = () => {
     return (
@@ -105,13 +106,13 @@ const DialogPrivacy = () => {
 const Footer = ({
     menuItems = [
         // {
-            // "title": "資源",
-            // "title": "",
-            // "links": [
-                // { "text": "協助", "url": "#" },
-                // { "text": "銷售", "url": "#" },
-                // { "text": "廣告", "url": "#" }
-            // ]
+        //     "title": "資源",
+        //     "title": "",
+        //     "links": [
+        //         { "text": "協助", "url": "#" },
+        //         { "text": "銷售", "url": "#" },
+        //         { "text": "廣告", "url": "#" }
+        //     ]
         // },
         {
             "title": "產品",
@@ -149,14 +150,17 @@ const Footer = ({
         <section className="py-32">
             <div className="container">
                 <footer>
-                    <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
-                        <div className="col-span-2 mb-8 lg:mb-0">
+                    <div className={cn(
+                        "flex flex-wrap lg:grid gap-8",
+                        `lg:grid-cols-${menuItems.length+2}`,
+                    )}>
+                        <div className="w-full lg:col-span-2 mb-8 lg:mb-0">
                             <div className="flex items-center gap-2 lg:justify-start">
                                 <LogoText />
                             </div>
                         </div>
                         {menuItems.map((section, sectionIdx) => (
-                            <div key={sectionIdx}>
+                            <div key={sectionIdx} className="pl-4 lg:pl-0">
                                 <h3 className="mb-4 font-bold">{section.title}</h3>
                                 <ul className="space-y-4 text-muted-foreground">
                                     {section.links.map((link, linkIdx) => (

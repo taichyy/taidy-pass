@@ -4,7 +4,7 @@
  
 @layer utilities {
     .nav_link {
-        @apply relative text-lg pr-10 pl-[1px] font-medium w-fit block after:block after:content-[''] after:absolute after:h-[3px] after:bg-pink-600 after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-right
+        @apply relative text-lg pr-10 md:pr-[1px] pl-[1px] font-medium w-fit block after:block after:content-[''] after:absolute after:h-[3px] after:bg-pink-600 after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-right
     }
 }
 

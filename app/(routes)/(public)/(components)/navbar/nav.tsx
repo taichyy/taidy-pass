@@ -23,11 +23,11 @@ const Nav = ({
     }, [pathname])
     
     return (
-        <div className={`sticky bg-white bg-opacity-70 shadow-md w-full transition-all duration-200 h-[12vh] z-[1000]`}>
+        <div className={`fixed top-0 left-0 bg-white shadow-md w-full transition-all duration-200 h-[12vh] z-[1000]`}>
             <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
                 <LogoText />
                 {/* NavLinks */}
-                <div className="hidden lg:flex items-center space-x-10">
+                <div className="hidden md:flex items-center space-x-10">
                     {navLinks.map((link) => (
                         <Link href={link.url} key={link.id} onClick={() => setShowNav(false)}>
                             <p className=" nav_link">
