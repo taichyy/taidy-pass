@@ -31,7 +31,7 @@ const NavMobile = ({
                         href={link.url} 
                         onClick={() => setShowNav(false)}
                     >
-                        <p className=" nav_link text-white text-[20px] ml-12 border-b-[1.5px] pb-1 border-white sm:text-[30px]">
+                        <p className=" nav_link text-white text-[20px] ml-12 border-b-[1.5px] pb-1 border-white sm:text-[24px]">
                             {link.label}
                         </p>
                     </Link>

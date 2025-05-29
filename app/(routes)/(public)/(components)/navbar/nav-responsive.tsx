@@ -47,7 +47,7 @@ const NavResponsive = () => {
     ]
 
     return (
-        <div>
+        <div className='relative mb-[12vh]'>
             <Nav setShowNav={setShowNav} navLinks={navLinks} />
             <NavMobile showNav={showNav} setShowNav={setShowNav} navLinks={navLinks} />
         </div>
