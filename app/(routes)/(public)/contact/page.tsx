@@ -17,7 +17,7 @@ const ContactPage = () => {
         <section 
             data-aos="fade-in"
             data-aos-anchor-placement="center"
-            className="min-h-[88vh] bg-background py-32 flex justify-center items-center gap-12 flex-col lg:flex-row"
+            className="min-h-[88vh] bg-background py-32 ml-12 flex justify-center items-center gap-12 flex-col lg:flex-row"
         >
             <div>
                 <div className="mb-14">
