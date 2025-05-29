@@ -33,7 +33,9 @@ const Nav = ({
                         <Link href={link.url} key={link.id} onClick={() => setShowNav(false)}>
                             <p className={cn(
                                 "nav_link",
-                                pathname === link.url ? "text-blue-700 font-bold" : "text-gray-600 hover:text-blue-700 transition-all duration-200"
+                                pathname === link.url 
+                                    ? "text-blue-700 font-bold after:scale-x-100" 
+                                    : "text-gray-600 hover:text-blue-700 transition-all duration-200"
                             )}>
                                 {link.label}
                             </p>
