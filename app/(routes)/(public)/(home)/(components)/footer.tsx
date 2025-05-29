@@ -104,15 +104,15 @@ const DialogPrivacy = () => {
 
 const Footer = ({
     menuItems = [
-        {
+        // {
             // "title": "資源",
-            "title": "",
-            "links": [
+            // "title": "",
+            // "links": [
                 // { "text": "協助", "url": "#" },
                 // { "text": "銷售", "url": "#" },
                 // { "text": "廣告", "url": "#" }
-            ]
-        },
+            // ]
+        // },
         {
             "title": "產品",
             "links": [
@@ -121,7 +121,7 @@ const Footer = ({
                 // { "text": "市集", "url": "#" },
                 // { "text": "功能", "url": "#" },
                 // { "text": "整合", "url": "#" },
-                { "text": "產品定價", "url": "/pricing" }
+                { "text": "價格方案", "url": "/pricing" }
             ]
         },
         {
