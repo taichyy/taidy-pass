@@ -7,10 +7,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function generateUserPrivateKey() {
-    const rawKey = crypto.getRandomValues(new Uint8Array(32)); // 256-bit key
+    const rawKey = window.crypto.getRandomValues(new Uint8Array(32)); // 256-bit key
     const base64Key = btoa(String.fromCharCode.apply(null, Array.from(rawKey)));
 
-    const cryptoKey = await crypto.subtle.importKey(
+    const cryptoKey = await window.crypto.subtle.importKey(
         "raw",
         rawKey,
         { name: "AES-GCM" },
@@ -90,7 +90,7 @@ export const AESDecrypt = (encryptedData: string | null, key: string) => {
 export async function deriveRawKey(password: string, salt: string): Promise<string> {
     const encoder = new TextEncoder();
 
-    const keyMaterial = await crypto.subtle.importKey(
+    const keyMaterial = await window.crypto.subtle.importKey(
         "raw",
         encoder.encode(password),
         "PBKDF2",
@@ -98,7 +98,7 @@ export async function deriveRawKey(password: string, salt: string): Promise<stri
         ["deriveBits"]
     );
 
-    const derivedBits = await crypto.subtle.deriveBits(
+    const derivedBits = await window.crypto.subtle.deriveBits(
         {
             name: "PBKDF2",
             salt: encoder.encode(salt),
