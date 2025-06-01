@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 import LogoText from "@/components/logo-text";
 import { Button } from "@/components/ui/button";
-import FormLoginPage from "./(components)/form-login-page";
+import FormVerify from "./(components)/form-veriry";
 import { ThemeModeToggle } from "@/components/theme-mode-toggle";
 import DesignedByFreepik from "@/components/designed-by-freepik";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -59,7 +59,7 @@ const LoginPage = ({
                             />
                             <DesignedByFreepik className="absolute bottom-0 left-0 hidden md:block"  />
                         </div>
-                        <FormLoginPage mode={mode} />
+                        <FormVerify mode={mode} />
                     </div>
                 </CardContent>
             </Card>

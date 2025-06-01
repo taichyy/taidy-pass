@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation"
 
 import { deriveRawKey } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import UncontrolledInput from "@/components/uncontrolled-input"
 import { useKey } from "@/components/providers/provider-key"
+import UncontrolledInput from "@/components/uncontrolled-input"
 
-export default function FormLoginPage({
+export default function FormVerify({
     mode = "login",
 }: {
     mode?: "register" | "login"
@@ -91,13 +91,13 @@ export default function FormLoginPage({
                 } else if (formMode == "login") {
                     setSalt(salt)
 
-                    const key = await deriveRawKey(password, salt) as unknown as string
-
-                    console.log(key)
+                    const key = await deriveRawKey(password, salt)
                     setKey(key)
 
                     toast.success(texts.apiSuccess)
-                    router.push(successUrl)
+
+                    // Let the middlewares handle the redirect
+                    router.refresh()
                 }
             } else {
                 let msg = ""
