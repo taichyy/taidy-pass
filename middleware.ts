@@ -4,53 +4,43 @@ import type { NextRequest } from 'next/server'
 
 const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET || '')
 
-const vaultRoute = '/vault'
-const loginRoute = '/login'
-
+const loginRoute = "/login"
 const protectedRoutes = [
-    vaultRoute,
+    '/vault'
 ]
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
     const token = request.cookies.get('token')?.value
 
-    const redirect = (url: string) => {
-        return NextResponse.redirect(new URL(url, request.url))
-    }
-
-    // Handle /login and logic
-    if ([loginRoute, vaultRoute].includes(pathname)) {
-        if (token) {
-            try {
-                const verify = await jwtVerify(token, jwtSecret)
-
-                if (verify) {
-                    if (pathname !== vaultRoute) {
-                        return redirect(vaultRoute)
-                    }
-                }
-
-                return NextResponse.next()
-            } catch (err) {
-                return NextResponse.next()
-            }
-        }
-
-        return NextResponse.next()
-    }
-
-    // Protected routes
+    // 如果是受保護的路由
     if (protectedRoutes.includes(pathname)) {
-        if (!token) return redirect('/')
+        if (!token) {
+            // 沒有 token，直接轉到 loginRoute
+            return NextResponse.redirect(new URL(loginRoute, request.url))
+        }
 
         try {
+            // 驗證 token
             await jwtVerify(token, jwtSecret)
-            return NextResponse.next()
+            return NextResponse.next() // token 有效，放行
         } catch (err) {
-            return redirect('/login')
+            // token 無效或過期，轉到 loginRoute
+            return NextResponse.redirect(new URL(loginRoute, request.url))
         }
     }
 
+    // 如果是 loginRoute 頁面，並且有 token，直接導向 /vault
+    if (pathname === loginRoute && token) {
+        try {
+            await jwtVerify(token, jwtSecret)
+            return NextResponse.redirect(new URL('/vault', request.url))
+        } catch (err) {
+            // token 無效或過期，繼續留在 loginRoute
+            return NextResponse.next()
+        }
+    }
+
+    // 其他路由，放行
     return NextResponse.next()
 }
