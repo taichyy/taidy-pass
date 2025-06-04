@@ -20,7 +20,7 @@ const FormLabel = ({
 }) => {
     const router = useRouter()
 
-    const { setOpen } = useDoubleCheckStore()
+    const { setDoubleCheckOpen } = useDoubleCheckStore()
 
     const [mode, setMode] = useState<"put" | "post" | "delete" | null>(null)
 
@@ -149,7 +149,7 @@ const FormLabel = ({
                                                 type="button"
                                                 onClick={() => {
                                                     if (label._id) {
-                                                        setOpen(true)
+                                                        setDoubleCheckOpen("label-delete-admin", true)
                                                         setId(label._id)
                                                     }
                                                 }}
@@ -199,6 +199,7 @@ const FormLabel = ({
                 )}
             </form>
             <DialogDoubleCheck 
+                id="label-delete-admin"
                 title="確定要刪除這個標籤嗎？"
                 doFunction={handleDelete}
                 server={true}

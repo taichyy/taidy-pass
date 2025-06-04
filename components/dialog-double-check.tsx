@@ -8,64 +8,72 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog"  
+} from "@/components/ui/dialog"
 import { Button } from "./ui/button";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 
 const DialogDoubleCheck = ({
+    id,
     title,
     desc,
     doFunction,
     disabled = false,
     server = false,
-}:{
+    force,
+}: {
+    id: string,
     title: string,
     desc?: string,
     doFunction: any
     disabled?: boolean,
-    server?: boolean
+    server?: boolean,
+    force?: boolean
 }) => {
     const router = useRouter()
 
-    const { open, setOpen } = useDoubleCheckStore()
+    const { open, setDoubleCheckOpen } = useDoubleCheckStore()
+
+    const currentOpen = open[id] || false
 
     const handleSubmit = async () => {
         try {
             await doFunction()
 
             server && router.refresh()
-            setOpen(false)
             toast.success("操作成功！")
         } catch (err) {
             console.error("Error in function in DialogDoubleCheck: " + err)
-            setOpen(false)
             toast.error("發生錯誤，請稍後再試！")
+        } finally {
+            setDoubleCheckOpen(id, false)
         }
     }
 
     return (
-        <Dialog onOpenChange={(e) => setOpen(e)} open={open}>
-            <DialogContent>
+        <Dialog onOpenChange={(e) => setDoubleCheckOpen(id, e)} open={force || currentOpen}>
+            <DialogContent btn={!force}>
                 <DialogHeader>
-                <DialogTitle>
-                    {title}
-                </DialogTitle>
-                {desc && (
-                    <DialogDescription>
-                        {desc}
-                    </DialogDescription>
-                )}
+                    <DialogTitle>
+                        {title}
+                    </DialogTitle>
+                    {desc && (
+                        <DialogDescription>
+                            {desc}
+                        </DialogDescription>
+                    )}
                 </DialogHeader>
                 <div>
                     <div className="flex justify-end gap-2 mt-4">
-                        <Button
-                            className=" text-black px-4 py-2"
-                            onClick={() => setOpen(false)}
-                            variant="outline"
-                            disabled={disabled}
-                        >
-                            取消
-                        </Button>
+                        {!force && (
+                            <Button
+                                className=" text-black px-4 py-2"
+                                onClick={() => setDoubleCheckOpen(id, false)}
+                                variant="outline"
+                                disabled={disabled}
+                            >
+                                取消
+                            </Button>
+                        )}
                         <Button
                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2"
                             onClick={handleSubmit}
@@ -79,5 +87,5 @@ const DialogDoubleCheck = ({
         </Dialog>
     );
 }
- 
+
 export default DialogDoubleCheck;

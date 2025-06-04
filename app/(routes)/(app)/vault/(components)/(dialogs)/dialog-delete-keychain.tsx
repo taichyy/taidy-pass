@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { KeyedMutator } from "swr";
-import { FolderKey } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 
 import {
     Dialog,
@@ -15,7 +15,7 @@ import FormKeychain from "../(forms)/form-keychain";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const DialogKeyChain = ({
+const DialogDeleteKeyChain = ({
     mutate
 }: {
     mutate?: KeyedMutator<any>;
@@ -25,23 +25,22 @@ const DialogKeyChain = ({
     return (
         <Dialog onOpenChange={(e) => setOpened(e)} open={opened}>
             <Tooltip>
-                <TooltipTrigger asChild>
-                    <DialogTrigger>
-                        <FolderKey />
+                <TooltipTrigger>
+                    <DialogTrigger asChild>
+                        <Trash2Icon />
                     </DialogTrigger>
                 </TooltipTrigger>
                 <TooltipContent>
-                    新增鑰匙圈
+                    刪除自訂鑰匙圈
                 </TooltipContent>
             </Tooltip>
             <DialogContent className="w-[90%]">
                 <DialogHeader>
                     <DialogTitle>
-                        新增鑰匙圈
+                        刪除鑰匙圈
                     </DialogTitle>
                     <DialogDescription>
-                        除預設鑰匙圈外，您可以新增多個鑰匙圈來分類您的帳號。<br />
-                        只要您不透露金鑰，將沒有任何人－包括我們，會知道您儲存的資訊。
+                        此動作將永久刪除鑰匙圈及其所有內容，我們無法為您恢復。
                     </DialogDescription>
                     <Separator />
                     <FormKeychain setOpened={setOpened} mutate={mutate} />
@@ -51,4 +50,4 @@ const DialogKeyChain = ({
     );
 };
 
-export default DialogKeyChain;
+export default DialogDeleteKeyChain;

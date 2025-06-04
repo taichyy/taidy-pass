@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 const { Schema } = mongoose
 
 const accountSchema = new Schema({
+    starred: {
+        type: Boolean,
+        default: false,
+    },
     title: {
         type: String,
         required: true,

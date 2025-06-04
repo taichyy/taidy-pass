@@ -58,7 +58,7 @@ export const POST = async (request) => {
                 query.keychainId = null; 
             }
 
-            const accounts = await Account.find(query);
+            const accounts = await Account.find(query).sort({ starred: -1, });
 
             // Collect all used label key
             const allLabelKeys = Array.from(new Set(accounts.flatMap(acc => acc.label)));

@@ -1,9 +1,11 @@
 import { create } from 'zustand';
 
 export const useDoubleCheckStore = create<{
-    open: boolean;
-    setOpen: (open: boolean) => void;
+    open: Record<string, boolean>,
+    setDoubleCheckOpen: (key: string, status: boolean) => void;
 }>((set) => ({
-    open: false,
-    setOpen: (open) => set({ open }),
+    open: {},
+    setDoubleCheckOpen: (key: string, status: boolean) => {
+        useDoubleCheckStore.setState(prev => ({ open: { ...prev.open, [key]: status } }))
+    }
 }));
