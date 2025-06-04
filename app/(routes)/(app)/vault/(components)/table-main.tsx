@@ -276,6 +276,7 @@ const CollapsibleArea = ({
                             />
                         </>
                     )}
+                    {/* TODO: Finish keychain deleting. */}
                     {/* {keychainId && (
                         <DialogDeleteKeyChain />
                     )} */}
@@ -283,9 +284,11 @@ const CollapsibleArea = ({
             </div>
             {keyInserted ? (
                 <>
-                    <div className="rounded-md border px-4 py-2 font-mono text-sm shadow-sm">
-                        {allUsedLabels?.join("、") || "無標籤"}
-                    </div>
+                    {hasOpened && (
+                        <div className="rounded-md border px-4 py-2 font-mono text-sm shadow-sm">
+                            {allUsedLabels?.join("、") || "無標籤"}
+                        </div>
+                    )}
                     <CollapsibleContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4">
                         {!!filtered?.length && filtered.map(item => (
                             <Card key={item._id} className="mt-4 py-4 px-3 flex flex-col justify-end">
