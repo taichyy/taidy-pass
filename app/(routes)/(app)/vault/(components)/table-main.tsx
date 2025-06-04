@@ -148,7 +148,7 @@ const CollapsibleArea = ({
     useEffect(() => {
         if (!encryptedAccounts || !insertedKeyVal) return;
 
-        const decrypted = fetched.data.map((record) => ({
+        const decrypted = encryptedAccounts.map((record) => ({
             ...record,
             title: AESDecrypt(record.title, insertedKeyVal),
             username: AESDecrypt(record.username, insertedKeyVal),
