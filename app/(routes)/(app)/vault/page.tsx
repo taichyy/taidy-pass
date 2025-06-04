@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { jwtVerify } from "jose";
+import { Pencil } from "lucide-react";
 import { cookies } from "next/headers";
 
 import LogoText from "@/components/logo-text";
@@ -10,8 +12,6 @@ import { StickyHeaderWrapper } from "./(components)/sticky-header-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Pencil } from "lucide-react";
-import Link from "next/link";
 
 const getLabels = async (token: string) => {
     const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/labels?method=get`, {

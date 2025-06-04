@@ -1,8 +1,10 @@
+import mongoose from "mongoose"
 import { NextResponse } from "next/server"
 
 import connect from "@/lib/db"
+import Account from "@/models/Account"
 import Keychain from "@/models/Keychain"
-import { getUserId } from "@/lib/actions"
+import { encryptRecord, getUserId } from "@/lib/actions"
 
 export const POST = async (request) => {
     // POST /api/keychains => create a new KeyChain
@@ -64,22 +66,45 @@ export const POST = async (request) => {
             )
         }
     } else if ( !method ) {
+        const session = await mongoose.startSession()
+        
         // POST /api/keychains => create a new keychain
         // This is encrypted data, by user at client.
-        const { name } = body || {}
+        const { name, derivedKey } = body || {}
 
+        // Generate new keychain
         const data = {
             name,
             userId,
         }
 
         const newKeyChain = new Keychain(data)
+
+        // Generate a verifying data inside keychain by default, encrypted by derivedKey
+        
+        const obj = {
+            type: "validation",
+            title: "validation",
+            username: "validation",
+            password: "validation",
+            userId,
+            keychainId: newKeyChain._id.toString(),
+        }
+    
+        const encryptedObj = await encryptRecord(obj, derivedKey)
+
+        const newAccount = new Account(encryptedObj)
     
         // Fetch
         try {
+            session.startTransaction()
+
             // From utils/db.js
             await connect()
-            await newKeyChain.save()
+            await newKeyChain.save({ session })
+            await newAccount.save({ session })
+
+            await session.commitTransaction()
     
             status = 200
             response.status = true
@@ -96,6 +121,8 @@ export const POST = async (request) => {
                 response,
                 { status }
             )
+        } finally {
+            session.endSession()
         }
     }
 

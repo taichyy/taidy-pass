@@ -7,6 +7,7 @@ export type TAccount = {
     password: string
     remark?: string
     label?: string[]
+    starred?: boolean
 }
 
 export type TNote = {

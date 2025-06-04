@@ -6,9 +6,9 @@ import { Check, Eye, EyeOffIcon } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 import { Button } from "@/components/ui/button";
-import { generateUserPrivateKey } from "@/lib/utils";
 import ControlledInput from "@/components/controlled-input";
-import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
+import { useKey } from "@/components/providers/provider-key";
+import { deriveRawKey, generateUserPrivateKey } from "@/lib/utils";
 
 // This is not the main component, but a subcomponent for the button, main below.
 const ButtonKeyGenerator = ({
@@ -120,8 +120,7 @@ const FormKeychain = ({
     mutate?: () => void;
     setOpened: (opened: boolean) => void;
 }) => {
-    const { setOpen } = useDoubleCheckStore()
-
+    const { salt } = useKey()
     const [copied, setCopied] = useState<boolean>(false);
     const [userKey, setUserKey] = useState<string | null>(null);
 
@@ -157,14 +156,32 @@ const FormKeychain = ({
             return;
         }
 
+        if (!userKey) {
+            toast.error("請先產生金鑰");
+            return;
+        }
+
+        if (!salt) {
+            toast.error("無法取得加密鹽值，請重新登入");
+            return;
+        }
+
         const form = e.target as HTMLFormElement;
         const name = (form.elements.namedItem("name") as HTMLInputElement).value
 
+        const derivedKey = await deriveRawKey(userKey, salt)
+ 
+        if (!derivedKey) {
+            toast.error("創建失敗，請重新登入，若問題持續存在，請聯繫管理員。");
+            return;
+        }
+        
         try {
             await fetch(url, {
                 method,
                 body: JSON.stringify({
-                    name
+                    name,
+                    derivedKey,
                 })
             })
 
@@ -215,7 +232,7 @@ const FormKeychain = ({
         <div className=" flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => {
                 setCopied(false)
-                setOpen(true)
+                setOpened(false)
             }}>
                 取消
             </Button>

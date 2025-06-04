@@ -38,8 +38,25 @@ const FormAccount = ({
 }) => {
     const isEdit = !!id;
 
-    const { key } = useKey();
-    const { setOpen } = useDoubleCheckStore()
+    const { key, keyOfKeychains } = useKey()
+
+    let insertedKeyVal: string | undefined;
+
+    // If it's a custom keychain, checkk if there is a key in keyOfKeychains.
+    if (keychainId && keyOfKeychains) {
+        const keychainKey = keyOfKeychains[keychainId];
+        if (keychainKey) {
+            insertedKeyVal = keychainKey;
+        }
+    }
+
+    // If it's a default keychain, check if there is a key.
+    if (!keychainId && key && key != "") {
+        console.log(keychainId)
+        insertedKeyVal = key;
+    }
+
+    const { setDoubleCheckOpen } = useDoubleCheckStore()
 
     const [loading, setLoading] = useState(false);
     const [searchKeys, setSearchKeys] = useState<string[]>([]);
@@ -50,8 +67,6 @@ const FormAccount = ({
         remark: "",
         label: []
     });
-
-    console.log(key)
 
     // EDIT mode as default value.
     let btnText = "編輯"
@@ -73,12 +88,12 @@ const FormAccount = ({
 
     // Sync fetched data with formData when in edit mode
     useEffect(() => {
-        if (data && isEdit && key) {
+        if (data && isEdit && insertedKeyVal) {
             setFormData({
-                title: AESDecrypt(data.title, key),
-                username: AESDecrypt(data.username, key),
-                password: AESDecrypt(data.password, key),
-                remark: AESDecrypt(data.remark, key),
+                title: AESDecrypt(data.title, insertedKeyVal),
+                username: AESDecrypt(data.username, insertedKeyVal),
+                password: AESDecrypt(data.password, insertedKeyVal),
+                remark: AESDecrypt(data.remark, insertedKeyVal),
                 label: searchKeys,
             });
         }
@@ -101,10 +116,10 @@ const FormAccount = ({
 
         const userId = await getUserId()
 
-        const url = isEdit ? `/api/accounts/${id}` : `/api/accounts/`
+        const url = isEdit ? `/api/accounts/${id}?mode=account` : `/api/accounts/`
         const method = isEdit ? "PUT" : "POST"
 
-        const clientKey = key || ""
+        const clientKey = insertedKeyVal || ""
 
         if (!e.target) {
             return;
@@ -130,14 +145,21 @@ const FormAccount = ({
         const encryptedObj = await encryptRecord(obj, clientKey)
 
         try {
-            await fetch(url, {
+            const req = await fetch(url, {
                 method,
                 body: JSON.stringify(encryptedObj)
             })
 
-            toast.success(successText)
-            setOpened(false)
-            mutate && mutate()
+            const res = await req.json();
+
+
+            if (res.type == "error") {
+                toast.error(errorText)
+            } else {               
+                toast.success(successText)
+                setOpened(false)
+                mutate && mutate()
+            }
         } catch (err) {
             console.log(err)
             toast.error(errorText)
@@ -222,7 +244,7 @@ const FormAccount = ({
                                 type="button"
                                 variant="outline"
                                 className="mt-4"
-                                onClick={() => setOpen(true)}
+                                onClick={() => setDoubleCheckOpen("account-delete", true)}
                                 disabled={loading}
                             >
                                 刪除
@@ -244,6 +266,7 @@ const FormAccount = ({
                 </p>
             )}
             <DialogDoubleCheck
+                id="account-delete"
                 title="確定要刪除這筆資料嗎？"
                 doFunction={handleDelete}
                 server={true}

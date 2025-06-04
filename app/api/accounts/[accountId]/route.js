@@ -99,6 +99,10 @@ export const PUT = async (request, { params }) => {
     const loginedUserId = await getUserId()
     const { accountId } = params
 
+    // Get mode from search params
+    const url = new URL(request.url)
+    const mode = url.searchParams.get("mode")
+
     let status = null;
     let response = {
         status: false,
@@ -107,20 +111,44 @@ export const PUT = async (request, { params }) => {
         data: null,
     };
 
-    const body = await request.json()
-    const { title, username, password, remark, userId } = body
-
-    const data = {
-        title,
-        username,
-        password,
-        remark,
-    }
-
     // Fetch
     try {
+        let data = {}
+        
+        const body = await request.json()
+
+        const { title, username, password, remark, userId } = body || {}
+
         // From utils/db.js
         await connect()
+
+        const findAccount = await Account.findById(accountId)
+
+         // If it's a regular PUT req.
+        if (!mode) {            
+            data = {
+                title,
+                username,
+                password,
+                remark,
+            }
+        } else if (mode == "starred") {
+            const currentStarred = findAccount.starred
+            data = {
+                starred: !(!!currentStarred),
+            }
+        }
+
+        if (findAccount.type == "validation") {
+            status = 400
+            response.status = false
+            response.type = "error"
+            response.message = "You cannot update a validation account."
+            return NextResponse.json(
+                response,
+                { status }
+            )
+        }
 
         if (userId != loginedUserId) {
             status = 403
