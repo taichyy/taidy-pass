@@ -1,8 +1,8 @@
 import mongoose from "mongoose"
-import { NextResponse } from "next/server"
 
 import connect from "@/lib/db"
 import Account from "@/models/Account"
+import { Response } from "@/lib/utils"
 import Keychain from "@/models/Keychain"
 import { encryptRecord, getUserId } from "@/lib/actions"
 
@@ -12,32 +12,23 @@ export const POST = async (request) => {
 
     const userId = await getUserId()
 
+    const { setStatus, setResponse, getResponse } = Response()
+
     if (!userId) {
-        const status = 401
-        const response = {
+        setStatus(401)
+        setResponse({
             status: false,
             type: "user",
             message: "User not found.",
-        }
+        })
 
-        return NextResponse.json(
-            response,
-            { status }
-        )
+        return getResponse()
     }
 
     const url = new URL(request.url)
     const method = url.searchParams.get("method")
 
     const body = await request.json()
-
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
 
     if (method === "get") {
         // GET /api/keychains?method=get => get all keychains
@@ -48,22 +39,23 @@ export const POST = async (request) => {
                 userId
             });
 
-            status = 200
-            response.status = true
-            response.type = "success"
-            response.message = "Keychains fetched successfully"
-            response.data = keychains
+            setStatus(200)
+            setResponse({
+                status: true,
+                type: "success",
+                message: "Keychains fetched successfully",
+                data: keychains,
+            })
         } catch (error) {
             console.error("Error fetching keychain records:", error);
 
-            status = 500
-            response.status = false
-            response.message = "keychain record fetching error."
+            setStatus(500)
+            setResponse({
+                status: false,
+                message: "Keychain record fetching error.",
+            })
 
-            return NextResponse.json(
-                response,
-                { status }
-            )
+            return getResponse();
         }
     } else if ( !method ) {
         const session = await mongoose.startSession()
@@ -106,28 +98,26 @@ export const POST = async (request) => {
 
             await session.commitTransaction()
     
-            status = 200
-            response.status = true
-            response.type = "success"
-            response.message = "Keychain has been created"
+            setStatus(200)
+            const response = {
+                status: true,
+                type: "success",
+                message: "Keychain has been created",
+            }
         } catch (error) {
             console.error("Error creating keychain records:", error);
 
-            status = 500
-            response.status = false
-            response.message = "Keychain record creating error."
+            setStatus(500)
+            setResponse({
+                status: false,
+                message: "Keychain record creating error.",
+            })
 
-            return NextResponse.json(
-                response,
-                { status }
-            )
+            return getResponse()
         } finally {
             session.endSession()
         }
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse()
 }

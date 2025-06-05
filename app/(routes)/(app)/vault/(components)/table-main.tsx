@@ -1,6 +1,6 @@
 "use client"
-import useSWR from "swr"
 import axios from "axios"
+import useSWR, { KeyedMutator } from "swr"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { FaStar, FaRegStar } from "react-icons/fa";
@@ -76,6 +76,7 @@ const CollapsibleArea = ({
     hide,
     search,
     searchKeys,
+    mutateKeyChains,
 }: {
     keychainId?: string,
     keychainName?: string,
@@ -83,6 +84,7 @@ const CollapsibleArea = ({
     hide: boolean,
     search: string,
     searchKeys: string[],
+    mutateKeyChains?: KeyedMutator<any>;
 }) => {
     const { key, keyOfKeychains, setKeyOfKeychains } = useKey()
     const { setDoubleCheckOpen } = useDoubleCheckStore()
@@ -277,9 +279,13 @@ const CollapsibleArea = ({
                         </>
                     )}
                     {/* TODO: Finish keychain deleting. */}
-                    {/* {keychainId && (
-                        <DialogDeleteKeyChain />
-                    )} */}
+                    {keychainId && (
+                        <DialogDeleteKeyChain 
+                            keychainId={keychainId} 
+                            keychainName={keychainName || ""}
+                            mutate={mutateKeyChains}
+                        />
+                    )}
                 </div>
             </div>
             {keyInserted ? (
@@ -509,6 +515,7 @@ const TableMain = ({
                             hide={hide}
                             search={search}
                             searchKeys={searchKeys}
+                            mutateKeyChains={mutate}
                         />
                     ))}
                 </main>
