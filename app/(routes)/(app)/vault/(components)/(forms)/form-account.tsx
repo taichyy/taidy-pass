@@ -52,7 +52,6 @@ const FormAccount = ({
 
     // If it's a default keychain, check if there is a key.
     if (!keychainId && key && key != "") {
-        console.log(keychainId)
         insertedKeyVal = key;
     }
 
