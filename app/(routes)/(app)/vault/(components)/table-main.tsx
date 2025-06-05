@@ -100,27 +100,28 @@ const CollapsibleArea = ({
     const [filtered, setFiltered] = useState<TAccount[]>([])
     // Display all used labels in the keychain
     const [allUsedLabels, setAllUsedLabels] = useState<string[]>([])
+    // Check if the key chain is set correctly.
+    const [keyCorrect, setKeyCorrect] = useState<boolean | null>(keychainId ? null : true)
 
-    // If it's a custom keychain, checkk if there is a key in keyOfKeychains.
     if (keychainId && keyOfKeychains) {
+        // If it's a custom keychain, check if there is a key in keyOfKeychains.
+        useEffect(() => {
+            const keychainKey = keyOfKeychains && keychainId && keyOfKeychains[keychainId];
+            if (keychainKey) {
+                setKeyInserted(true);
+                setInsertedKeyVal(keychainKey);
+                setOpen(true);
+            }
+        }, [keychainId, keyOfKeychains])
+    } else {
+        // If it's a default keychain, check if there is a key.
+        useEffect(() => {
+            if (!keychainId && key && key != "") {
+                setKeyInserted(true);
+                setInsertedKeyVal(key);
+            }
+        }, [key, keychainId, keyOfKeychains])
     }
-    useEffect(() => {
-        const keychainKey = keyOfKeychains && keychainId && keyOfKeychains[keychainId];
-        if (keychainKey) {
-            setKeyInserted(true);
-            setInsertedKeyVal(keychainKey)
-        }
-    }, [keychainId, keyOfKeychains])
-
-    // If it's a default keychain, check if there is a key.
-    useEffect(() => {
-        if (!keychainId && key && key != "") {
-            setKeyInserted(true);
-            setInsertedKeyVal(key);
-        }
-
-    }, [key, keychainId, keyOfKeychains])
-
 
     // Effeciency issue: if the keychain is not opened for the 1st time, it won't fetch data.
     useEffect(() => {
@@ -158,10 +159,20 @@ const CollapsibleArea = ({
             remark: record.remark ? AESDecrypt(record.remark, insertedKeyVal) : "",
         }))
 
-        const usedLabels = Array.from(new Set(decrypted.map(record => record.label).flat())) as string[];
+        const keyIsCorrect = !!(decrypted.find(record => record.type == "validation" && record.username == "validation")) || !keychainId;
+        setKeyCorrect(keyIsCorrect);
 
-        setAccounts(decrypted)
-        setFiltered(decrypted)
+        if (keyIsCorrect) {
+            const validationIndex = decrypted.findIndex(record => record.type === "validation" && record.username === "validation");
+            if (validationIndex !== -1) {
+                decrypted.splice(validationIndex, 1);
+            }
+        }
+
+        const usedLabels = keyIsCorrect ? Array.from(new Set(decrypted.map(record => record.label).flat())) as string[] : [];
+
+        setAccounts(keyIsCorrect ? decrypted : [])
+        setFiltered(keyIsCorrect ? decrypted : [])
         setAllUsedLabels(usedLabels)
     }, [encryptedAccounts, insertedKeyVal])
 
@@ -248,7 +259,7 @@ const CollapsibleArea = ({
                     </CollapsibleTrigger>
                 </div>
                 <div className="flex items-center gap-2">
-                    {(keyInserted && keychainId) && (
+                    {(keyInserted && keyCorrect && keychainId) && (
                         <>
                             <Tooltip>
                                 <TooltipTrigger>
@@ -280,15 +291,15 @@ const CollapsibleArea = ({
                     )}
                     {/* TODO: Finish keychain deleting. */}
                     {keychainId && (
-                        <DialogDeleteKeyChain 
-                            keychainId={keychainId} 
+                        <DialogDeleteKeyChain
+                            keychainId={keychainId}
                             keychainName={keychainName || ""}
                             mutate={mutateKeyChains}
                         />
                     )}
                 </div>
             </div>
-            {keyInserted ? (
+            {keyCorrect && keyInserted ? (
                 <>
                     {hasOpened && (
                         <div className="rounded-md border px-4 py-2 font-mono text-sm shadow-sm">
@@ -398,7 +409,7 @@ const CollapsibleArea = ({
                 </>
             ) : (
                 <div className="flex justify-center items-center pt-14 pb-20">
-                    <DialogSetKey keychainId={keychainId} />
+                    <DialogSetKey keychainId={keychainId} keyCorrect={keyCorrect} />
                 </div>
             )}
         </Collapsible>
