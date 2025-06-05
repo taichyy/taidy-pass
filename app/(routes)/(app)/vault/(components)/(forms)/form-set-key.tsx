@@ -13,17 +13,15 @@ type TFormData = {
     base64Key: string;
 };
 const FormSetKey = ({
-    mutate,
     setOpened,
     keychainId,
 }:{
-    mutate?: () => void;
     setOpened: (opened: boolean) => void;
     keychainId?: string;
 }) => {
     const router = useRouter();
 
-    const { salt, keyOfKeychains, setKeyOfKeychains } = useKey();
+    const { salt, setKeyOfKeychains } = useKey();
 
     const [formData, setFormData] = useState<TFormData>({
         base64Key: "",

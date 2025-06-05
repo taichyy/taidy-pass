@@ -31,7 +31,7 @@ const FormDeleteKeychain = ({
         },
         {
             id: "password",
-            type: "text",
+            type: "password",
             label: "登入密碼",
             placeholder: "請輸入您的登入密碼以確認",
         },
@@ -72,7 +72,7 @@ const FormDeleteKeychain = ({
         }
 
         try {
-            const req = await axios({
+            await axios({
                 method,
                 url,
                 data: JSON.stringify({
@@ -80,9 +80,6 @@ const FormDeleteKeychain = ({
                 })
             })
 
-            const res = req.data
-
-            console.log(res)
             toast.success("刪除成功")
             setOpened(false)
             mutate && mutate()
