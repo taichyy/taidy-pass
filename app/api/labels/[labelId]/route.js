@@ -1,18 +1,11 @@
-import { NextResponse } from "next/server"
-
 import connect from "@/lib/db"
 import Label from "@/models/Label"
+import { Response } from "@/lib/utils"
 
 export const DELETE = async (request, { params }) => {
     const { labelId } = params
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {
@@ -20,35 +13,30 @@ export const DELETE = async (request, { params }) => {
         await connect()
         await Label.findByIdAndDelete(labelId)
 
-        status = 200
-        response.status = true
-        response.type = "success"
-        response.message = "Label has been deleted."
+        setStatus(200)
+        setResponse({
+            status: true,
+            type: "success",
+            message: "Label has been deleted.",
+        })
     } catch (err) {
         console.error("Error deleting Label record:", err);
 
-        status = 500
-        response.status = false
-        response.type = "error"
-        response.message = "Label deleted failed."
+        setStatus(500)
+        setResponse({
+            status: false,
+            type: "error",
+            message: "Label deleted failed.",
+        })
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse();
 }
 
 export const PUT = async (request, { params }) => {
     const { labelId } = params
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     const body = await request.json()
     const { key, name } = body
@@ -64,21 +52,22 @@ export const PUT = async (request, { params }) => {
 
         await Label.findByIdAndUpdate(labelId, data)
 
-        status = 200
-        response.status = true
-        response.type = "success"
-        response.message = "Label has been updated."
+        setStatus(200)
+        setResponse({
+            status: true,
+            type: "success",
+            message: "Label has been updated.",
+        })
     } catch (err) {
         console.error("Error updating Label record:", err);
 
-        status = 500
-        response.status = false
-        response.type = "error"
-        response.message = "Label update failed."
+        setStatus(500)
+        setResponse({
+            status: false,
+            type: "error",
+            message: "Label update failed.",
+        })
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse();
 }

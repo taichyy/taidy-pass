@@ -2,12 +2,10 @@ import bcrypt from "bcryptjs";
 import CryptoJS from "crypto-js";
 import { sign } from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
 import connect from "@/lib/db"
 import User from "@/models/User";
-
-const MAX_AGE = 60 * 60 * 24 * 14; // days;
+import { Response, MAX_AGE } from "@/lib/utils"
 
 // Login
 export const POST = async (request) => {
@@ -16,14 +14,7 @@ export const POST = async (request) => {
     const jwtSecret = process.env.JWT_SECRET || "";
     const secret = process.env.USER_SECRET || "";
 
-    // Message to response
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     const body = await request.json();
     const { username, password } = body;
@@ -34,27 +25,27 @@ export const POST = async (request) => {
         const user = await User.findOne({ usernameHash });
 
         if (!user) {
-            status = 401;
-            response = {
+            setStatus(401);
+            setResponse({
                 status: false,
                 type: "user",
-                message: "使用者不存在",
+                message: "User does not exist",
                 data: null,
-            };
-            return NextResponse.json(response, { status });
+            })
+            return getResponse();
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            status = 401;
-            response = {
+            setStatus(401);
+            setResponse({
                 status: false,
                 type: "password",
-                message: "密碼錯誤",
+                message: "Password is incorrect",
                 data: null,
-            };
-            return NextResponse.json(response, { status });
+            });
+            return getResponse();
         }
 
         const decryptedEmail = CryptoJS.AES.decrypt(user.email, secret).toString(CryptoJS.enc.Utf8);
@@ -81,37 +72,34 @@ export const POST = async (request) => {
             maxAge: MAX_AGE,
         });
 
-        status = 200;
-        response = {
+        setStatus(200);
+        setResponse({
             status: true,
             type: "user",
-            message: "登入成功",
-            data: { 
+            message: "Login successful",
+            data: {
                 token,
                 salt: user.salt,
             },
-        };
+        })
     } catch (error) {
         console.error("[LOGIN_ERROR]", error);
-        status = 500;
-        response.message = "發生錯誤，請稍後再試";
+
+        setStatus(500);
+        setResponse({
+            status: false,
+            message: "Server error during login",
+        });
     }
 
-    return NextResponse.json(response, { status });
+    return getResponse();
 };
 
 // Logout
 export async function DELETE(request) {
     const cookieStore = cookies();
 
-    // Message to response
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     cookieStore.set("token", "", {
         path: "/",
@@ -119,12 +107,11 @@ export async function DELETE(request) {
         expires: new Date(0), // Expire immediately
     });
 
-    status = 200
-    response.status = true
-    response.message = "Logout successfully"
+    setStatus(200);
+    setResponse({
+        status: true,
+        message: "Logout successfully",
+    })
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse();
 }

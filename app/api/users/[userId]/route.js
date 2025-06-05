@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server"
-
 import connect from "@/lib/db"
 import User from "@/models/User"
+import { Response } from "@/lib/utils"
 import { getUserId } from "@/lib/actions"
 
 export const GET = async (request, { params }) => {
@@ -9,19 +8,15 @@ export const GET = async (request, { params }) => {
 
     const loginedUserId = await getUserId(request)
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     if (loginedUserId !== userId) {
-        status = 403
-        response.status = false
-        response.type = "error"
-        response.message = "You are not authorized to access this user." 
+        setStatus(403)
+        setResponse({
+            status: false,
+            type: "user",
+            message: "You are not authorized to access this user.",
+        })
     } else {
          // Fetch
         try {
@@ -30,45 +25,42 @@ export const GET = async (request, { params }) => {
             const user = await User.findById(userId)
 
             if (!user) {
-                status = 404
-                response.status = false
-                response.type = "error"
-                response.message = "User not found."
+                setStatus(404)
+                setResponse({
+                    status: false,
+                    type: "user",
+                    message: "User not found.",
+                })
             } else {
-                status = 200
-                response.status = true
-                response.type = "success"
-                response.message = "User found."
-                response.data = user
+                setStatus(200)
+                setResponse({
+                    status: true,
+                    type: "success",
+                    message: "User found.",
+                    data: user,
+                })
             }
         } catch (err) {
             console.error("Error fetching User record:", err);
 
-            status = 500
-            response.status = false
-            response.type = "error"
-            response.message = "User fetch failed."
+            setStatus(500)
+            setResponse({
+                status: false,
+                type: "error",
+                message: "User fetch failed.",
+            })
         }   
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse()
 }
 
 export const PATCH = async (request, { params }) => {
     const { userId } = params
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
-
     const body = await request.json()
+
+    const { setStatus, setResponse, getResponse } = Response()
 
     // Construct a dynamic update object
     const updateData = {};
@@ -85,21 +77,22 @@ export const PATCH = async (request, { params }) => {
         await connect()
         await User.findByIdAndUpdate(userId, updateData)
 
-        status = 200
-        response.status = true
-        response.type = "success"
-        response.message = "User has been updated."
+        setStatus(200)
+        setResponse({
+            status: true,
+            type: "success",
+            message: "User has been updated.",
+        })
     } catch (err) {
         console.error("Error updating User record:", err);
 
-        status = 500
-        response.status = false
-        response.type = "error"
-        response.message = "User update failed."
+        setStatus(500)
+        setResponse({
+            status: false,
+            type: "error",
+            message: "User update failed.",
+        })
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse();
 }
