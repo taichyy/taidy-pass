@@ -89,6 +89,7 @@ const FormAccount = ({
     // Sync fetched data with formData when in edit mode
     useEffect(() => {
         if (data && isEdit && insertedKeyVal) {
+            setSearchKeys(data.label || []);
             setFormData({
                 title: AESDecrypt(data.title, insertedKeyVal),
                 username: AESDecrypt(data.username, insertedKeyVal),
