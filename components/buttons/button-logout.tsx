@@ -18,7 +18,7 @@ const ButtonLogout = () => {
     return (
         <>
             <Button onClick={() => setDoubleCheckOpen("logout", true)}>
-                確定登出
+                登出
             </Button>
             <DialogDoubleCheck
                 id="logout"
