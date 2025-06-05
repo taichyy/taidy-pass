@@ -8,6 +8,7 @@ const UncontrolledInput = ({
     remark,
     placeholder,
     defaultValue,
+    required = false
 }: {
     id: string,
     label: string,
@@ -15,6 +16,7 @@ const UncontrolledInput = ({
     remark?: string,
     placeholder?: string,
     defaultValue?: string,
+    required?: boolean
 }) => {
     return (
         <div className="flex flex-col space-y-0.5 w-full">
@@ -35,6 +37,7 @@ const UncontrolledInput = ({
                 placeholder={placeholder || ("請輸入"+label)} 
                 className="bg-white border-slate-300" 
                 defaultValue={defaultValue}
+                required={required}
             />
         </div>
     );
