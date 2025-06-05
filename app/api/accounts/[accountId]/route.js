@@ -23,7 +23,7 @@ export const GET = async (request, { params }) => {
 
         const account = await Account.findById(accountId)
 
-        const { title, username, password, remark, userId } = account
+        const { title, username, password, label, remark, userId } = account
 
         if (userId != loginedUserId) {
             status = 403
@@ -37,6 +37,7 @@ export const GET = async (request, { params }) => {
                 username,
                 password,
                 remark,
+                label,
             }
     
             status = 200
@@ -52,41 +53,6 @@ export const GET = async (request, { params }) => {
         response.status = false
         response.type = "error"
         response.message = "Account fetched failed."
-    }
-
-    return NextResponse.json(
-        response,
-        { status }
-    )
-}
-
-export const DELETE = async (request, { params }) => {
-    const { accountId } = params
-
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
-
-    // Fetch
-    try {
-        await connect()
-        await Account.findByIdAndDelete(accountId)
-
-        status = 200
-        response.status = true
-        response.type = "success"
-        response.message = "Account has been deleted."
-    } catch (err) {
-        console.error("Error deleting account record:", err);
-
-        status = 500
-        response.status = false
-        response.type = "error"
-        response.message = "Account deleted failed."
     }
 
     return NextResponse.json(
@@ -117,7 +83,7 @@ export const PUT = async (request, { params }) => {
         
         const body = await request.json()
 
-        const { title, username, password, remark, userId } = body || {}
+        const { title, username, password, label, remark, userId } = body || {}
 
         // From utils/db.js
         await connect()
@@ -125,11 +91,12 @@ export const PUT = async (request, { params }) => {
         const findAccount = await Account.findById(accountId)
 
          // If it's a regular PUT req.
-        if (!mode) {            
+        if (mode == "account") {            
             data = {
                 title,
                 username,
                 password,
+                label,
                 remark,
             }
         } else if (mode == "starred") {
@@ -170,6 +137,41 @@ export const PUT = async (request, { params }) => {
         response.status = false
         response.type = "error"
         response.message = "Account update failed."
+    }
+
+    return NextResponse.json(
+        response,
+        { status }
+    )
+}
+
+export const DELETE = async (request, { params }) => {
+    const { accountId } = params
+
+    let status = null;
+    let response = {
+        status: false,
+        type: null,
+        message: null,
+        data: null,
+    };
+
+    // Fetch
+    try {
+        await connect()
+        await Account.findByIdAndDelete(accountId)
+
+        status = 200
+        response.status = true
+        response.type = "success"
+        response.message = "Account has been deleted."
+    } catch (err) {
+        console.error("Error deleting account record:", err);
+
+        status = 500
+        response.status = false
+        response.type = "error"
+        response.message = "Account deleted failed."
     }
 
     return NextResponse.json(
