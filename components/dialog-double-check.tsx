@@ -56,11 +56,9 @@ const DialogDoubleCheck = ({
                     <DialogTitle>
                         {title}
                     </DialogTitle>
-                    {desc && (
-                        <DialogDescription>
-                            {desc}
-                        </DialogDescription>
-                    )}
+                    <DialogDescription>
+                        {desc}
+                    </DialogDescription>
                 </DialogHeader>
                 <div>
                     <div className="flex justify-end gap-2 mt-4">

@@ -246,7 +246,7 @@ const CollapsibleArea = ({
                     </CollapsibleTrigger>
                 </div>
                 <div className="flex items-center gap-2">
-                    {keyInserted && (
+                    {(keyInserted && keychainId) && (
                         <>
                             <Tooltip>
                                 <TooltipTrigger>

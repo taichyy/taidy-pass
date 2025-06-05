@@ -33,7 +33,6 @@ const DialogShare = () => {
                         透過超連結與密碼，分享資訊給其他人
                     </DialogDescription>
                     <Separator />
-                    
                 </DialogHeader>
             </DialogContent>
         </Dialog>
