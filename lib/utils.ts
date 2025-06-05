@@ -1,6 +1,9 @@
 import CryptoJS from "crypto-js"
 import { twMerge } from "tailwind-merge"
 import { type ClassValue, clsx } from "clsx"
+import { NextResponse } from "next/server";
+
+export const MAX_AGE = 60 * 60 * 24 * 14;
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -113,4 +116,36 @@ export async function deriveRawKey(password: string, salt: string): Promise<stri
     const keyArray = new Uint8Array(derivedBits);
     return btoa(Array.from(keyArray).map(c => String.fromCharCode(c)).join(""));
 
+}
+
+// Closure, as response template
+export const Response = () => {
+    let status: number | null = null;
+
+    let response: any = {
+        status: false,
+        type: null,
+        message: null,
+        data: null,
+    }
+
+    const setStatus = (newStatus: number | null) => status = newStatus;
+    const setResponse = (newResponse: {
+        status?: boolean,
+        type?: string | null,
+        message?: string | null,
+        data?: any
+    }) => response = { ...response, ...newResponse };
+
+     const getResponse = () => {
+        return NextResponse.json(response, { status: status ?? 500 });
+    };
+
+    return {
+        status,
+        response,
+        setStatus,
+        setResponse,
+        getResponse,
+    }
 }

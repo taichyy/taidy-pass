@@ -1,8 +1,7 @@
-import { NextResponse } from "next/server"
-
 import connect from "@/lib/db"
 import Label from "@/models/Label"
 import Account from "@/models/Account"
+import { Response } from "@/lib/utils"
 import { getUserId } from "@/lib/actions"
 
 export const POST = async (request) => {
@@ -11,18 +10,17 @@ export const POST = async (request) => {
 
     const userId = await getUserId()
 
+    const { setStatus, setResponse, getResponse } = Response()
+
     if (!userId) {
-        const status = 401
-        const response = {
+        setStatus(401)
+        setResponse({
             status: false,
             type: "user",
             message: "User not found.",
-        }
+        })
 
-        return NextResponse.json(
-            response,
-            { status }
-        )
+        return getResponse();
     }
 
     const url = new URL(request.url)
@@ -30,13 +28,6 @@ export const POST = async (request) => {
 
     const body = await request.json()
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
 
     if (method === "get") {
         // GET /api/accounts?method=get => get all accounts
@@ -71,22 +62,23 @@ export const POST = async (request) => {
                 label: acc.label.map(key => labelMap.get(key) || key) // fallback to key if name not found
             }));
 
-            status = 200
-            response.status = true
-            response.type = "success"
-            response.message = "Account fetched successfully"
-            response.data = accountsWithLabelNames
+            setStatus(200)
+            setResponse({
+                status: true,
+                type: "success",
+                message: "Account fetched successfully",
+                data: accountsWithLabelNames,
+            })
         } catch (error) {
             console.error("Error fetching account records:", error);
 
-            status = 500
-            response.status = false
-            response.message = "Account record fetching error."
+            setStatus(500)
+            setResponse({
+                status: false,
+                message: "Account record fetching error.",
+            })
 
-            return NextResponse.json(
-                response,
-                { status }
-            )
+            return getResponse();
         }
     } else if ( !method ) {
         // POST /api/accounts => create a new account
@@ -111,26 +103,24 @@ export const POST = async (request) => {
             await connect()
             await newAccount.save()
     
-            status = 200
-            response.status = true
-            response.type = "success"
-            response.message = "Account has been created"
+            setStatus(200)
+            setResponse({
+                status: true,
+                type: "success",
+                message: "Account has been created",
+            })
         } catch (error) {
             console.error("Error creating account records:", error);
 
-            status = 500
-            response.status = false
-            response.message = "Account record creating error."
+            setStatus(500)
+            setResponse({
+                status: false,
+                message: "Account record creating error.",
+            })
 
-            return NextResponse.json(
-                response,
-                { status }
-            )
+            return getResponse();
         }
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse();
 }

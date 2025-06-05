@@ -2,12 +2,10 @@ import bcrypt from "bcryptjs"
 import CryptoJS from "crypto-js"
 import { sign } from "jsonwebtoken";
 import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
 
 import connect from "@/lib/db"
 import User from "@/models/User"
-
-const MAX_AGE = 60 * 60 * 24 * 14; // days;
+import { Response, MAX_AGE } from "@/lib/utils"
 
 // Create a new user.
 export const POST = async (request) => {
@@ -16,14 +14,7 @@ export const POST = async (request) => {
     const jwtSecret = process.env.JWT_SECRET || "";
     const secret = process.env.USER_SECRET || "";
 
-    // Message to response
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     const body = await request.json();
     const { username, password, email } = body;
@@ -38,14 +29,14 @@ export const POST = async (request) => {
         const existingUser = await User.findOne({ usernameHash });
 
         if (existingUser) {
-            status = 200;
-            response = {
+            setStatus(200);
+            setResponse({
                 status: true,
                 type: "user",
                 message: "User already exists",
                 data: null,
-            };
-            return NextResponse.json(response, { status });
+            })
+            return getResponse()
         }
 
         const newUser = new User({
@@ -80,17 +71,21 @@ export const POST = async (request) => {
             maxAge: MAX_AGE,
         });
 
-        status = 201;
-        response = {
+        setStatus(201);
+        setResponse({
             status: true,
+            type: "success",
             message: "Registration successful",
-            data: null,
-        };
+        })
     } catch (error) {
         console.error("[REGISTER_ERROR]", error);
-        status = 500;
-        response.message = "Registration error, try again.";
+        
+        setStatus(500);
+        setResponse({
+            status: false,
+            message: "Registration failed, please try again.",
+        })
     }
 
-    return NextResponse.json(response, { status });
+    return getResponse()
 };

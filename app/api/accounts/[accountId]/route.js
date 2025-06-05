@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server"
-
 import connect from "@/lib/db"
 import Account from "@/models/Account"
+import { Response } from "@/lib/utils"
 import { getUserId } from "@/lib/actions"
 
 export const GET = async (request, { params }) => {
@@ -9,13 +8,7 @@ export const GET = async (request, { params }) => {
 
     const { accountId } = params
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {
@@ -26,10 +19,12 @@ export const GET = async (request, { params }) => {
         const { title, username, password, label, remark, userId } = account
 
         if (userId != loginedUserId) {
-            status = 403
-            response.status = false
-            response.type = "error"
-            response.message = "You are not authorized to access this account."
+            setStatus(403)
+            setResponse({
+                status: false,
+                type: "error",
+                message: "You are not authorized to access this account.",
+            })
         } else {
             const data = {
                 _id: account._id,
@@ -40,25 +35,26 @@ export const GET = async (request, { params }) => {
                 label,
             }
     
-            status = 200
-            response.status = true
-            response.type = "success"
-            response.message = "Account fetched successfully."
-            response.data = data
+            setStatus(200)
+            setResponse({
+                status: true,
+                type: "success",
+                message: "Account fetched successfully.",
+                data,
+            })
         }
     } catch (err) {
         console.error("Error fetching account record by id:", err);
 
-        status = 500
-        response.status = false
-        response.type = "error"
-        response.message = "Account fetched failed."
+        setStatus(500)
+        setResponse({
+            status: false,
+            type: "error",
+            message: "Account fetch failed.",
+        })
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse()
 }
 
 export const PUT = async (request, { params }) => {
@@ -69,13 +65,7 @@ export const PUT = async (request, { params }) => {
     const url = new URL(request.url)
     const mode = url.searchParams.get("mode")
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {
@@ -107,75 +97,73 @@ export const PUT = async (request, { params }) => {
         }
 
         if (findAccount.type == "validation") {
-            status = 400
-            response.status = false
-            response.type = "error"
-            response.message = "You cannot update a validation account."
-            return NextResponse.json(
-                response,
-                { status }
-            )
+            setStatus(400)
+            setResponse({
+                status: false,
+                type: "error",
+                message: "You cannot update a validation account.",
+            })
+
+            return getResponse()
         }
 
         if (userId != loginedUserId) {
-            status = 403
-            response.status = false
-            response.type = "error"
-            response.message = "You are not authorized to access this account."
+            setStatus(403)
+            setResponse({
+                status: false,
+                type: "error",
+                message: "You are not authorized to access this account.",
+            })
         } else {
             await Account.findByIdAndUpdate(accountId, data)
     
-            status = 200
-            response.status = true
-            response.type = "success"
-            response.message = "Account has been updated."
+            setStatus(200)
+            setResponse({
+                status: true,
+                type: "success",
+                message: "Account has been updated.",
+            })
         }
     } catch (err) {
         console.error("Error updating account record:", err);
 
-        status = 500
-        response.status = false
-        response.type = "error"
-        response.message = "Account update failed."
+        setStatus(500)
+        setResponse({
+            status: false,
+            type: "error",
+            message: "Account update failed.",
+        })
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse()
 }
 
 export const DELETE = async (request, { params }) => {
     const { accountId } = params
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {
         await connect()
         await Account.findByIdAndDelete(accountId)
 
-        status = 200
-        response.status = true
-        response.type = "success"
-        response.message = "Account has been deleted."
+        setStatus(200)
+        setResponse({
+            status: true,
+            type: "success",
+            message: "Account has been deleted.",
+        })
     } catch (err) {
         console.error("Error deleting account record:", err);
 
-        status = 500
-        response.status = false
-        response.type = "error"
-        response.message = "Account deleted failed."
+        setStatus(500)
+        setResponse({
+            status: false,
+            type: "error",
+            message: "Account deletion failed.",
+        })
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse()
 }

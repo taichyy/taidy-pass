@@ -1,9 +1,9 @@
 import { jwtVerify } from "jose"
 import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
 
 import connect from "@/lib/db"
 import Label from "@/models/Label"
+import { Response } from "@/lib/utils"
 
 export const POST = async (request) => {
     // POST /api/labels => create a new label
@@ -18,13 +18,7 @@ export const POST = async (request) => {
     const userId = decoded.payload.userId
     const role = decoded.payload.role
 
-    let status = null;
-    let response = {
-        status: false,
-        type: null,
-        message: null,
-        data: null,
-    };
+    const { setStatus, setResponse, getResponse } = Response()
 
     const url = new URL(request.url)
     const method = url.searchParams.get("method")
@@ -38,29 +32,32 @@ export const POST = async (request) => {
     
             const labels = await Label.find(type == "custom" ? { userId } : {});
 
-            status = 200
-            response.status = true
-            response.type = "success"
-            response.message = "Label fetched successfully"
-            response.data = labels
+            setStatus(200)
+            setResponse({
+                status: true,
+                type: "success",
+                message: "Labels fetched successfully",
+                data: labels,
+            })
         } catch (error) {
             console.error("Error fetching label records:", error);
 
-            status = 500
-            response.status = false
-            response.message = "Label record fetching error."
+            setStatus(500)
+            setResponse({
+                status: false,
+                message: "Label record fetching error.",
+            })
 
-            return NextResponse.json(
-                response,
-                { status }
-            )
+            return getResponse();
         }
     } else if ( !method ) {
         if (role !== "admin") {
-            status = 401
-            response.status = false
-            response.type = "unauthorized"
-            response.message = "Permission denied."
+            setStatus(401)
+            setResponse({
+                status: false,
+                type: "unauthorized",
+                message: "Permission denied.",
+            })
         } else {
             // POST /api/labels => create a new label
             // This is encrypted data, by user at client.
@@ -83,39 +80,36 @@ export const POST = async (request) => {
                 const existingLabel = await Label.findOne({ key })
     
                 if (existingLabel) {
-                    status = 400
-                    response.status = false
-                    response.type = "duplicated"
-                    response.message = "Label key already exists."
-                    return NextResponse.json(
-                        response,
-                        { status }
-                    )
+                    setStatus(400)
+                    setResponse({
+                        status: false,
+                        type: "duplicated",
+                        message: "Label key already exists.",
+                    })
+                    return getResponse();
                 }
     
                 await newlabel.save()
-        
-                status = 200
-                response.status = true
-                response.type = "success"
-                response.message = "Label has been created"
+
+                setStatus(200)
+                setResponse({
+                    status: true,
+                    type: "success",
+                    message: "Label has been created",
+                })
             } catch (error) {
                 console.error("Error creating label records:", error);
+
+                setStatus(500)
+                setResponse({
+                    status: false,
+                    message: "Label record creating error.",
+                })
     
-                status = 500
-                response.status = false
-                response.message = "Label record creating error."
-    
-                return NextResponse.json(
-                    response,
-                    { status }
-                )
+                return getResponse();
             }
         }
     }
 
-    return NextResponse.json(
-        response,
-        { status }
-    )
+    return getResponse();
 }
