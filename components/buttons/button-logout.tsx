@@ -9,8 +9,7 @@ const ButtonLogout = () => {
     const handleClick = async () => {
         // remove cookie server-side
         await fetch("/api/session", { method: "DELETE" }); 
-        
-        router.push("/login");
+        router.refresh()
     };
     return (
         <Button onClick={() => handleClick()}>
