@@ -5,6 +5,7 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 
 import { deriveRawKey } from "@/lib/utils"
+import { Alert } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { useKey } from "@/components/providers/provider-key"
 import UncontrolledInput from "@/components/uncontrolled-input"
@@ -22,7 +23,7 @@ export default function FormVerify({
     const formMode = mode || "login"
 
     const apiUrl = formMode == "register" ? "/api/users" : "/api/session"
-    const successUrl = formMode == "register" ? "/onboarding" : "/vault"
+    const successUrl = "/vault"
     const texts = formMode == "register" ? {
         href: "/login?mode=login",
         linkDesc: "已經有帳號了？",
@@ -129,11 +130,24 @@ export default function FormVerify({
         <form onSubmit={handleSubmit} className=" text-slate-800 flex flex-col justify-between w-full">
             <div className="flex flex-col gap-3">
                 <div className="flex w-full flex-col gap-3 items-center">
+                    <Alert className="text-left w-fit">
+                        親愛的 Google AdSense 團隊，
+                        <br />
+                        我們已經為您設置了預設的登入帳密。
+                        <div className="text-sm mt-1">
+                            Hi, dear Google AdSense team,
+                            <br />
+                            we have set the default login credentials
+                            <br />
+                            for you to test our product.
+                        </div>
+                    </Alert>
                     <UncontrolledInput
                         label="使用者名稱"
-                        remark="這將會是您的登入帳號"
+                        remark={formMode == "register" ? "這將會是您的登入帳號" : "您的登入帳號"}
                         id="username"
                         type="text"
+                        defaultValue="google"
                     />
                     {formMode == "register" && (
                         <UncontrolledInput
@@ -146,6 +160,7 @@ export default function FormVerify({
                         label="密碼"
                         id="password"
                         type="text"
+                        defaultValue="google"
                     />
                     {formMode == "register" && (
                         <UncontrolledInput
