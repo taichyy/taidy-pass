@@ -11,13 +11,17 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import FormKeychain from "../(forms)/form-keychain";
 import { Separator } from "@/components/ui/separator";
+import FormDeleteKeychain from "../(forms)/form-delete-keychain";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const DialogDeleteKeyChain = ({
+    keychainId,
+    keychainName,
     mutate
 }: {
+    keychainId: string; 
+    keychainName: string;
     mutate?: KeyedMutator<any>;
 }) => {
     const [opened, setOpened] = useState(false);
@@ -43,7 +47,12 @@ const DialogDeleteKeyChain = ({
                         此動作將永久刪除鑰匙圈及其所有內容，我們無法為您恢復。
                     </DialogDescription>
                     <Separator />
-                    <FormKeychain setOpened={setOpened} mutate={mutate} />
+                    <FormDeleteKeychain 
+                        keychainName={keychainName}
+                        keychainId={keychainId} 
+                        mutate={mutate}
+                        setOpened={setOpened} 
+                    />
                 </DialogHeader>
             </DialogContent>
         </Dialog>
