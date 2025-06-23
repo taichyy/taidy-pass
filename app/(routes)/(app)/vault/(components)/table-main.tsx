@@ -103,25 +103,24 @@ const CollapsibleArea = ({
     // Check if the key chain is set correctly.
     const [keyCorrect, setKeyCorrect] = useState<boolean | null>(keychainId ? null : true)
 
-    if (keychainId && keyOfKeychains) {
-        // If it's a custom keychain, check if there is a key in keyOfKeychains.
-        useEffect(() => {
-            const keychainKey = keyOfKeychains && keychainId && keyOfKeychains[keychainId];
-            if (keychainKey) {
-                setKeyInserted(true);
-                setInsertedKeyVal(keychainKey);
-                setOpen(true);
-            }
-        }, [keychainId, keyOfKeychains])
-    } else {
-        // If it's a default keychain, check if there is a key.
-        useEffect(() => {
-            if (!keychainId && key && key != "") {
-                setKeyInserted(true);
-                setInsertedKeyVal(key);
-            }
-        }, [key, keychainId, keyOfKeychains])
-    }
+    // If it's a custom keychain, check if there is a key in keyOfKeychains.
+    useEffect(() => {
+        const keychainKey = keyOfKeychains && keychainId && keyOfKeychains[keychainId];
+
+        if (keychainKey) {
+            setKeyInserted(true);
+            setInsertedKeyVal(keychainKey);
+            setOpen(true);
+        }
+    }, [keychainId, keyOfKeychains])
+
+    // If it's a default keychain, check if there is a key.
+    useEffect(() => {
+        if (!keychainId && key && key != "") {
+            setKeyInserted(true);
+            setInsertedKeyVal(key);
+        }
+    }, [key, keychainId])
 
     // Effeciency issue: if the keychain is not opened for the 1st time, it won't fetch data.
     useEffect(() => {
