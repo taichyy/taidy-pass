@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
     title: 'TaidyPass | 最安全的密碼管理器',
-    description: 'TaidyPass is a password manager that helps you securely store and manage your credentials. Developed by TaiChe Software Co. Ltd.',
+    description: 'TaidyPass is a password manager that helps you securely store and manage your credentials. Developed by TaiChe Digital Co. Ltd.',
     other: {
         "monetag": process.env.NEXT_PUBLIC_MONETAG ?? "",
     },
