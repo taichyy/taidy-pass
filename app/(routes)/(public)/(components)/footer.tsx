@@ -10,7 +10,7 @@ interface MenuItem {
     }[];
 }
 
-const copyrightText = `© ${new Date().getFullYear()} TaiChe Digital Co., Ltd. All rights reserved.`;
+const copyrightText = `© ${new Date().getFullYear()} TaiChe Technology. All rights reserved.`;
 
 const DialogTerms = () => {
     return (
@@ -152,7 +152,7 @@ const Footer = ({
                 <footer>
                     <div className={cn(
                         "flex flex-wrap lg:grid gap-8",
-                        `lg:grid-cols-${menuItems.length+2}`,
+                        `lg:grid-cols-${menuItems.length + 2}`,
                     )}>
                         <div className="w-full lg:col-span-2 mb-8 lg:mb-0">
                             <div className="flex items-center gap-2 lg:justify-start">
