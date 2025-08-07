@@ -163,11 +163,11 @@ export default function FormVerify({
                             {texts.linkBtn}
                         </Link>
                     </span>
-                    {formMode == "login" && (
+                    {/* {formMode == "login" && (
                         <Link href="/forgot" className="text-primary/70 hover:underline">
                             忘記密碼？
                         </Link>
-                    )}
+                    )} */}
                 </div>
             </div>
             <div className="flex flex-col items-end my-6 md:mt-4">
