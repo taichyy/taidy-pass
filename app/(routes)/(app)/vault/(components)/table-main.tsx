@@ -391,7 +391,7 @@ const CollapsibleArea = ({
                             labels={labels}
                             keychainId={keychainId}
                         >
-                            <Card className="mt-4 py-4 px-3 min-h-[200px] cursor-pointer flex justify-center items-center opacity-50 hover:opacity-100 transition-opacity duration-300 bg-transparent hover:bg-white/40">
+                            <Card className="mt-4 py-4 px-3 min-h-[200px] cursor-pointer flex justify-center items-center opacity-50 hover:opacity-100 transition-opacity duration-300 bg-transparent hover:bg-white/40 dark:hover:bg-gray-800/40">
                                 <PlusCircle
                                     size={32}
                                     className="text-slate-700 cursor-pointer"
@@ -503,7 +503,7 @@ const TableMain = ({
                     setSearch(e.target.value)
                 }}
                 placeholder="搜尋......"
-                className="h-[50px] text-base"
+                className="h-[50px] text-base bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             />
             {/* Main area, under search and filtering section. */}
             {/* First one, without keychainId, means default keychain */}

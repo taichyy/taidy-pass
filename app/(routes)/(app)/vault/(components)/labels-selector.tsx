@@ -31,8 +31,8 @@ const LabelsSelector = ({
                             }
                         }}
                         className={cn(
-                            "mr-2 mb-2 text-sm cursor-pointer w-fit dark:bg-black",
-                            !isSelected && "bg-white"
+                            "mr-2 mb-2 text-sm cursor-pointer w-fit",
+                            !isSelected && "bg-white dark:bg-gray-800"
                         )}
                     >
                         {label.name}

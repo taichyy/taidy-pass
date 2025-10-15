@@ -46,7 +46,7 @@ const Edit = ({
                 <DialogHeader>
                     <DialogTitle>輸入密碼</DialogTitle>
                     <form onSubmit={(e) => handleSubmit(e)}>
-                        <Input name="password" className="mt-4" />
+                        <Input name="password" className="mt-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" />
                         <Button type="submit" className="mt-4 w-full">
                             確定
                         </Button>

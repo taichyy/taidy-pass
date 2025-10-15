@@ -10,7 +10,7 @@ import DesignedByFreepik from "@/components/designed-by-freepik";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ForgotPage = () => {
-    const imageSrc = "/login.jpg";
+    const imageSrc = "/login.png";
 
     return (
         <main className="flex flex-col gap-2 justify-center items-center h-[100dvh] w-fit ml-auto mr-auto">
@@ -27,7 +27,7 @@ const ForgotPage = () => {
                 </Button>
             </Link>
             <Card 
-                className="w-full relative bg-white min-w-[350px]"
+                className="w-full relative bg-white dark:bg-gray-900 min-w-[350px]"
                 data-aos={"fade-right"}
                 data-aos-anchor-placement="top-center"
             >

@@ -126,7 +126,7 @@ export default function FormVerify({
     }
 
     return (
-        <form onSubmit={handleSubmit} className=" text-slate-800 flex flex-col justify-between w-full">
+        <form onSubmit={handleSubmit} className="  flex flex-col justify-between w-full">
             <div className="flex flex-col gap-3">
                 <div className="flex w-full flex-col gap-3 items-center">
                     <UncontrolledInput
@@ -145,13 +145,13 @@ export default function FormVerify({
                     <UncontrolledInput
                         label="密碼"
                         id="password"
-                        type="text"
+                        type="password"
                     />
                     {formMode == "register" && (
                         <UncontrolledInput
                             label="確認密碼"
                             id="confirm-password"
-                            type="text"
+                            type="password"
                             placeholder="請再次輸入密碼"
                         />
                     )}
@@ -171,7 +171,7 @@ export default function FormVerify({
                 </div>
             </div>
             <div className="flex flex-col items-end my-6 md:mt-4">
-                <Button type="submit" disabled={isLoading}>
+                <Button type="submit" disabled={isLoading} className="text-white">
                     {isLoading ? "載入中" : texts.button}
                 </Button>
             </div>
