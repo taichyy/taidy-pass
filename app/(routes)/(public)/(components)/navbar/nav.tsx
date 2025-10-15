@@ -24,7 +24,7 @@ const Nav = ({
     }, [pathname])
     
     return (
-        <div className={`fixed top-0 left-0 bg-white shadow-md w-full transition-all duration-200 h-[12vh] z-[1000]`}>
+        <div className={`fixed top-0 left-0 bg-white dark:bg-gray-900 shadow-md w-full transition-all duration-200 h-[12vh] z-[1000]`}>
             <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
                 <LogoText />
                 {/* NavLinks */}
@@ -35,7 +35,7 @@ const Nav = ({
                                 "nav_link",
                                 pathname === link.url 
                                     ? "text-blue-700 font-bold after:scale-x-100" 
-                                    : "text-gray-600 hover:text-blue-700 transition-all duration-200"
+                                    : "text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all duration-200"
                             )}>
                                 {link.label}
                             </p>
@@ -48,7 +48,7 @@ const Nav = ({
                         Join Now
                     </button> */}
                     {/* Burger menu */}
-                    <HiBars3BottomRight onClick={() => setShowNav(true)} className="w-8 h-8 cursor-pointer text-black lg:hidden" />
+                    <HiBars3BottomRight onClick={() => setShowNav(true)} className="w-8 h-8 cursor-pointer text-foreground lg:hidden" />
                 </div>
             </div>
         </div>

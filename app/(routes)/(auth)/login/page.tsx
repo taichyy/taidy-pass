@@ -18,7 +18,7 @@ const LoginPage = ({
 }) => {
     const { mode } = searchParams;
 
-    const imageSrc = mode === "register" ? "/register.png" : "/login.jpg";
+    const imageSrc = mode === "register" ? "/register.png" : "/login.png";
 
     return (
         <main className="flex flex-col gap-2 justify-center items-center h-[100dvh] w-fit ml-auto mr-auto">
@@ -29,13 +29,13 @@ const LoginPage = ({
                 data-aos-delay={400}
                 className="w-fit mr-auto text-slate-800"
             >
-                <Button variant="outline">
+                <Button variant="outline" className="dark:bg-accent/80 dark:text-white">
                     <ArrowLeft className="mr-1" size={20} />
                     返回
                 </Button>
             </Link>
             <Card 
-                className="w-full relative bg-white min-w-[350px]"
+                className="w-full relative bg-white dark:bg-slate-200 min-w-[350px]"
                 data-aos={mode == "login" ? "fade-right" : "fade-left"}
                 data-aos-anchor-placement="top-center"
             >

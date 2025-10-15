@@ -40,7 +40,7 @@ const ControlledInput = ({
                 placeholder={placeholder || ("請輸入"+label)} 
                 value={value}
                 onChange={onChange}
-                className="bg-white border-slate-300" 
+                className="bg-white dark:bg-gray-900 border-slate-300 dark:border-gray-600 text-gray-900 dark:text-gray-100" 
             />
         </div>
     );

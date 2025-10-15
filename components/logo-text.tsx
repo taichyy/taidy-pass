@@ -11,7 +11,8 @@ const LogoText = () => {
                 height={65}
             />
             <h1 className="text-xl md:text-3xl font-semibold">
-                <span className="text-primary mr-0.5">Taidy</span>Pass
+                <span className="text-primary mr-0.5">Taidy</span>
+                <span className="dark:text-primary">Pass</span>
             </h1>
         </Link>
     );
