@@ -10,7 +10,7 @@ const emailDescription = "我們將會盡快回覆您的訊息。";
 const email = "taichedev@gmail.com";
 const msgLabel = "Line";
 const msgDescription = "若有更緊急的事項，請透過 Line 聯絡客服人員。";
-const msgAddress = "taichenyen";
+const msgAddress = "@142cffjd";
 
 const ContactPage = () => {
     return (
