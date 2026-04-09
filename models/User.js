@@ -65,4 +65,7 @@ userSchema.pre("save", function (next) {
     this.updatedAt = new Date();
     next();
 });
-module.exports = mongoose.models.User || mongoose.model('User', userSchema);
+
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;

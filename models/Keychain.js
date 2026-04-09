@@ -13,4 +13,6 @@ const keychainSchema = new Schema({
     },
 })
 
-module.exports = mongoose.models.Keychain || mongoose.model('Keychain', keychainSchema);
+const Keychain = mongoose.models.Keychain || mongoose.model("Keychain", keychainSchema);
+
+export default Keychain;
