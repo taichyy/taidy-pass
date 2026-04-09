@@ -11,6 +11,8 @@ import { StickyHeaderWrapper } from "./(components)/sticky-header-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 const getLabels = async (token: string) => {
     const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/labels?method=get`, {
