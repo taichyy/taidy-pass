@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { jwtVerify } from "jose";
-import { Pencil } from "lucide-react";
 import { cookies } from "next/headers";
 
 import LogoText from "@/components/logo-text";
@@ -11,7 +10,7 @@ import ButtonBackToTop from "@/components/buttons/button-back-to-top";
 import { StickyHeaderWrapper } from "./(components)/sticky-header-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const getLabels = async (token: string) => {
     const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/labels?method=get`, {
@@ -51,24 +50,33 @@ const VaultPage = async () => {
                     <span className="text-bold">
                         {username}
                     </span>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                                <Link href="/settings">
-                                    <Avatar className="border-2 border-slate-400 dark:border-white rounded-full flex justify-center items-center group cursor-pointer">
-                                        <Pencil className="hidden group-hover:block" />
-                                        <AvatarImage
-                                            src="/logo.png"
-                                            alt="@user"
-                                            className="block group-hover:hidden"
-                                        />
-                                        <AvatarFallback>Taidy</AvatarFallback>
-                                    </Avatar>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Avatar className="border-2 border-slate-400 dark:border-white rounded-full flex justify-center items-center group cursor-pointer">
+                                <AvatarImage
+                                    src="/logo.png"
+                                    alt="@user"
+                                />
+                                <AvatarFallback>Taidy</AvatarFallback>
+                            </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuGroup>
+                                <DropdownMenuLabel>帳戶</DropdownMenuLabel>
+                                <Link href="/logout">
+                                    <DropdownMenuItem>
+                                        登出
+                                    </DropdownMenuItem>
                                 </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            使用者設定
-                        </TooltipContent>
-                    </Tooltip>
+                                {/* <DropdownMenuItem>Billing</DropdownMenuItem> */}
+                            </DropdownMenuGroup>
+                            {/* <DropdownMenuSeparator />
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem>Team</DropdownMenuItem>
+                                <DropdownMenuItem>Subscription</DropdownMenuItem>
+                            </DropdownMenuGroup> */}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </StickyHeaderWrapper>
             {/* // Use fixed width insteawd of %, because Dialog opening somehow change the width. */}

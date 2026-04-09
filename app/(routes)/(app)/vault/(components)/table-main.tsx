@@ -27,7 +27,6 @@ import DialogKeyChain from "./(dialogs)/dialog-keychain"
 import { TAccount, TKeychain, TLabel } from "@/lib/types"
 import ButtonCopy from "@/components/buttons/button-copy"
 import { useKey } from "@/components/providers/provider-key"
-import ButtonLogout from "@/components/buttons/button-logout"
 import { ThemeModeToggle } from "@/components/theme-mode-toggle"
 import DialogDoubleCheck from "@/components/dialog-double-check"
 import DialogDeleteKeyChain from "./(dialogs)/dialog-delete-keychain"
@@ -307,7 +306,7 @@ const CollapsibleArea = ({
                     )}
                     <CollapsibleContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4">
                         {!!filtered?.length && filtered.map(item => (
-                            <Card key={item._id} className="mt-4 py-4 px-3 flex flex-col justify-end">
+                            <Card key={item._id} className="mt-4 py-4 px-3 flex flex-col justify-start">
                                 <div className="flex justify-between items-center pb-2">
                                     <span>
                                         {item?.starred ? (
@@ -332,7 +331,7 @@ const CollapsibleArea = ({
                                         ))}
                                     </div>
                                 </div>
-                                <div>
+                                <div className="flex-grow">
                                     <div className="pl-2 text-base">
                                         {item.title}
                                         <div className="flex justify-between flex-col flex-wrap mt-2">
@@ -370,7 +369,7 @@ const CollapsibleArea = ({
                                             </Tooltip>
                                         </div>
                                     </div>
-                                    <div className="flex gap-1 justify-end mt-3">
+                                    <div className="flex gap-1 justify-end mt-4">
                                         {/* This is a dialog, which display only the button. */}
                                         <DialogAccount
                                             labels={labels}
@@ -488,7 +487,6 @@ const TableMain = ({
                 </div>
                 <div className="flex gap-2 ml-auto">
                     <ThemeModeToggle />
-                    <ButtonLogout />
                 </div>
             </nav>
             {/* Filter keys */}
