@@ -101,7 +101,7 @@ const ButtonKeyGenerator = ({
                         </div>
                     </div>
                     <p className="text-red-500 text-xs mt-2">
-                        ⚠️ {!copied ? "此金鑰僅顯示一次！" : "進入首頁後將不會再顯示。"}
+                        ⚠️ 金鑰會於初次使用後暫存於本地瀏覽器（localStorage），只要未清除資料或換裝置，您可於「登出頁」再次取得所有自訂鑰匙圈密鑰。請務必妥善保存，遺失將無法復原。
                     </p>
                 </div>
             )}

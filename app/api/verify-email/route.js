@@ -11,7 +11,7 @@ export async function POST(request) {
     const { setStatus, setResponse, getResponse } = Response();
 
     try {
-        const cookieStore = cookies();
+        const cookieStore = await cookies();
         const token = cookieStore.get("token")?.value;
 
         if (!token) {
@@ -35,7 +35,7 @@ export async function POST(request) {
                 email: decoded.email,
             },
             jwtSecret,
-            { expiresIn: '24h' }
+            { expiresIn: '10m' }
         );
         
         if (verificationToken) {
@@ -60,7 +60,7 @@ export async function POST(request) {
                             content: `
                                 <p>請點擊以下連結以驗證您的 Email 信箱：</p>
                                 <a href="${verifyUrl}" target="_blank">${verifyUrl}</a>
-                                <p>此連結有效期限為 24 小時。</p>
+                                <p>此連結有效期限為 10 分鐘。</p>
                             `,
                         }),
                     }

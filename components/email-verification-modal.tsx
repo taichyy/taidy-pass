@@ -105,7 +105,10 @@ export function EmailVerificationModal({
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                         我們將發送驗證連結到：
                         <div className="font-medium text-foreground mt-1">
-                            {userEmail}
+                            {userEmail.split("@")[0].length <=3 
+                                ? userEmail 
+                                : userEmail.split("@")[0].substring(0, 3) + "*".repeat(userEmail.split("@")[0].length - 3) + "@" + userEmail.split("@")[1]
+                            }
                         </div>
                     </div>
 
