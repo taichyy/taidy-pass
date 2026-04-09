@@ -13,7 +13,7 @@ export const POST = async (request) => {
     const jwtSecret = process.env.JWT_SECRET || "";
 
     // Parse userId from token, or by Bearer header
-    const token = cookies().get("token")?.value || request.headers.get("Authorization")?.split(" ")[1]
+    const token = (await cookies()).get("token")?.value || request.headers.get("Authorization")?.split(" ")[1]
     const decoded = await jwtVerify(token, new TextEncoder().encode(jwtSecret))
     const userId = decoded.payload.userId
     const role = decoded.payload.role

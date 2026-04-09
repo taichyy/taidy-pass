@@ -47,7 +47,7 @@ export const getUserId = async (request?: any) => {
         const authHeader = request.headers.get("authorization")
         token = authHeader?.split(" ")[1] || ""
     } else {
-        token = cookies().get("token")?.value || ""
+        token = (await cookies()).get("token")?.value || ""
     }
 
     const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))

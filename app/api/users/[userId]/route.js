@@ -3,7 +3,8 @@ import User from "@/models/User"
 import { Response } from "@/lib/utils"
 import { getUserId } from "@/lib/actions"
 
-export const GET = async (request, { params }) => {
+export const GET = async (request, props) => {
+    const params = await props.params;
     const { userId } = params
 
     const loginedUserId = await getUserId(request)
@@ -55,7 +56,8 @@ export const GET = async (request, { params }) => {
     return getResponse()
 }
 
-export const PATCH = async (request, { params }) => {
+export const PATCH = async (request, props) => {
+    const params = await props.params;
     const { userId } = params
 
     const body = await request.json()
