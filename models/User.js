@@ -5,16 +5,16 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
     // AES 加密，可解碼
-    usernameEncrypted: { 
-        type: String, 
-        required: true 
-    }, 
+    usernameEncrypted: {
+        type: String,
+        required: true
+    },
     // SHA256 hash 判斷唯一性
-    usernameHash: { 
-        type: String, 
-        required: true, 
-        unique: true 
-    }, 
+    usernameHash: {
+        type: String,
+        required: true,
+        unique: true
+    },
     email: {
         type: String,
         required: false,
@@ -24,7 +24,7 @@ const userSchema = new Schema({
     },
     // Hashed password
     password: {
-        type: String, 
+        type: String,
         required: true,
     },
     salt: {
@@ -40,7 +40,7 @@ const userSchema = new Schema({
     },
     // Third-party provider id, optional if provider as credentials.
     providerId: {
-        type: String, 
+        type: String,
     },
     avatarUrl: {
         type: String,
