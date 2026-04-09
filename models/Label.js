@@ -36,4 +36,7 @@ labelSchema.pre("save", function (next) {
     this.updatedAt = new Date();
     next();
 });
-module.exports = mongoose.models.Label || mongoose.model('Label', labelSchema);
+
+const Label = mongoose.models.Label || mongoose.model("Label", labelSchema);
+
+export default Label;
