@@ -90,6 +90,19 @@ export function EmailVerificationModal({
         setVerificationSent(false);
         handleSendVerification();
     };
+    
+    const handleClick = async () => {
+        try {
+            await fetch("/api/session", { method: "DELETE" });
+
+            toast.success("登出成功！")
+        } catch (err) {
+            console.error("Error in function in DialogDoubleCheck: " + err)
+            toast.error("發生錯誤，請稍後再試！")
+        } finally {
+            router.push("/")
+        }
+    }
 
     return (
         <Dialog open={isOpen} onOpenChange={() => {}}>
@@ -112,6 +125,7 @@ export function EmailVerificationModal({
                         </div>
                     </div>
 
+                    <div>
                     {!verificationSent ? (
                         <Button 
                             onClick={handleSendVerification}
@@ -135,6 +149,15 @@ export function EmailVerificationModal({
                             </Button>
                         </div>
                     )}
+                        <Button
+                            variant="outline"
+                            onClick={handleClick}
+                            className="w-full mt-2"
+                        >
+                            登出
+                        </Button>
+                    </div>
+
 
                     <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
                         沒有收到郵件？請檢查垃圾郵件資料夾
