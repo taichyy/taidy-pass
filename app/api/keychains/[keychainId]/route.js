@@ -8,7 +8,8 @@ import { Response } from "@/lib/utils"
 import Keychain from "@/models/Keychain"
 import { getUserId } from "@/lib/actions"
 
-export const DELETE = async (request, { params }) => {
+export const DELETE = async (request, props) => {
+    const params = await props.params;
     const { keychainId } = params
 
     const body = await request.json()

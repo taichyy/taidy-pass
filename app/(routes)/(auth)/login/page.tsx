@@ -9,13 +9,14 @@ import { ThemeModeToggle } from "@/components/theme-mode-toggle";
 import DesignedByFreepik from "@/components/designed-by-freepik";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const LoginPage = ({
-    searchParams,
-}:{
-    searchParams: {
-        mode?: "register" | "login"
+const LoginPage = async (
+    props:{
+        searchParams: Promise<{
+            mode?: "register" | "login"
+        }>
     }
-}) => {
+) => {
+    const searchParams = await props.searchParams;
     const { mode } = searchParams;
 
     const imageSrc = mode === "register" ? "/register.png" : "/login.png";

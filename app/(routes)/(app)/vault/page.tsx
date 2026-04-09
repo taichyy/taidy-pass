@@ -32,7 +32,7 @@ const VaultPage = async () => {
     // Always check this
     const jwtSecret = process.env.JWT_SECRET || "";
 
-    const token = cookies().get("token")?.value
+    const token = (await cookies()).get("token")?.value
     const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
 
     const jwt = decoded?.payload as TJWTPayload

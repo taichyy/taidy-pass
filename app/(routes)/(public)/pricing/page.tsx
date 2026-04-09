@@ -29,11 +29,12 @@ interface PricingPlan {
     comingSoon?: boolean;
 }
 
-const PricingPage = ({
-    searchParams,
-}: {
-    searchParams: { isYearly?: string; };
-}) => {
+const PricingPage = async (
+    props: {
+        searchParams: Promise<{ isYearly?: string; }>;
+    }
+) => {
+    const searchParams = await props.searchParams;
     // URL would be like: /pricing?isYearly, the searchParams will be { isYearly: "" }
     const isYearly = searchParams.isYearly === "";
 

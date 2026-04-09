@@ -2,7 +2,8 @@ import connect from "@/lib/db"
 import Label from "@/models/Label"
 import { Response } from "@/lib/utils"
 
-export const DELETE = async (request, { params }) => {
+export const DELETE = async (request, props) => {
+    const params = await props.params;
     const { labelId } = params
 
     const { setStatus, setResponse, getResponse } = Response()
@@ -33,7 +34,8 @@ export const DELETE = async (request, { params }) => {
     return getResponse();
 }
 
-export const PUT = async (request, { params }) => {
+export const PUT = async (request, props) => {
+    const params = await props.params;
     const { labelId } = params
 
     const { setStatus, setResponse, getResponse } = Response()

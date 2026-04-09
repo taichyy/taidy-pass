@@ -3,7 +3,8 @@ import Account from "@/models/Account"
 import { Response } from "@/lib/utils"
 import { getUserId } from "@/lib/actions"
 
-export const GET = async (request, { params }) => {
+export const GET = async (request, props) => {
+    const params = await props.params;
     const loginedUserId = await getUserId()
 
     const { accountId } = params
@@ -57,7 +58,8 @@ export const GET = async (request, { params }) => {
     return getResponse()
 }
 
-export const PUT = async (request, { params }) => {
+export const PUT = async (request, props) => {
+    const params = await props.params;
     const loginedUserId = await getUserId()
     const { accountId } = params
 
@@ -138,7 +140,8 @@ export const PUT = async (request, { params }) => {
     return getResponse()
 }
 
-export const DELETE = async (request, { params }) => {
+export const DELETE = async (request, props) => {
+    const params = await props.params;
     const { accountId } = params
 
     const { setStatus, setResponse, getResponse } = Response()
