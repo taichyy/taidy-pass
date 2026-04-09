@@ -5,7 +5,7 @@ import { Response } from "@/lib/utils"
 export async function POST(request) {
     const body = await request.json();
 
-    const { email, username, content } = body || {}
+    const { subject, email, username, content } = body || {}
 
     const { setStatus, setResponse, getResponse } = Response()
 
@@ -32,10 +32,10 @@ export async function POST(request) {
     const message = {
         from: `TaidyPass Team <${process.env.EMAIL_FROM}>`,
         to: email,
-        subject: "Using NodeMailer with Next.js API.",
+        subject: subject || "TaidyPass Notification",
         html: `
             <p>
-                Hello ${username, content || "親愛的用戶"},
+                Hello ${username},
             </p>
 
             ${content}
