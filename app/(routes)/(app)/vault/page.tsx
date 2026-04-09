@@ -49,7 +49,7 @@ const VaultPage = async () => {
             <StickyHeaderWrapper>
                 <LogoText />
                 <div className="flex items-center gap-2">
-                    <span className="text-bold">
+                    <span className="text-bold hidden sm:block">
                         {username}
                     </span>
                     <DropdownMenu>

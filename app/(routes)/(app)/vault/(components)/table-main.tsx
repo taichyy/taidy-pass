@@ -335,21 +335,21 @@ const CollapsibleArea = ({
                                     <div className="pl-2 text-base">
                                         {item.title}
                                         <div className="flex justify-between flex-col flex-wrap mt-2">
-                                            <div className="flex items-center gap-1 flex-1">
+                                            <div className="flex items-center gap-1 flex-1 w-full">
                                                 <Key size={16} />
-                                                <span className=" min-w-[60px] md:min-w-[90px] lg:min-w-[120px]">
+                                                <div className=" min-w-[60px] md:min-w-[90px] lg:min-w-[120px] overflow-clip">
                                                     {!hide ? item.username : item.username.replace(/./g, "*")}
-                                                </span>
+                                                </div>
                                                 {!hide && <ButtonCopy value={item.username} className="ml-auto" />}
                                             </div>
-                                            <div className="flex items-center gap-1 flex-1">
+                                            <div className="flex items-center gap-1 flex-1 w-full">
                                                 <Key size={16} />
-                                                <span className=" min-w-[60px] md:min-w-[90px] lg:min-w-[120px]">
+                                                <div className=" min-w-[60px] md:min-w-[90px] lg:min-w-[120px] overflow-clip">
                                                     {!hide
                                                         ? item.password.length > 20 ? item.password.slice(0, 20) + '...' : item.password
                                                         : item.password.length > 20 ? item.password.replace(/./g, "*").slice(0, 20) + '...' : item.password.replace(/./g, "*")
                                                     }
-                                                </span>
+                                                </div>
                                                 {!hide && <ButtonCopy value={item.password} className="ml-auto" />}
                                             </div>
                                             {/* 第二行：備註 */}
