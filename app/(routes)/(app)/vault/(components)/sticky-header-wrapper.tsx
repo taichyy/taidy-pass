@@ -29,7 +29,7 @@ export function StickyHeaderWrapper({ children }: { children: React.ReactNode })
                 id="sticky-header"
                 className={cn(
                     "flex items-center justify-between gap-3 rounded-b-md sticky top-0 z-10 py-2 px-4 transition-colors duration-300",
-                    "bg-white dark:bg-gray-900 text-foreground shadow-md px-10 md:px-16 xl:px-32",
+                    "bg-white dark:bg-gray-900 text-foreground shadow-md px-10 md:px-10",
                     // isSticky && "shadow-sm bg-transparent",
                 )}
             >
