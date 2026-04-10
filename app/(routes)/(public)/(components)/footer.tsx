@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import LogoText from "@/components/logo-text";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import Link from "next/link";
 
 interface MenuItem {
     title: string;
@@ -130,6 +131,7 @@ const Footer = ({
             "links": [
                 { "text": "關於我們", "url": "/about" },
                 { "text": "聯絡我們", "url": "/contact" },
+                { "text": "太馳官網", "url": "https://www.taiche.dev" },
             ]
         },
         {
@@ -168,7 +170,13 @@ const Footer = ({
                                             key={linkIdx}
                                             className="font-medium hover:text-primary"
                                         >
-                                            <a href={link.url}>{link.text}</a>
+                                            {link.url.startsWith("http") ? (
+                                                <a href={link.url} target="_blank" rel="noopener noreferrer">
+                                                    {link.text}
+                                                </a>
+                                            ) : (
+                                                <Link href={link.url}>{link.text}</Link>
+                                            )}
                                         </li>
                                     ))}
                                 </ul>

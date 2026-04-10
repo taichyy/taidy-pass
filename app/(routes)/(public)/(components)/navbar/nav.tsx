@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { HiBars3BottomRight } from "react-icons/hi2";
 
@@ -18,11 +18,11 @@ const Nav = ({
     setShowNav
 }: Props) => {
     const pathname = usePathname()
-    
+
     useEffect(() => {
         setShowNav(false)
     }, [pathname])
-    
+
     return (
         <div className={`fixed top-0 left-0 bg-white dark:bg-gray-900 shadow-md w-full transition-all duration-200 h-[12vh] z-[1000]`}>
             <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
@@ -30,16 +30,35 @@ const Nav = ({
                 {/* NavLinks */}
                 <div className="hidden md:flex items-center space-x-10">
                     {navLinks.map((link) => (
-                        <Link href={link.url} key={link.id} onClick={() => setShowNav(false)}>
-                            <p className={cn(
-                                "nav_link",
-                                pathname === link.url 
-                                    ? "text-blue-700 font-bold after:scale-x-100" 
-                                    : "text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all duration-200"
-                            )}>
-                                {link.label}
-                            </p>
-                        </Link>
+                        <Fragment key={link.id}>
+                            {link.url.startsWith("http") ? (
+                                <a
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <p className={cn(
+                                        "nav_link",
+                                        pathname === link.url
+                                            ? "text-blue-700 font-bold after:scale-x-100"
+                                            : "text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all duration-200"
+                                    )}>
+                                        {link.label}
+                                    </p>
+                                </a>
+                            ) : (
+                                <Link href={link.url} key={link.id} onClick={() => setShowNav(false)}>
+                                    <p className={cn(
+                                        "nav_link",
+                                        pathname === link.url
+                                            ? "text-blue-700 font-bold after:scale-x-100"
+                                            : "text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all duration-200"
+                                    )}>
+                                        {link.label}
+                                    </p>
+                                </Link>
+                            )}
+                        </Fragment>
                     ))}
                 </div>
                 {/* Buttons */}
