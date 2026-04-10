@@ -2,9 +2,6 @@ import { jwtVerify } from 'jose'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-import User from './models/User'
-import { getUserId } from './lib/actions'
-
 const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET || '')
 
 const loginRoute = "/login"
@@ -37,17 +34,7 @@ export async function middleware(request: NextRequest) {
     if (pathname === loginRoute && token) {
         try {
             await jwtVerify(token, jwtSecret)
-
-            // Check if token is still valid based on tokenValidAfter
-            const userId = await getUserId();
-            const user = await User.findById(userId);
-
-            if (user && user.tokenValidAfter > new Date()) {
-                return NextResponse.redirect(new URL('/vault', request.url))
-            } else {
-                // token 已經失效，繼續留在 loginRoute
-                return NextResponse.next()
-            }
+            return NextResponse.redirect(new URL('/vault', request.url))
         } catch (err) {
             // token 無效或過期，繼續留在 loginRoute
             return NextResponse.next()
