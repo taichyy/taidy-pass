@@ -50,6 +50,10 @@ const userSchema = new Schema({
         enum: ["user", "admin"],
         default: "user",
     },
+    tokenValidAfter: {
+        type: Date,
+        default: () => new Date(),
+    },  
     createdAt: {
         type: Date,
         default: () => new Date(),

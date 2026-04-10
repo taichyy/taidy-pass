@@ -14,11 +14,6 @@ A simple, user-friendly, and highly secure password manager that allows you to s
 - **JWT (JSON Web Token)** – Secure authentication and session management.
 - **crypto-js** – Encrypts all stored and transmitted data for enhanced security.
 
-## 🎮 Demo Credentials
-
-For demo website, you can use:
-Username: 123 Password: 123
-
 ## 📖 Getting Started
 
 ### 1️⃣ MongoDB Setup MongoDB
@@ -76,10 +71,6 @@ This project is open-source and available under the MIT License.
 - **MongoDB** – 彈性又自由的資料庫
 - **JWT (JSON Web Token)** – 登入驗證
 - **crypto-js** – 加密
-
-## 🎮 測試帳密
-
-DEMO 網站的測試帳密皆為「123」
 
 ## 📖 開始使用
 
