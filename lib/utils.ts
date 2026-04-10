@@ -105,7 +105,7 @@ export async function deriveRawKey(password: string, salt: string): Promise<stri
         {
             name: "PBKDF2",
             salt: encoder.encode(salt),
-            iterations: 100_000,
+            iterations: 310_000,
             hash: "SHA-256",
         },
         keyMaterial,
