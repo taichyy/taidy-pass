@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import connect from "@/lib/db"
 import User from "@/models/User";
 import { Response, MAX_AGE } from "@/lib/utils"
+import { getUserId } from "@/lib/actions";
 
 // Login
 export const POST = async (request) => {
@@ -101,10 +102,25 @@ export async function DELETE(request) {
 
     const { setStatus, setResponse, getResponse } = Response()
 
+    // Update tokenValidAfter to invalidate existing tokens
+    const token = cookieStore.get("token")?.value;
+    if (token) {
+        try {
+            const userId = await getUserId();
+
+            await User.findByIdAndUpdate(userId, { tokenValidAfter: new Date() });
+        } catch (error) {
+            console.error("[LOGOUT_ERROR]", error);
+            // Even if token verification fails, we still want to clear the cookie
+        }
+    }   
+
+    // Clear the token cookie
     cookieStore.set("token", "", {
         path: "/",
         httpOnly: true,
-        expires: new Date(0), // Expire immediately
+        // Expire immediately
+        expires: new Date(0), 
     });
 
     setStatus(200);
