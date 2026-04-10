@@ -3,7 +3,8 @@ import { verify, sign } from "jsonwebtoken";
 
 import connect from "@/lib/db";
 import User from "@/models/User";
-import { Response, apiProtect } from "@/lib/utils";
+import { Response } from "@/lib/utils";
+import { apiProtect } from "@/lib/actions";
 
 export async function POST(request) {
     // ----- General api check.
