@@ -26,6 +26,11 @@ const NavResponsive = () => {
         },
         {
             id: "4",
+            url: "https://www.taiche.dev",
+            label: "太馳官網",
+        },
+        {
+            id: "5",
             url: "/login",
             label: "進入系統",
         },
