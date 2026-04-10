@@ -1,12 +1,29 @@
 import connect from "@/lib/db"
 import Label from "@/models/Label"
 import { Response } from "@/lib/utils"
+import { apiProtect } from "@/lib/actions"
 
 export const DELETE = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     const params = await props.params;
     const { labelId } = params
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {
@@ -35,10 +52,26 @@ export const DELETE = async (request, props) => {
 }
 
 export const PUT = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     const params = await props.params;
     const { labelId } = params
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     const body = await request.json()
     const { key, name } = body

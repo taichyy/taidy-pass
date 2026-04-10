@@ -1,13 +1,32 @@
 const nodemailer = require('nodemailer');
 
 import { Response } from "@/lib/utils"
+import { apiProtect } from "@/lib/actions"
 
 export async function POST(request) {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
+    // TODO: Protect, only admin can send email, or a user sending email to himself.
+
     const body = await request.json();
 
     const { subject, email, username, content } = body || {}
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     if (!email) {
         setStatus(400)

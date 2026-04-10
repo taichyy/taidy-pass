@@ -6,16 +6,32 @@ import User from "@/models/User"
 import Account from "@/models/Account"
 import { Response } from "@/lib/utils"
 import Keychain from "@/models/Keychain"
-import { getUserId } from "@/lib/actions"
+import { getUserId, apiProtect } from "@/lib/actions"
 
 export const DELETE = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     const params = await props.params;
     const { keychainId } = params
 
     const body = await request.json()
     const { password } = body || {}
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     if (!keychainId) {
         setStatus(400)

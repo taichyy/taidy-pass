@@ -25,6 +25,8 @@ export const POST = async (request) => {
     const usernameHash = CryptoJS.SHA256(username, secret).toString();
     const passwordHash = await bcrypt.hash(password, 12);
 
+    const newUserSalt = CryptoJS.lib.WordArray.random(16).toString();
+
     try {
         const existingUser = await User.findOne({ usernameHash });
 
@@ -45,6 +47,7 @@ export const POST = async (request) => {
             password: passwordHash,
             email: encryptedEmail,
             secondFAPassword: passwordHash,
+            salt: newUserSalt,
             role: "user",
         });
 

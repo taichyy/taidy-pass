@@ -3,12 +3,29 @@ import { verify, sign } from "jsonwebtoken";
 
 import connect from "@/lib/db";
 import User from "@/models/User";
-import { Response } from "@/lib/utils";
+import { Response, apiProtect } from "@/lib/utils";
 
 export async function POST(request) {
-    await connect();
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
 
-    const { setStatus, setResponse, getResponse } = Response();
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
+
+    await connect();
 
     try {
         const cookieStore = await cookies();
