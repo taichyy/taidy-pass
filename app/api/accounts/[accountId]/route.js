@@ -1,15 +1,32 @@
 import connect from "@/lib/db"
 import Account from "@/models/Account"
 import { Response } from "@/lib/utils"
-import { getUserId } from "@/lib/actions"
+import { getUserId, apiProtect } from "@/lib/actions"
 
 export const GET = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
+
     const params = await props.params;
     const loginedUserId = await getUserId()
 
     const { accountId } = params
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {
@@ -59,6 +76,24 @@ export const GET = async (request, props) => {
 }
 
 export const PUT = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     const params = await props.params;
     const loginedUserId = await getUserId()
     const { accountId } = params
@@ -66,8 +101,6 @@ export const PUT = async (request, props) => {
     // Get mode from search params
     const url = new URL(request.url)
     const mode = url.searchParams.get("mode")
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {
@@ -141,10 +174,27 @@ export const PUT = async (request, props) => {
 }
 
 export const DELETE = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
+
     const params = await props.params;
     const { accountId } = params
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     // Fetch
     try {

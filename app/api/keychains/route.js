@@ -4,15 +4,31 @@ import connect from "@/lib/db"
 import Account from "@/models/Account"
 import { Response } from "@/lib/utils"
 import Keychain from "@/models/Keychain"
-import { encryptRecord, getUserId } from "@/lib/actions"
+import { encryptRecord, getUserId, apiProtect } from "@/lib/actions"
 
 export const POST = async (request) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     // POST /api/keychains => create a new KeyChain
     // POST /api/keychains?method=get => get all keychains
 
     const userId = await getUserId()
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     if (!userId) {
         setStatus(401)

@@ -2,15 +2,31 @@ import connect from "@/lib/db"
 import Label from "@/models/Label"
 import Account from "@/models/Account"
 import { Response } from "@/lib/utils"
-import { getUserId } from "@/lib/actions"
+import { getUserId, apiProtect } from "@/lib/actions"
 
 export const POST = async (request) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     // POST /api/accounts => create a new account
     // POST /api/accounts?method=get => get all accounts
 
     const userId = await getUserId()
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     if (!userId) {
         setStatus(401)
@@ -27,7 +43,6 @@ export const POST = async (request) => {
     const method = url.searchParams.get("method")
 
     const body = await request.json()
-
 
     if (method === "get") {
         // GET /api/accounts?method=get => get all accounts

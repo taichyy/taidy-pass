@@ -4,6 +4,7 @@ import { jwtVerify } from "jose"
 import { cookies } from "next/headers"
 
 import { TAccount, TNote } from "./types"
+import User from "@/models/User"
 
 export const encryptRecord = async (record: TAccount, key: string) => {
     const { title, username, password, remark } = record
@@ -35,7 +36,7 @@ export const encryptRecordNote = async (record: TNote, key: string) => {
     }
 }
 
-export const getUserId = async (request?: any) => {
+export const getUserId = async (request?: any): Promise<string> => {
     // Always check this
     const jwtSecret = process.env.JWT_SECRET || "";
 
@@ -54,5 +55,68 @@ export const getUserId = async (request?: any) => {
 
     const userId = decoded.payload.userId
 
-    return userId || ""
+    return userId as string || ""
+}
+
+export const tokenIsValid = async (request?: any): Promise<boolean> => {
+    try {
+        // Always check this
+        const jwtSecret = process.env.JWT_SECRET || "";
+
+        // Already did basic check whild getting userId.
+        const userId = await getUserId(request)
+
+        // Fetch tokenValidAfter from database, and compare with token's iat (issued at) field.
+        const user = await User.findById(userId)
+
+        // Parse userId from token
+        let token = ""
+    
+        if (request) {
+            const authHeader = request.headers.get("authorization")
+            token = authHeader?.split(" ")[1] || ""
+        } else {
+            token = (await cookies()).get("token")?.value || ""
+        }
+
+        const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
+        const tokenIat = decoded?.payload.iat && new Date(decoded?.payload.iat * 1000) || new Date()
+
+        if (user && user.tokenValidAfter < tokenIat) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+export const apiProtect = async () => {
+    let roleList = ["admin", "user"]
+
+    const adminOnly = () => roleList = ["admin"]
+
+    const userOnly = () => roleList = ["user"]
+
+    const getCheckResult = async () => {
+        // Always check this
+        const jwtSecret = process.env.JWT_SECRET || "";
+
+        const isValid = await tokenIsValid()
+
+        console.log(roleList)
+
+        const token = (await cookies()).get("token")?.value || ""
+        const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
+        const tokenRole: string = decoded?.payload.role as string || ""
+
+        return isValid && roleList.includes(tokenRole)
+    }
+
+    return {
+        adminOnly,
+        userOnly,
+        getCheckResult
+    }
 }

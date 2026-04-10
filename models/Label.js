@@ -37,6 +37,6 @@ labelSchema.pre("save", function (next) {
     next();
 });
 
-const Label = mongoose.models.Label || mongoose.model("Label", labelSchema);
+const Label = mongoose?.models?.Label || mongoose.model("Label", labelSchema);
 
 export default Label;

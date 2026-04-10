@@ -4,8 +4,27 @@ import { cookies } from "next/headers"
 import connect from "@/lib/db"
 import Label from "@/models/Label"
 import { Response } from "@/lib/utils"
+import { apiProtect } from "@/lib/actions"
 
 export const POST = async (request) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     // POST /api/labels => create a new label
     // POST /api/labels?method=get => get all labels
 
@@ -17,8 +36,6 @@ export const POST = async (request) => {
     const decoded = await jwtVerify(token, new TextEncoder().encode(jwtSecret))
     const userId = decoded.payload.userId
     const role = decoded.payload.role
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     const url = new URL(request.url)
     const method = url.searchParams.get("method")

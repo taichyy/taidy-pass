@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import mongoose from "mongoose";
 
 const { Schema } = mongoose;
@@ -30,7 +29,6 @@ const userSchema = new Schema({
     salt: {
         type: String,
         required: true,
-        default: () => crypto.randomBytes(16).toString("base64url"),
     },
     provider: {
         type: String,
@@ -70,6 +68,6 @@ userSchema.pre("save", function (next) {
     next();
 });
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const User = mongoose?.models?.User || mongoose.model("User", userSchema);
 
 export default User;

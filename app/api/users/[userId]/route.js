@@ -4,15 +4,31 @@ import { cookies } from "next/headers";
 import connect from "@/lib/db"
 import User from "@/models/User"
 import { Response } from "@/lib/utils"
-import { getUserId } from "@/lib/actions"
+import { getUserId, apiProtect } from "@/lib/actions"
 
 export const GET = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     const params = await props.params;
     const { userId } = params
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     const loginedUserId = await getUserId()
 
@@ -109,12 +125,28 @@ export const GET = async (request, props) => {
 }
 
 export const PATCH = async (request, props) => {
+    // ----- General api check.
+    // Auth helpers
+    const { getCheckResult } = await apiProtect()
+    const valid = await getCheckResult()
+
+    // Response helpers
+    const { setStatus, setResponse, getResponse } = Response()
+
+    // Auth check
+    if (!valid) {
+        setStatus(403)
+        setResponse({
+            status: false,
+            message: "Access denied.",
+        })
+        return getResponse();
+    }
+
     const params = await props.params;
     const { userId } = params
 
     const body = await request.json()
-
-    const { setStatus, setResponse, getResponse } = Response()
 
     // Construct a dynamic update object
     const updateData = {};
