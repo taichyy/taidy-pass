@@ -3,6 +3,7 @@ import CryptoJS from "crypto-js"
 import { jwtVerify } from "jose"
 import { cookies } from "next/headers"
 
+import connect from "./db"
 import User from "@/models/User"
 import { TAccount, TNote } from "./types"
 
@@ -36,13 +37,12 @@ export const encryptRecordNote = async (record: TNote, key: string) => {
     }
 }
 
-export const getUserId = async (request?: any): Promise<string | false> => {
+export const getUserId = async (request?: any): Promise<string> => {
     // Always check this
     const jwtSecret = process.env.JWT_SECRET || "";
 
     // Parse userId from token
     let token = ""
-
     
     if (request) {
         const authHeader = request.headers.get("authorization")
@@ -50,8 +50,6 @@ export const getUserId = async (request?: any): Promise<string | false> => {
     } else {
         token = (await cookies()).get("token")?.value || ""
     }
-
-    if (!token) return false
 
     const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
 
@@ -68,6 +66,8 @@ export const tokenIsValid = async (request?: any): Promise<boolean> => {
         // Already did basic check whild getting userId.
         const userId = await getUserId(request)
 
+        await connect()
+        
         // Fetch tokenValidAfter from database, and compare with token's iat (issued at) field.
         const user = await User.findById(userId)
 
@@ -92,6 +92,7 @@ export const tokenIsValid = async (request?: any): Promise<boolean> => {
             return false
         }
     } catch (error) {
+        console.log(error)
         return false
     }
 }
