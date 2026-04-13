@@ -21,6 +21,8 @@ export function EmailVerificationWrapper({ children }: EmailVerificationWrapperP
         try {
             const userId = await getUserId()
 
+            if (!userId) return
+
             const response = await fetch(`/api/users/${userId}?type=email-check`);
             const result = await response.json();
 

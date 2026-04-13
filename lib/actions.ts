@@ -3,8 +3,8 @@ import CryptoJS from "crypto-js"
 import { jwtVerify } from "jose"
 import { cookies } from "next/headers"
 
-import { TAccount, TNote } from "./types"
 import User from "@/models/User"
+import { TAccount, TNote } from "./types"
 
 export const encryptRecord = async (record: TAccount, key: string) => {
     const { title, username, password, remark } = record
@@ -36,7 +36,7 @@ export const encryptRecordNote = async (record: TNote, key: string) => {
     }
 }
 
-export const getUserId = async (request?: any): Promise<string> => {
+export const getUserId = async (request?: any): Promise<string | false> => {
     // Always check this
     const jwtSecret = process.env.JWT_SECRET || "";
 
@@ -50,6 +50,8 @@ export const getUserId = async (request?: any): Promise<string> => {
     } else {
         token = (await cookies()).get("token")?.value || ""
     }
+
+    if (!token) return false
 
     const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
 
@@ -79,6 +81,8 @@ export const tokenIsValid = async (request?: any): Promise<boolean> => {
             token = (await cookies()).get("token")?.value || ""
         }
 
+        if (!token) return false
+
         const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
         const tokenIat = decoded?.payload.iat && new Date(decoded?.payload.iat * 1000) || new Date()
 
@@ -99,15 +103,16 @@ export const apiProtect = async () => {
 
     const userOnly = () => roleList = ["user"]
 
-    const getCheckResult = async () => {
+    const getCheckResult = async (): Promise<boolean> => {
         // Always check this
         const jwtSecret = process.env.JWT_SECRET || "";
 
         const isValid = await tokenIsValid()
 
-        console.log(roleList)
-
         const token = (await cookies()).get("token")?.value || ""
+
+        if (!token) return false
+
         const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
         const tokenRole: string = decoded?.payload.role as string || ""
 
