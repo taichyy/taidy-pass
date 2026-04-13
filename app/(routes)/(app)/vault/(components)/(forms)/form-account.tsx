@@ -116,6 +116,8 @@ const FormAccount = ({
 
         const userId = await getUserId()
 
+        if (!userId) return
+
         const url = isEdit ? `/api/accounts/${id}?mode=account` : `/api/accounts/`
         const method = isEdit ? "PUT" : "POST"
 

@@ -95,47 +95,36 @@ export const POST = async (request) => {
 
             return getResponse();
         }
-    } else if ( !method ) {
-        // POST /api/accounts => create a new account
-        // This is encrypted data, by user at client.
-        const { title, username, password, remark, label, keychainId } = body || {}
-
-        const data = {
-            title,
-            username,
-            password,
-            remark,
-            userId,
-            label,
-            keychainId,
+    } else if (!method) {
+        // 支援單筆與批量新增
+        // 單筆: body 為物件，批量: body 為陣列
+        let accounts = [];
+        if (Array.isArray(body)) {
+            // 批量
+            accounts = body.map(acc => ({ ...acc, userId }));
+        } else {
+            // 單筆
+            const { title, username, password, remark, label, keychainId } = body || {};
+            accounts = [{ title, username, password, remark, userId, label, keychainId }];
         }
-
-        const newAccount = new Account(data)
-    
-        // Fetch
         try {
-            // From utils/db.js
-            await connect()
-            await newAccount.save()
-    
-            setStatus(200)
+            await connect();
+            await Account.insertMany(accounts);
+            setStatus(200);
             setResponse({
                 status: true,
                 type: "success",
-                message: "Account has been created",
-            })
+                message: accounts.length > 1 ? "Accounts have been created" : "Account has been created",
+            });
         } catch (error) {
             console.error("Error creating account records:", error);
-
-            setStatus(500)
+            setStatus(500);
             setResponse({
                 status: false,
                 message: "Account record creating error.",
-            })
-
+            });
             return getResponse();
         }
     }
-
     return getResponse();
 }

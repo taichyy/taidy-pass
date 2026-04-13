@@ -2,10 +2,10 @@
 import axios from "axios"
 import useSWR, { KeyedMutator } from "swr"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { HiQuestionMarkCircle } from "react-icons/hi2"
-import { ChevronsUpDown, Edit, Eye, EyeOff, Key, LockKeyhole, Pencil, PlusCircle } from "lucide-react"
+import { ChevronsUpDown, Edit, Eye, EyeOff, FolderOutput, Import, Key, LockKeyhole, Pencil, PlusCircle } from "lucide-react"
 
 import {
     Collapsible,
@@ -19,7 +19,6 @@ import { Badge } from "@/components/ui/badge"
 import LabelsSelector from "./labels-selector"
 import { Button } from "@/components/ui/button"
 import { AESDecrypt, poster } from "@/lib/utils"
-import DialogShare from "./(dialogs)/dialog-share"
 import { useHideStore } from "@/lib/stores/use-hide"
 import DialogSetKey from "./(dialogs)/dialog-set-key"
 import DialogAccount from "./(dialogs)/dialog-account"
@@ -181,6 +180,8 @@ const CollapsibleArea = ({
     const handleStarToggle = async (id: string) => {
         const userId = await getUserId()
 
+        if (!userId) return
+
         const update = async (id: string) => {
             try {
                 const req = await axios({
@@ -209,6 +210,48 @@ const CollapsibleArea = ({
         }
 
         update(id)
+    }
+
+    // 匯出功能
+    const handleExport = () => {
+        // 匯出該 keychain 下所有帳號（已解密）
+        const exportData = accounts.map(({ _id, ...rest }) => rest)
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `${keychainName || "default-keychain"}.json`
+        a.click()
+        URL.revokeObjectURL(url)
+    }
+
+    // 匯入功能（修正版，input 用 ref 控制）
+    const inputRef = useRef<HTMLInputElement>(null)
+    const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file || !insertedKeyVal) return
+        try {
+            const text = await file.text()
+            const importData = JSON.parse(text)
+            // 重新加密
+            const encrypted = importData.map((record: any) => ({
+                ...record,
+                title: CryptoJS.AES.encrypt(record.title, insertedKeyVal).toString(),
+                username: CryptoJS.AES.encrypt(record.username, insertedKeyVal).toString(),
+                password: CryptoJS.AES.encrypt(record.password, insertedKeyVal).toString(),
+                remark: record.remark ? CryptoJS.AES.encrypt(record.remark, insertedKeyVal).toString() : "",
+                keychainId: keychainId || null,
+            }))
+            await axios.post("/api/accounts", encrypted)
+            mutate()
+            alert("匯入成功！")
+        } catch (err) {
+            alert("匯入失敗，檔案格式錯誤或加密金鑰不符")
+            console.error(err)
+        } finally {
+            // 清空 input value 以便重複上傳同一檔案
+            e.target.value = ""
+        }
     }
 
     return (
@@ -257,6 +300,34 @@ const CollapsibleArea = ({
                     </CollapsibleTrigger>
                 </div>
                 <div className="flex items-center gap-2">
+                    {/* 匯出/匯入按鈕 */}
+                    {keyInserted && keyCorrect && (
+                        <>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Import onClick={() => inputRef.current?.click()} />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    匯入帳號資料（JSON檔）
+                                </TooltipContent>
+                            </Tooltip>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <FolderOutput onClick={handleExport} />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    匯出目前鑰匙圈
+                                </TooltipContent>
+                            </Tooltip>
+                            <input
+                                ref={inputRef}
+                                type="file"
+                                accept="application/json"
+                                style={{ display: "none" }}
+                                onChange={handleImport}
+                            />
+                        </>
+                    )}
                     {(keyInserted && keyCorrect && keychainId) && (
                         <>
                             <Tooltip>
