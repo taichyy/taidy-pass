@@ -1,5 +1,6 @@
 "use client"
 import axios from "axios"
+import CryptoJS from "crypto-js"
 import useSWR, { KeyedMutator } from "swr"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
