@@ -107,6 +107,3 @@ bun dev      # Using Bun
 ```
 
 打開瀏覽器，並至 http://localhost:3000 即可。
-
-📜 授權條款
-本專案為開源軟體，採用 MIT 授權許可證。
