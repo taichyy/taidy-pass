@@ -137,6 +137,7 @@ const CollapsibleArea = ({
     const { data: fetched, isLoading, mutate } = useSWR<TAPIAccounts>(
         keyInserted && hasOpened && ["/api/accounts", paramsAcc, bodyAcc],
         ([url, params, body]) => poster(url, params, body),
+        { dedupingInterval: 30000, revalidateOnFocus: false },
     )
     const encryptedAccounts = fetched?.data
 
@@ -169,8 +170,16 @@ const CollapsibleArea = ({
 
         const usedLabels = keyIsCorrect ? Array.from(new Set(decrypted.map(record => record.label).flat())) as string[] : [];
 
-        setAccounts(keyIsCorrect ? decrypted : [])
-        setFiltered(keyIsCorrect ? decrypted : [])
+        const finalAccounts = keyIsCorrect ? decrypted : []
+        setAccounts(finalAccounts)
+        setFiltered(
+            search
+                ? finalAccounts.filter(record =>
+                    record.title.toLowerCase().includes(search.toLowerCase()) ||
+                    record.username.toLowerCase().includes(search.toLowerCase())
+                )
+                : finalAccounts
+        )
         setAllUsedLabels(usedLabels)
     }, [encryptedAccounts, insertedKeyVal])
 
@@ -508,6 +517,7 @@ const TableMain = ({
     const { data: fetched, isLoading, mutate } = useSWR<TAPIKeychain>(
         ["/api/keychains", paramsKeychain, bodyKeychain],
         ([url, params, body]) => poster(url, params, body),
+        { dedupingInterval: 30000, revalidateOnFocus: false },
     )
     const keychains = fetched?.data
 
