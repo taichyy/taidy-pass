@@ -14,13 +14,41 @@ export function EmailVerificationWrapper({ children }: EmailVerificationWrapperP
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        checkVerificationStatus();
+        let ignore = false;
+
+        const check = async () => {
+            try {
+                const userId = await getUserId()
+
+                if (!userId || ignore) return
+
+                const response = await fetch(`/api/users/${userId}?type=email-check`);
+                const result = await response.json();
+
+                if (ignore) return;
+
+                if (result.status && result.data) {
+                    const { emailVerified, email } = result.data;
+                    setUserEmail(email);
+                    console.log(result)
+                    if (!emailVerified) {
+                        setShowModal(true);
+                    }
+                }
+            } catch (error) {
+                console.error("檢查驗證狀態錯誤:", error);
+            } finally {
+                if (!ignore) setIsLoading(false);
+            }
+        };
+
+        check();
+        return () => { ignore = true; };
     }, []);
 
-    const checkVerificationStatus = async () => {
+    const recheckVerification = async () => {
         try {
             const userId = await getUserId()
-
             if (!userId) return
 
             const response = await fetch(`/api/users/${userId}?type=email-check`);
@@ -29,22 +57,19 @@ export function EmailVerificationWrapper({ children }: EmailVerificationWrapperP
             if (result.status && result.data) {
                 const { emailVerified, email } = result.data;
                 setUserEmail(email);
-                console.log(result)
                 if (!emailVerified) {
                     setShowModal(true);
                 }
             }
         } catch (error) {
             console.error("檢查驗證狀態錯誤:", error);
-        } finally {
-            setIsLoading(false);
         }
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
         // 重新檢查驗證狀態
-        checkVerificationStatus();
+        recheckVerification();
     };
 
     if (isLoading) {

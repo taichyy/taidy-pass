@@ -2,6 +2,8 @@ import Link from "next/link";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
+import connect from "@/lib/db";
+import Label from "@/models/Label";
 import LogoText from "@/components/logo-text";
 import { TJWTPayload, TLabel } from "@/lib/types";
 import TableMain from "./(components)/table-main";
@@ -11,21 +13,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-
-const getLabels = async (token: string) => {
-    const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/labels?method=get`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        cache: "no-store",
-    })
-
-    const res = await req.json()
-
-    return res
-}
 
 const VaultPage = async () => {
     // Always check this
@@ -39,8 +26,8 @@ const VaultPage = async () => {
     const role: "user" | "admin" = jwt.role || "user"
     const username: string = jwt.username || ""
 
-    const fetchedLabels = await getLabels(token || "")
-    const labels: TLabel[] = fetchedLabels?.data || []
+    await connect()
+    const labels: TLabel[] = JSON.parse(JSON.stringify(await Label.find({}).lean()))
 
     return (
         <>
@@ -80,11 +67,12 @@ const VaultPage = async () => {
                 </div>
             </StickyHeaderWrapper>
             {/* // Use fixed width insteawd of %, because Dialog opening somehow change the width. */}
-            <div className="w-[95%] mx-auto pt-5 px-4 md:mx-auto">
+            <div className="w-[95%] mx-auto pt-5 px-4 md:mx-auto flex-1 flex flex-col">
                 {/* This includes admin settings, add, logout, and switch key buttons. */}
                 {/* The children would be placed in front of the add button. */}
                 <ResizablePanelGroup
                     direction="horizontal"
+                    className="flex-1"
                 >
                     <ResizablePanel defaultSize={80}>
                         <TableMain labels={labels}>

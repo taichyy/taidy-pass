@@ -6,7 +6,7 @@ const VaultLayout = ({
     children: React.ReactNode
 }) => {
     return (
-        <main className="bg-gray-50 dark:bg-black/90 min-h-screen">
+        <main className="bg-gray-50 dark:bg-black/90 min-h-screen flex flex-col">
             <EmailVerificationWrapper>
                 {children}
             </EmailVerificationWrapper>
