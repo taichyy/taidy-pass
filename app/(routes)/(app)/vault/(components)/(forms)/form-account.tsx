@@ -1,8 +1,10 @@
 "use client";
 import { toast } from "react-hot-toast";
 import useSWR, { KeyedMutator } from "swr";
+import { Key, Link2 } from "lucide-react";
 import { useState, useEffect, FormEvent } from "react";
 
+import { cn } from "@/lib/utils";
 import { TLabel } from "@/lib/types";
 import LabelsSelector from "../labels-selector";
 import { Button } from "@/components/ui/button";
@@ -12,6 +14,7 @@ import ControlledInput from "@/components/controlled-input";
 import { useKey } from "@/components/providers/provider-key";
 import DialogDoubleCheck from "@/components/dialog-double-check";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
+import LinkedAccountPicker, { TLinkedOption } from "./linked-account-picker";
 
 type TFormData = {
     title: string;
@@ -21,6 +24,8 @@ type TFormData = {
     label: string[];
     keychainId?: string;
 };
+
+type TMode = "credentials" | "external"
 const FormAccount = ({
     labels,
     id,
@@ -59,6 +64,8 @@ const FormAccount = ({
 
     const [loading, setLoading] = useState(false);
     const [searchKeys, setSearchKeys] = useState<string[]>([]);
+    const [linkedAccountId, setLinkedAccountId] = useState<string | null>(null);
+    const [mode, setMode] = useState<TMode>("credentials");
     const [formData, setFormData] = useState<TFormData>({
         title: "",
         username: "",
@@ -89,6 +96,9 @@ const FormAccount = ({
     useEffect(() => {
         if (data && isEdit && insertedKeyVal) {
             setSearchKeys(data.label || []);
+            const linked = data.linkedAccountId || null;
+            setLinkedAccountId(linked);
+            setMode(linked ? "external" : "credentials");
             setFormData({
                 title: AESDecrypt(data.title, insertedKeyVal),
                 username: AESDecrypt(data.username, insertedKeyVal),
@@ -104,6 +114,34 @@ const FormAccount = ({
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
+
+    // Pick / unpick a linked source account
+    const handlePickLinked = (opt: TLinkedOption | null) => {
+        if (opt) {
+            setLinkedAccountId(opt._id);
+            // Clear local credentials — linked accounts reference the source only.
+            setFormData(prev => ({
+                ...prev,
+                username: "",
+                password: "",
+            }));
+        } else {
+            setLinkedAccountId(null);
+        }
+    };
+
+    // Switch between credentials / external tabs
+    const handleSwitchMode = (next: TMode) => {
+        if (next === mode) return
+        setMode(next)
+        if (next === "credentials") {
+            // Leaving external → drop linkage
+            setLinkedAccountId(null)
+        } else {
+            // Leaving credentials → clear local credentials
+            setFormData(prev => ({ ...prev, username: "", password: "" }))
+        }
+    }
 
     // For Add and edit
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -129,9 +167,25 @@ const FormAccount = ({
 
         const form = e.target as HTMLFormElement;
         const title = (form.elements.namedItem("title") as HTMLInputElement).value
-        const username = (form.elements.namedItem("username") as HTMLInputElement).value
-        const password = (form.elements.namedItem("password") as HTMLInputElement).value
-        const remark = (form.elements.namedItem("remark") as HTMLInputElement).value
+        const remark = (form.elements.namedItem("remark") as HTMLInputElement)?.value || ""
+        const isExternal = mode === "external"
+        const username = isExternal
+            ? ""
+            : (form.elements.namedItem("username") as HTMLInputElement)?.value || ""
+        const password = isExternal
+            ? ""
+            : (form.elements.namedItem("password") as HTMLInputElement)?.value || ""
+
+        if (isExternal && !linkedAccountId) {
+            toast.error("請選擇要連結的外部帳號。")
+            setLoading(false)
+            return
+        }
+        if (!isExternal && !username) {
+            toast.error("帳號為必填。")
+            setLoading(false)
+            return
+        }
 
         const obj: any = {
             title,
@@ -140,6 +194,7 @@ const FormAccount = ({
             remark,
             label: searchKeys,
             userId,
+            linkedAccountId: isExternal ? linkedAccountId : null,
         }
         if ( keychainId ) {
             obj.keychainId = keychainId
@@ -189,31 +244,9 @@ const FormAccount = ({
         }
     };
 
-    const inputs = [
-        {
-            id: "title",
-            type: "text",
-            value: formData.title,
-            label: "項目"
-        },
-        {
-            id: "username",
-            type: "text",
-            value: formData.username,
-            label: "帳號"
-        },
-        {
-            id: "password",
-            type: "text",
-            value: formData.password,
-            label: "密碼"
-        },
-        {
-            id: "remark",
-            type: "textarea",
-            value: formData.remark,
-            label: "備註"
-        },
+    const tabs: { id: TMode; label: string; icon: React.ReactNode }[] = [
+        { id: "credentials", label: "帳密登入", icon: <Key size={14} /> },
+        // { id: "external", label: "外部登入", icon: <Link2 size={14} /> },
     ]
 
     return (
@@ -232,16 +265,76 @@ const FormAccount = ({
                 "Loading..."
             ) : (
                 <form onSubmit={handleSubmit} className="text-left flex flex-col gap-3">
-                    {inputs.map((input) => (
-                        <ControlledInput
-                            key={input.id}
-                            id={input.id}
-                            type={input.type as "text" | "email" | "password" | "textarea"}
-                            label={input.label}
-                            value={input.value}
-                            onChange={handleChange}
-                        />
-                    ))}
+                    {/* Tab switcher */}
+                    <div className="flex gap-1 p-1 bg-muted rounded-md">
+                        {tabs.map(t => (
+                            <button
+                                key={t.id}
+                                type="button"
+                                onClick={() => handleSwitchMode(t.id)}
+                                className={cn(
+                                    "flex-1 flex items-center justify-center gap-1.5 text-sm px-3 py-1.5 rounded transition-colors",
+                                    mode === t.id
+                                        ? "bg-background shadow-sm font-medium"
+                                        : "text-muted-foreground hover:text-foreground"
+                                )}
+                            >
+                                {t.icon}
+                                {t.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {mode === "credentials" ? (
+                        <>
+                            <ControlledInput
+                                id="title"
+                                type="text"
+                                label="項目"
+                                value={formData.title}
+                                onChange={handleChange}
+                            />
+                            <ControlledInput
+                                id="username"
+                                type="text"
+                                label="帳號"
+                                value={formData.username}
+                                onChange={handleChange}
+                            />
+                            <ControlledInput
+                                id="password"
+                                type="text"
+                                label="密碼"
+                                value={formData.password}
+                                onChange={handleChange}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <ControlledInput
+                                id="title"
+                                type="text"
+                                label="項目"
+                                value={formData.title}
+                                onChange={handleChange}
+                            />
+                            <LinkedAccountPicker
+                                currentKeychainId={keychainId}
+                                excludeId={id}
+                                value={linkedAccountId}
+                                onPick={handlePickLinked}
+                            />
+                        </>
+                    )}
+
+                    <ControlledInput
+                        id="remark"
+                        type="textarea"
+                        label="備註"
+                        value={formData.remark}
+                        onChange={handleChange}
+                    />
+
                     <div className=" flex justify-end gap-3">
                         {isEdit && (
                             <Button

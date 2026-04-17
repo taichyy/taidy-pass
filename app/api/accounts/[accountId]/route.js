@@ -34,7 +34,7 @@ export const GET = async (request, props) => {
 
         const account = await Account.findById(accountId)
 
-        const { title, username, password, label, remark, userId } = account
+        const { title, username, password, label, remark, userId, linkedAccountId, keychainId } = account
 
         if (userId != loginedUserId) {
             setStatus(403)
@@ -51,6 +51,8 @@ export const GET = async (request, props) => {
                 password,
                 remark,
                 label,
+                linkedAccountId: linkedAccountId || null,
+                keychainId: keychainId || null,
             }
     
             setStatus(200)
@@ -108,7 +110,7 @@ export const PUT = async (request, props) => {
         
         const body = await request.json()
 
-        const { title, username, password, label, remark, userId } = body || {}
+        const { title, username, password, label, remark, userId, linkedAccountId } = body || {}
 
         // From utils/db.js
         await connect()
@@ -123,6 +125,7 @@ export const PUT = async (request, props) => {
                 password,
                 label,
                 remark,
+                linkedAccountId: linkedAccountId || null,
             }
         } else if (mode == "starred") {
             const currentStarred = findAccount.starred
@@ -151,12 +154,27 @@ export const PUT = async (request, props) => {
             })
         } else {
             await Account.findByIdAndUpdate(accountId, data)
-    
+
+            // 取得最新資料
+            const updated = await Account.findById(accountId)
+            const { title, username, password, label, remark, userId: updatedUserId, linkedAccountId: updatedLinkedAccountId, keychainId: updatedKeychainId } = updated
+
             setStatus(200)
             setResponse({
                 status: true,
                 type: "success",
                 message: "Account has been updated.",
+                data: {
+                    _id: updated._id,
+                    title,
+                    username,
+                    password,
+                    remark,
+                    label,
+                    linkedAccountId: updatedLinkedAccountId || null,
+                    keychainId: updatedKeychainId || null,
+                    userId: updatedUserId,
+                }
             })
         }
     } catch (err) {
