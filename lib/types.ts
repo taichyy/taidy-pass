@@ -8,6 +8,8 @@ export type TAccount = {
     remark?: string
     label?: string[]
     starred?: boolean
+    keychainId?: string | null
+    linkedAccountId?: string | null
 }
 
 export type TNote = {

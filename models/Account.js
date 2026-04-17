@@ -36,6 +36,12 @@ const accountSchema = new Schema({
         type: String,
         default: null,
     },
+    // Optional reference to another account (same keychain or default keychain).
+    // Plain ObjectId string, not encrypted — doesn't leak credentials on its own.
+    linkedAccountId: {
+        type: String,
+        default: null,
+    },
     // "validation" or null
     type: {
         type: String,

@@ -105,8 +105,8 @@ export const POST = async (request) => {
             accounts = body.map(acc => ({ ...acc, userId }));
         } else {
             // 單筆
-            const { title, username, password, remark, label, keychainId } = body || {};
-            accounts = [{ title, username, password, remark, userId, label, keychainId }];
+            const { title, username, password, remark, label, keychainId, linkedAccountId } = body || {};
+            accounts = [{ title, username, password, remark, userId, label, keychainId, linkedAccountId: linkedAccountId || null }];
         }
 
         // ----- Plan limit check (user role only)
