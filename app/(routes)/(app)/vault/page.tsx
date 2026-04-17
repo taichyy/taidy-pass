@@ -9,6 +9,7 @@ import { TJWTPayload, TLabel } from "@/lib/types";
 import TableMain from "./(components)/table-main";
 import ButtonBackToTop from "@/components/buttons/button-back-to-top";
 import { StickyHeaderWrapper } from "./(components)/sticky-header-wrapper";
+import NotesPanel, { NotesMobileTrigger } from "./(components)/notes-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -68,25 +69,38 @@ const VaultPage = async () => {
             </StickyHeaderWrapper>
             {/* // Use fixed width insteawd of %, because Dialog opening somehow change the width. */}
             <div className="w-[95%] mx-auto pt-5 px-4 md:mx-auto flex-1 flex flex-col">
-                {/* This includes admin settings, add, logout, and switch key buttons. */}
-                {/* The children would be placed in front of the add button. */}
-                <ResizablePanelGroup
-                    direction="horizontal"
-                    className="flex-1"
-                >
-                    <ResizablePanel defaultSize={80}>
-                        <TableMain labels={labels}>
-                            <DialogAdminSettings
-                                role={role}
-                                labels={labels}
-                            />
-                        </TableMain>
-                    </ResizablePanel>
-                    <ResizableHandle withHandle className="mx-4" />
-                    <ResizablePanel defaultSize={20}>
-                        
-                    </ResizablePanel>
-                </ResizablePanelGroup>
+                {/* Desktop: resizable split with notes on the right */}
+                <div className="hidden md:flex flex-1">
+                    <ResizablePanelGroup
+                        direction="horizontal"
+                        className="flex-1"
+                    >
+                        <ResizablePanel defaultSize={75} minSize={50}>
+                            <TableMain labels={labels}>
+                                <DialogAdminSettings
+                                    role={role}
+                                    labels={labels}
+                                />
+                            </TableMain>
+                        </ResizablePanel>
+                        <ResizableHandle withHandle className="mx-4" />
+                        <ResizablePanel defaultSize={25} minSize={15}>
+                            <NotesPanel />
+                        </ResizablePanel>
+                    </ResizablePanelGroup>
+                </div>
+
+                {/* Mobile: full-width table, notes via floating button */}
+                <div className="md:hidden flex-1">
+                    <TableMain labels={labels}>
+                        <DialogAdminSettings
+                            role={role}
+                            labels={labels}
+                        />
+                    </TableMain>
+                </div>
+
+                <NotesMobileTrigger />
                 {/* This is fixed positioned */}
                 <ButtonBackToTop />
             </div>

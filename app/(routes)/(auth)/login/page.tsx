@@ -36,7 +36,7 @@ const LoginPage = async (
                 </Button>
             </Link>
             <Card 
-                className="w-full relative bg-white dark:bg-slate-200 min-w-[350px]"
+                className="w-full relative bg-white dark:bg-gray-900 min-w-[350px]"
                 data-aos={mode == "login" ? "fade-right" : "fade-left"}
                 data-aos-anchor-placement="top-center"
             >

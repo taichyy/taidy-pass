@@ -79,7 +79,7 @@ const LogoutPage = () => {
                 </Button>
             </Link>
             <Card 
-                className="w-full relative bg-white dark:bg-slate-200 min-w-[350px]"
+                className="w-full relative bg-white dark:bg-gray-900 min-w-[350px]"
                 data-aos="fade-right"
                 data-aos-anchor-placement="top-center"
             >

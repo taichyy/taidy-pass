@@ -4,7 +4,8 @@ import connect from "@/lib/db"
 import Account from "@/models/Account"
 import { Response } from "@/lib/utils"
 import Keychain from "@/models/Keychain"
-import { encryptRecord, getUserId, apiProtect } from "@/lib/actions"
+import { USER_PLAN_LIMITS, isLimited } from "@/lib/limits"
+import { encryptRecord, getUserId, getUserRole, apiProtect } from "@/lib/actions"
 
 export const POST = async (request) => {
     // ----- General api check.
@@ -80,6 +81,22 @@ export const POST = async (request) => {
         // This is encrypted data, by user at client.
         const { name, derivedKey } = body || {}
 
+        // ----- Plan limit check (user role only)
+        const role = await getUserRole()
+        if (isLimited(role)) {
+            await connect()
+            const count = await Keychain.countDocuments({ userId })
+            if (count >= USER_PLAN_LIMITS.keychains) {
+                setStatus(403)
+                setResponse({
+                    status: false,
+                    type: "limit",
+                    message: `鑰匙圈數量已達方案上限（${USER_PLAN_LIMITS.keychains} 組）。`,
+                })
+                return getResponse()
+            }
+        }
+
         // Generate new keychain
         const data = {
             name,
@@ -115,11 +132,11 @@ export const POST = async (request) => {
             await session.commitTransaction()
     
             setStatus(200)
-            const response = {
+            setResponse({
                 status: true,
                 type: "success",
                 message: "Keychain has been created",
-            }
+            })
         } catch (error) {
             console.error("Error creating keychain records:", error);
 

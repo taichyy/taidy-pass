@@ -29,7 +29,7 @@ const DialogTerms = () => {
                     <DialogDescription>
                         歡迎使用 TaidyPass（以下簡稱「本服務」）。在註冊帳號或使用本服務之前，請詳細閱讀以下使用條款。
                     </DialogDescription>
-                    <article className="flex flex-col gap-3 pt-4 text-sm text-slate-800">
+                    <article className="flex flex-col gap-3 pt-4 text-sm text-slate-800 dark:text-slate-200">
                         <p className="-indent-4 ml-4">
                             1. 服務內容<br />
                             本服務提供一款基於零知識架構的密碼管理器。所有使用者資料僅於本地端加密後儲存至伺服器，我們無法、也不會嘗試存取您的密碼內容。
@@ -73,7 +73,7 @@ const DialogPrivacy = () => {
                     <DialogDescription>
                         我們重視您的個人資料保護，以下是我們的隱私政策。
                     </DialogDescription>
-                    <article className="flex flex-col gap-3 pt-4 text-sm text-slate-800">
+                    <article className="flex flex-col gap-3 pt-4 text-sm text-slate-800 dark:text-slate-200">
                         <p className="-indent-4 ml-4">
                             1. 我們收集哪些資料？<br />
                             電子郵件地址（註冊與登入用）<br />
