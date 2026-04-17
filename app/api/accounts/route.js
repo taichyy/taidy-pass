@@ -2,7 +2,8 @@ import connect from "@/lib/db"
 import Label from "@/models/Label"
 import Account from "@/models/Account"
 import { Response } from "@/lib/utils"
-import { getUserId, apiProtect } from "@/lib/actions"
+import { USER_PLAN_LIMITS, isLimited } from "@/lib/limits"
+import { getUserId, getUserRole, apiProtect } from "@/lib/actions"
 
 export const POST = async (request) => {
     // ----- General api check.
@@ -107,6 +108,49 @@ export const POST = async (request) => {
             const { title, username, password, remark, label, keychainId } = body || {};
             accounts = [{ title, username, password, remark, userId, label, keychainId }];
         }
+
+        // ----- Plan limit check (user role only)
+        // Group incoming accounts by keychainId (null => default keychain).
+        // Validation accounts (inserted automatically on keychain creation) do not count.
+        const role = await getUserRole()
+        if (isLimited(role)) {
+            try {
+                await connect();
+
+                const grouped = accounts.reduce((acc, cur) => {
+                    if (cur.type === "validation") return acc
+                    const kcId = cur.keychainId || null
+                    acc.set(kcId, (acc.get(kcId) || 0) + 1)
+                    return acc
+                }, new Map())
+
+                for (const [keychainId, incoming] of grouped.entries()) {
+                    const existing = await Account.countDocuments({
+                        userId,
+                        keychainId: keychainId || null,
+                        type: { $ne: "validation" },
+                    })
+                    if (existing + incoming > USER_PLAN_LIMITS.accountsPerKeychain) {
+                        setStatus(403)
+                        setResponse({
+                            status: false,
+                            type: "limit",
+                            message: `${USER_PLAN_LIMITS.accountsPerKeychain} 組帳號已達方案上限。`,
+                        })
+                        return getResponse()
+                    }
+                }
+            } catch (error) {
+                console.error("Error checking account limits:", error);
+                setStatus(500);
+                setResponse({
+                    status: false,
+                    message: "Account limit check error.",
+                });
+                return getResponse();
+            }
+        }
+
         try {
             await connect();
             await Account.insertMany(accounts);

@@ -58,6 +58,27 @@ export const getUserId = async (request?: any): Promise<string> => {
     return userId as string || ""
 }
 
+export const getUserRole = async (request?: any): Promise<"user" | "admin" | ""> => {
+    const jwtSecret = process.env.JWT_SECRET || "";
+
+    let token = ""
+
+    if (request) {
+        const authHeader = request.headers.get("authorization")
+        token = authHeader?.split(" ")[1] || ""
+    } else {
+        token = (await cookies()).get("token")?.value || ""
+    }
+
+    try {
+        const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
+        const role = decoded.payload.role as "user" | "admin" | undefined
+        return role || ""
+    } catch {
+        return ""
+    }
+}
+
 export const tokenIsValid = async (request?: any): Promise<boolean> => {
     try {
         // Always check this

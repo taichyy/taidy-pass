@@ -138,6 +138,7 @@ export default function FormVerify({
                     {formMode == "register" && (
                         <UncontrolledInput
                             label="電子信箱"
+                            remark="將會進行信箱驗證，請務必填寫真實信箱"
                             id="email"
                             type="email"
                         />

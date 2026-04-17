@@ -110,7 +110,7 @@ export default function FormForgot() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className=" text-slate-800 flex flex-col justify-between w-full">
+        <form onSubmit={handleSubmit} className=" text-slate-800 dark:text-slate-200 flex flex-col justify-between w-full">
             <div className="flex flex-col gap-3">
                 <div className="flex w-full flex-col gap-3 items-center">
                     <UncontrolledInput

@@ -48,11 +48,11 @@ const PricingPage = async (
             monthlyPrice: "0",
             yearlyPrice: "0",
             features: [
-                { text: "最多 5 組鑰匙圈" },
+                { text: "最多 3 組鑰匙圈" },
                 { text: "每組鑰匙圈最多儲存 50 組帳號密碼" },
                 { text: "無限制使用系統標籤" },
-                { text: "最多 50 張便利貼" },
-                { text: "透過共享連接分享帳號密碼" },
+                { text: "最多 15 張便利貼" },
+                // { text: "透過共享連接分享帳號密碼" },
             ],
         },
         {

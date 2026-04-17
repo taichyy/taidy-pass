@@ -474,7 +474,7 @@ const CollapsibleArea = ({
                             <Card className="mt-4 py-4 px-3 min-h-[200px] cursor-pointer flex justify-center items-center opacity-50 hover:opacity-100 transition-opacity duration-300 bg-transparent hover:bg-white/40 dark:hover:bg-gray-800/40">
                                 <PlusCircle
                                     size={32}
-                                    className="text-slate-700 cursor-pointer"
+                                    className="text-slate-700 dark:text-slate-300 cursor-pointer"
                                 />
                             </Card>
                         </DialogAccount>

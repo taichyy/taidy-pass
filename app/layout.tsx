@@ -23,21 +23,6 @@ export const metadata: Metadata = {
     },
 }
 
-// TODO for MVP, feat:
-// 1. Add favicon
-// 2. 自訂鑰匙圈按下去沒金鑰要可以存金鑰，然後加解密用那組，外加使用者cookie存的那組（先問問GPT）
-// 3. 登入之後的 Logo 按下去不要回到產品首頁
-// 4. 使用者個人資訊的相關編輯
-// 5. 改掉預設大頭貼照片
-// 6. 便利貼功能
-// 7. 批量選取、移動、刪除功能
-// 8. 哪些鑰匙圈預設開關存 cookie
-// 9. 改首頁三個大頭貼照片，用可商用插圖
-// 10. 頁尾放 Freepik + Lottie
-
-// TODO for MVP, fix:
-// 1. 登入、跳轉到資訊頁面之後，似乎不會自動拿資料，要手動 refresh
-
 export default function RootLayout({
     children,
 }: {

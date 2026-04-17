@@ -157,6 +157,8 @@ const FormAccount = ({
 
             if (res.type == "error") {
                 toast.error(errorText)
+            } else if (res.status === false) {
+                toast.error(res.message || errorText)
             } else {               
                 toast.success(successText)
                 setOpened(false)

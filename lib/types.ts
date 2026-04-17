@@ -11,8 +11,10 @@ export type TAccount = {
 }
 
 export type TNote = {
+    _id?: string
     title?: string
     context?: string
+    order?: number
 }
 
 export type TLabel = {

@@ -81,10 +81,10 @@ const ButtonKeyGenerator = ({
                                 </p>
                                 <Icon
                                     onClick={() => setShow(!show)}
-                                    className="cursor-pointer text-gray-500 hover:text-gray-700"
+                                    className="cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                                 />
                             </div>
-                            <div className="border p-3 mb-4 rounded font-mono text-sm break-all transition-all duration-150 bg-gray-100 text-gray-800">
+                            <div className="border p-3 mb-4 rounded font-mono text-sm break-all transition-all duration-150 bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700">
                                 {show ? userKey : userKey.replace(/./g, "*")}
                             </div>
                         </div>
@@ -177,13 +177,19 @@ const FormKeychain = ({
         }
         
         try {
-            await fetch(url, {
+            const req = await fetch(url, {
                 method,
                 body: JSON.stringify({
                     name,
                     derivedKey,
                 })
             })
+            const res = await req.json().catch(() => ({}))
+
+            if (!req.ok || res?.status === false) {
+                toast.error(res?.message || "新增失敗")
+                return
+            }
 
             toast.success("新增成功")
             setOpened(false)

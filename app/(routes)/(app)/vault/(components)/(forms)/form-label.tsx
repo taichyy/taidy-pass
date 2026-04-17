@@ -118,7 +118,7 @@ const FormLabel = ({
                             >
                                 <PlusCircle
                                     size={24}
-                                    className="text-slate-800 cursor-pointer"
+                                    className="text-slate-800 dark:text-slate-200 cursor-pointer"
                                 />
                             </button>
                         </TooltipTrigger>
