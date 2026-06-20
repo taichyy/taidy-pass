@@ -1,16 +1,17 @@
-import type { Metadata, Viewport } from "next";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import { notFound } from "next/navigation";
+import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next"
+import { setRequestLocale } from "next-intl/server";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
 
 import "../globals.css";
+import { routing } from "@/i18n/routing";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ProviderAOS from "@/components/providers/provider-aos";
-import { ProviderI18n } from "@/components/providers/provider-i18n";
 import { ProviderKey } from "@/components/providers/provider-key";
+import { ProviderI18n } from "@/components/providers/provider-i18n";
 import { ProviderTheme } from "@/components/providers/provider-theme";
-import { routing } from "@/i18n/routing";
 
 export const viewport: Viewport = {
     themeColor: "black",
@@ -47,6 +48,7 @@ export default async function LocaleLayout({
     return (
         <html lang={locale} suppressHydrationWarning>
             <body className="bg-background text-foreground">
+                <Analytics />
                 <NextIntlClientProvider>
                     <ProviderI18n>
                         <ProviderTheme attribute="class" defaultTheme="system" enableSystem>
