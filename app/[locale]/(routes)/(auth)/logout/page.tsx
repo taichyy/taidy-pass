@@ -1,7 +1,7 @@
 "use client"
 
 import useSWR from "swr";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect} from "react";

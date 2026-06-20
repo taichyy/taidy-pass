@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { LanguageToggle } from "@/components/language-toggle";
 
 const VaultPage = async () => {
     // Always check this
@@ -35,6 +36,7 @@ const VaultPage = async () => {
             <StickyHeaderWrapper>
                 <LogoText />
                 <div className="flex items-center gap-2">
+                    <LanguageToggle />
                     <span className="text-bold hidden sm:block">
                         {username}
                     </span>

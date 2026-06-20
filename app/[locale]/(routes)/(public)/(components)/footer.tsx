@@ -1,8 +1,11 @@
-import Link from "next/link";
+"use client";
+
+import { Link } from "@/i18n/navigation";
 
 import { cn } from "@/lib/utils";
 import LogoText from "@/components/logo-text";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useI18n } from "@/components/providers/provider-i18n";
 
 interface MenuItem {
     title: string;
@@ -15,17 +18,19 @@ interface MenuItem {
 const copyrightText = `© ${new Date().getFullYear()} www.heytai.dev . All rights reserved.`;
 
 const DialogTerms = () => {
+    const { t } = useI18n();
+
     return (
         <Dialog>
             <DialogTrigger>
                 <li className="underline hover:text-primary">
-                    使用條款
+                    {t("使用條款")}
                 </li>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        使用條款（Terms and Conditions）
+                        {t("使用條款（Terms and Conditions）")}
                     </DialogTitle>
                     <DialogDescription>
                         歡迎使用 TaidyPass（以下簡稱「本服務」）。在註冊帳號或使用本服務之前，請詳細閱讀以下使用條款。
@@ -59,17 +64,19 @@ const DialogTerms = () => {
 }
 
 const DialogPrivacy = () => {
+    const { t } = useI18n();
+
     return (
         <Dialog>
             <DialogTrigger>
                 <li className="underline hover:text-primary">
-                    隱私權政策
+                    {t("隱私權政策")}
                 </li>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        隱私權政策（Privacy Policy）
+                        {t("隱私權政策（Privacy Policy）")}
                     </DialogTitle>
                     <DialogDescription>
                         我們重視您的個人資料保護，以下是我們的隱私政策。

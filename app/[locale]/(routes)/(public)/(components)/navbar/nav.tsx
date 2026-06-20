@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Fragment, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { HiBars3BottomRight } from "react-icons/hi2";
@@ -8,6 +8,7 @@ import { HiBars3BottomRight } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 import { TNavItem } from "@/lib/types";
 import LogoText from "@/components/logo-text";
+import { LanguageToggle } from "@/components/language-toggle";
 
 type Props = {
     navLinks: TNavItem[]
@@ -62,13 +63,11 @@ const Nav = ({
                         </Fragment>
                     ))}
                 </div>
-                {/* Buttons */}
-                <div className="block md:hidden">
-                    {/* <button className="md:px-8 md:py-2.5 px-6 py-2 text-white font-semibold text-base bg-blue-700 hover:bg-blue-900 transition-all duration-200 rounded-full">
-                        Join Now
-                    </button> */}
-                    {/* Burger menu */}
-                    <HiBars3BottomRight onClick={() => setShowNav(true)} className="w-8 h-8 cursor-pointer text-foreground lg:hidden" />
+                {/* Right-side controls */}
+                <div className="flex items-center gap-2">
+                    <LanguageToggle />
+                    {/* Burger menu (mobile only) */}
+                    <HiBars3BottomRight onClick={() => setShowNav(true)} className="w-8 h-8 cursor-pointer text-foreground md:hidden" />
                 </div>
             </div>
         </div>
