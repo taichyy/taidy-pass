@@ -36,7 +36,7 @@ const LoginPage = async (
                 </Button>
             </Link>
             <Card 
-                className="w-full relative bg-white dark:bg-gray-900 min-w-[350px]"
+                className="relative w-fit min-w-[min(350px,calc(100vw-2rem))] max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900"
                 data-aos={mode == "login" ? "fade-right" : "fade-left"}
                 data-aos-anchor-placement="top-center"
             >
@@ -49,7 +49,7 @@ const LoginPage = async (
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="block md:grid grid-cols-2 gap-4 w-full md:w-fit">
+                    <div className="block w-[300px] max-w-full md:grid md:w-fit md:max-w-none md:grid-cols-[300px_300px] gap-4">
                         <div className="relative">
                             <Image
                                 src={imageSrc}
