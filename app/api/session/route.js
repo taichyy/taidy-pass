@@ -52,6 +52,9 @@ export const POST = async (request) => {
         const decryptedEmail = CryptoJS.AES.decrypt(user.email, secret).toString(CryptoJS.enc.Utf8);
         const decryptedUsername = CryptoJS.AES.decrypt(user.usernameEncrypted, secret).toString(CryptoJS.enc.Utf8);
 
+        // Reset tokenValidAfter so the newly issued token will always pass validation
+        await User.findByIdAndUpdate(user._id, { tokenValidAfter: new Date(0) });
+
         const token = sign(
             {
                 userId: user._id,

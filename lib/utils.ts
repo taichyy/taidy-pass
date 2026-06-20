@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js"
 import { twMerge } from "tailwind-merge"
-import { type ClassValue, clsx } from "clsx"
 import { NextResponse } from "next/server";
+import { type ClassValue, clsx } from "clsx"
 
 export const MAX_AGE = 60 * 60 * 24 * 14;
 

@@ -1,4 +1,5 @@
 "use client"
+
 import axios from "axios"
 import useSWR from "swr"
 import CryptoJS from "crypto-js"
@@ -6,15 +7,6 @@ import toast from "react-hot-toast"
 import { useEffect, useMemo, useState } from "react"
 import { GripVertical, Pencil, Plus, StickyNote, Trash2 } from "lucide-react"
 
-import { TNote } from "@/lib/types"
-import { AESDecrypt, poster } from "@/lib/utils"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { useKey } from "@/components/providers/provider-key"
-import DialogDoubleCheck from "@/components/dialog-double-check"
-import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store"
 import {
     Dialog,
     DialogContent,
@@ -22,6 +14,15 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { TNote } from "@/lib/types"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { AESDecrypt, poster } from "@/lib/utils"
+import { Separator } from "@/components/ui/separator"
+import { useKey } from "@/components/providers/provider-key"
+import DialogDoubleCheck from "@/components/dialog-double-check"
+import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store"
 
 const aesEncrypt = (plain: string, key: string) => {
     if (!plain) return ""
@@ -227,17 +228,24 @@ const NotesPanel = () => {
         setDragOverId(null)
         if (!wasDragging) return
 
+        // Capture the new order of IDs from the current local state
+        const newOrder = items.map((i) => i._id)
+
         // Persist order
         try {
             await axios.put("/api/notes?method=reorder", {
-                ids: items.map((i) => i._id),
+                ids: newOrder,
             })
-            // Silently update SWR cache to new order
+            // Re-sort the encrypted SWR cache to match the new order,
+            // so the decryptedNotes memo stays in sync without a network re-fetch.
             mutate(
-                (cur) =>
-                    cur
-                        ? { ...cur, data: items }
-                        : cur,
+                (cur) => {
+                    if (!cur?.data) return cur
+                    const sorted = newOrder
+                        .map((id) => cur.data.find((n) => n._id === id))
+                        .filter(Boolean) as typeof cur.data
+                    return { ...cur, data: sorted }
+                },
                 { revalidate: false }
             )
         } catch (err) {

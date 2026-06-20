@@ -37,6 +37,11 @@ labelSchema.pre("save", function (next) {
     next();
 });
 
+// Indexes
+// key already has unique: true (implicit index)
+// Fetch all labels belonging to a user
+labelSchema.index({ userId: 1 });
+
 const Label = mongoose?.models?.Label || mongoose.model("Label", labelSchema);
 
 export default Label;

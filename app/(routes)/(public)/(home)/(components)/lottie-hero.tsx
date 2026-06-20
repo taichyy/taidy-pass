@@ -1,4 +1,5 @@
 "use client"
+
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const LottieHero = () => {

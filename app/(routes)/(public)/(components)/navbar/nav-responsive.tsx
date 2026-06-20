@@ -1,4 +1,5 @@
 "use client"
+
 import { useState } from 'react'
 
 import Nav from './nav'
@@ -26,29 +27,9 @@ const NavResponsive = () => {
         },
         {
             id: "4",
-            url: "https://www.taiche.dev",
-            label: "太馳官網",
-        },
-        {
-            id: "5",
             url: "/login",
             label: "進入系統",
         },
-        // {
-        //     id: "4",
-        //     url: "#",
-        //     label: "Testimonial",
-        // },
-        // {
-        //     id: "5",
-        //     url: "#",
-        //     label: "Blog",
-        // },
-        // {
-        //     id: "6",
-        //     url: "#",
-        //     label: "Contact",
-        // },
     ]
 
     return (

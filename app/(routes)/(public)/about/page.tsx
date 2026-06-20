@@ -13,14 +13,10 @@ const mainImage = {
     src: "/about.png",
     alt: "佔位圖",
 };
-const secondaryImage = {
-    src: "https://shadcnblocks.com/images/block/placeholder-2.svg",
-    alt: "佔位圖",
-};
 const breakout = {
-    src: "/logoWithoutText.png",
+    src: "/logo.png",
     alt: "logo",
-    title: "由太馳資訊－TaidyPass 團隊開發",
+    title: "TaidyPass Team",
     description: "為企業提供有效的工具，改善工作流程、提升效率並促進成長。",
     buttonText: "了解更多",
     buttonUrl: "https://shadcnblocks.com",

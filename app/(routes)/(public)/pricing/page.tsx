@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -9,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import YrMoSwitch from "./(components)/yr-mo-switch";
 import { Separator } from "@/components/ui/separator";
 

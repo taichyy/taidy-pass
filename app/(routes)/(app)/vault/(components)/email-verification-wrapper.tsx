@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect } from "react";
 
 import { getUserId } from "@/lib/actions";
@@ -90,6 +91,7 @@ export function EmailVerificationWrapper({ children }: EmailVerificationWrapperP
                 isOpen={showModal}
                 onClose={handleCloseModal}
                 userEmail={userEmail}
+                onEmailUpdate={(newEmail) => setUserEmail(newEmail)}
             />
         </>
     );

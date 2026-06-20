@@ -1,7 +1,8 @@
 "use client";
+
+import { Key, Link2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import useSWR, { KeyedMutator } from "swr";
-import { Key, Link2 } from "lucide-react";
 import { useState, useEffect, FormEvent } from "react";
 
 import { cn } from "@/lib/utils";
@@ -74,6 +75,16 @@ const FormAccount = ({
         label: []
     });
 
+    // Clear form whenever the dialog opens so stale data never pre-fills the inputs.
+    useEffect(() => {
+        if (opened && isEdit) {
+            setFormData({ title: "", username: "", password: "", remark: "", label: [] });
+            setSearchKeys([]);
+            setLinkedAccountId(null);
+            setMode("credentials");
+        }
+    }, [opened]);
+
     // EDIT mode as default value.
     let btnText = "編輯"
     let successText = "編輯成功！"
@@ -85,16 +96,31 @@ const FormAccount = ({
         errorText = "新增失敗，請稍後再試！"
     }
 
-    // Fetch existing data for edit mode
+    // Fetch existing data for edit mode.
+    // dedupingInterval: 0 + revalidateOnMount: true ensures we always fire a
+    // fresh request when the dialog opens.
     const { data: fetched, error, isLoading } = useSWR(
         isEdit && opened ? `/api/accounts/${id}` : null,
         (url) => fetcher(url),
+        { dedupingInterval: 0, revalidateOnMount: true },
     );
     const data = fetched?.data;
 
-    // Sync fetched data with formData when in edit mode
+    // Track whether we've already populated the form for this open session.
+    // This prevents SWR's synchronous cache hit (isLoading=false, stale data)
+    // from filling the form before the fresh response arrives.
+    const [dataReady, setDataReady] = useState(false);
+
     useEffect(() => {
-        if (data && isEdit && insertedKeyVal) {
+        // Reset the ready flag every time the dialog opens
+        if (opened && isEdit) {
+            setDataReady(false);
+        }
+    }, [opened]);
+
+    // Populate form only when we have fresh data from the network
+    useEffect(() => {
+        if (data && isEdit && insertedKeyVal && !isLoading) {
             setSearchKeys(data.label || []);
             const linked = data.linkedAccountId || null;
             setLinkedAccountId(linked);
@@ -104,10 +130,11 @@ const FormAccount = ({
                 username: AESDecrypt(data.username, insertedKeyVal),
                 password: AESDecrypt(data.password, insertedKeyVal),
                 remark: AESDecrypt(data.remark, insertedKeyVal),
-                label: searchKeys,
+                label: data.label || [],
             });
+            setDataReady(true);
         }
-    }, [data, id]);
+    }, [data, isLoading, id]);
 
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,7 +273,7 @@ const FormAccount = ({
 
     const tabs: { id: TMode; label: string; icon: React.ReactNode }[] = [
         { id: "credentials", label: "帳密登入", icon: <Key size={14} /> },
-        // { id: "external", label: "外部登入", icon: <Link2 size={14} /> },
+        { id: "external", label: "外部登入", icon: <Link2 size={14} /> },
     ]
 
     return (
@@ -261,7 +288,7 @@ const FormAccount = ({
                     />
                 )}
             </div>
-            {isLoading && isEdit && opened ? (
+            {(isEdit && opened && !dataReady) ? (
                 "Loading..."
             ) : (
                 <form onSubmit={handleSubmit} className="text-left flex flex-col gap-3">

@@ -68,6 +68,13 @@ userSchema.pre("save", function (next) {
     next();
 });
 
+// Indexes
+// usernameHash already has unique: true (implicit index)
+// Email lookups (login, verification flows)
+userSchema.index({ email: 1 });
+// Provider-based login lookups
+userSchema.index({ provider: 1, providerId: 1 });
+
 const User = mongoose?.models?.User || mongoose.model("User", userSchema);
 
 export default User;

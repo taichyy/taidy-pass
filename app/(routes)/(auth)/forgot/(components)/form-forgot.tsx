@@ -1,11 +1,9 @@
 "use client"
-import Link from "next/link"
+
 import { useState } from "react"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 
-import { deriveRawKey } from "@/lib/utils"
-import { Alert } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { useKey } from "@/components/providers/provider-key"
 import UncontrolledInput from "@/components/uncontrolled-input"

@@ -1,4 +1,5 @@
 "use server"
+
 import CryptoJS from "crypto-js"
 import { jwtVerify } from "jose"
 import { cookies } from "next/headers"
@@ -107,7 +108,7 @@ export const tokenIsValid = async (request?: any): Promise<boolean> => {
         const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
         const tokenIat = decoded?.payload.iat && new Date(decoded?.payload.iat * 1000) || new Date()
 
-        if (user && user.tokenValidAfter < tokenIat) {
+        if (user && (!user.tokenValidAfter || user.tokenValidAfter <= tokenIat)) {
             return true
         } else {
             return false

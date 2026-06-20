@@ -48,6 +48,14 @@ const accountSchema = new Schema({
     }
 })
 
+// Indexes
+// Primary list query: filter by owner + keychain, sorted by starred
+accountSchema.index({ userId: 1, keychainId: 1, starred: -1 });
+// Label filtering within a keychain
+accountSchema.index({ userId: 1, keychainId: 1, label: 1 });
+// External link lookups (find records that reference a given source account)
+accountSchema.index({ linkedAccountId: 1 });
+
 const Account = mongoose?.models?.Account || mongoose.model("Account", accountSchema);
 
 export default Account;

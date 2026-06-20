@@ -1,7 +1,8 @@
+import Link from "next/link";
+
 import { cn } from "@/lib/utils";
 import LogoText from "@/components/logo-text";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import Link from "next/link";
 
 interface MenuItem {
     title: string;
@@ -11,7 +12,7 @@ interface MenuItem {
     }[];
 }
 
-const copyrightText = `© ${new Date().getFullYear()} TaiChe Technology. All rights reserved.`;
+const copyrightText = `© ${new Date().getFullYear()} www.heytai.dev . All rights reserved.`;
 
 const DialogTerms = () => {
     return (
@@ -131,7 +132,6 @@ const Footer = ({
             "links": [
                 { "text": "關於我們", "url": "/about" },
                 { "text": "聯絡我們", "url": "/contact" },
-                { "text": "太馳官網", "url": "https://www.taiche.dev" },
             ]
         },
         {

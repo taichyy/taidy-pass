@@ -1,5 +1,5 @@
-import { ReactNode, Suspense } from "react";
 import { SyncLoader } from "react-spinners";
+import { ReactNode, Suspense } from "react";
 
 import { cn } from "@/lib/utils";
 

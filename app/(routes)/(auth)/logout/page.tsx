@@ -1,9 +1,10 @@
 "use client"
+
 import useSWR from "swr";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect} from "react";
 import { useRouter } from "next/navigation";
 
 import { cn, poster } from "@/lib/utils";

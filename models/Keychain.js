@@ -13,6 +13,9 @@ const keychainSchema = new Schema({
     },
 })
 
+// Indexes
+keychainSchema.index({ userId: 1 });
+
 const Keychain = mongoose?.models?.Keychain || mongoose.model("Keychain", keychainSchema);
 
 export default Keychain;

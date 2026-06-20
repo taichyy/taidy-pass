@@ -1,9 +1,10 @@
-import { verify } from "jsonwebtoken";
+import CryptoJS from "crypto-js";
+import { verify, sign } from "jsonwebtoken";
 import { cookies } from "next/headers";
 
 import connect from "@/lib/db"
 import User from "@/models/User"
-import { Response } from "@/lib/utils"
+import { Response, MAX_AGE } from "@/lib/utils"
 import { getUserId, apiProtect } from "@/lib/actions"
 
 export const GET = async (request, props) => {
@@ -156,6 +157,75 @@ export const PATCH = async (request, props) => {
             updateData[field] = body[field];
         }
     });
+
+    // Handle email update
+    if (body.email !== undefined) {
+        const secret = process.env.USER_SECRET || "";
+        const jwtSecret = process.env.JWT_SECRET || "";
+
+        const newEmail = body.email.trim().toLowerCase();
+
+        // Encrypt and store new email, reset verification status
+        updateData.email = CryptoJS.AES.encrypt(newEmail, secret).toString();
+        updateData.emailVerified = null;
+
+        // Fetch current user data to rebuild JWT payload
+        await connect();
+        const user = await User.findById(userId);
+        if (!user) {
+            setStatus(404);
+            setResponse({ status: false, message: "User not found." });
+            return getResponse();
+        }
+
+        const cookieStore = await cookies();
+        const token = cookieStore.get("token")?.value;
+        if (!token) {
+            setStatus(401);
+            setResponse({ status: false, message: "Not logged in." });
+            return getResponse();
+        }
+
+        const decoded = verify(token, jwtSecret);
+
+        // Fetch
+        try {
+            await User.findByIdAndUpdate(userId, updateData);
+
+            // Re-issue JWT with updated email
+            const newToken = sign(
+                {
+                    userId: decoded.userId,
+                    username: decoded.username,
+                    email: newEmail,
+                    role: decoded.role,
+                },
+                jwtSecret,
+                { expiresIn: MAX_AGE }
+            );
+
+            (await cookies()).set("token", newToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                path: "/",
+                maxAge: MAX_AGE,
+            });
+
+            setStatus(200);
+            setResponse({
+                status: true,
+                type: "email_updated",
+                message: "Email updated successfully.",
+            });
+        } catch (err) {
+            console.error("Error updating email:", err);
+            setStatus(500);
+            setResponse({ status: false, message: "Email update failed." });
+        }
+
+        return getResponse();
+    }
 
     // Fetch
     try {

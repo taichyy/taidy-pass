@@ -1,4 +1,4 @@
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
 
 import LottieEmail from "./(components)/lottie-email";
 
@@ -7,10 +7,7 @@ const description = "聯絡 TaidyPass 團隊，讓我們幫助您。";
 const description2 = "請注意，我們無法協助找回您的金鑰";
 const emailLabel = "Email";
 const emailDescription = "我們將會盡快回覆您的訊息。";
-const email = "service@taiche.dev";
-const msgLabel = "Line";
-const msgDescription = "若有更緊急的事項，請透過 Line 聯絡客服人員。";
-const msgAddress = "@142cffjd";
+const email = "tai@heytai.dev";
 
 const ContactPage = () => {
     return (
@@ -45,7 +42,7 @@ const ContactPage = () => {
                             {email}
                         </a>
                     </div>
-                    <div>
+                    {/* <div>
                         <span className="mb-3 flex size-12 flex-col items-center justify-center rounded-full bg-accent w-fit p-3">
                             <MessageCircle className="h-6 w-auto" />
                         </span>
@@ -54,7 +51,7 @@ const ContactPage = () => {
                         <a href="#" className="font-semibold hover:underline">
                             {msgAddress}
                         </a>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div 
