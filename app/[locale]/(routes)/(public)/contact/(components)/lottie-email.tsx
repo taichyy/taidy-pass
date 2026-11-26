@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
@@ -14,6 +14,6 @@ const LottieEmail = () => {
             />
         </>
     );
-}
+};
 
 export default LottieEmail;

@@ -1,21 +1,20 @@
-"use client"
+"use client";
 
-import { Copy } from "lucide-react"
-import toast from "react-hot-toast"
+import { Copy } from "lucide-react";
+import toast from "react-hot-toast";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-const ButtonCopy = ({
-    value,
-    className,
-}:{
+const ButtonCopy = (props:{
     value: string,
     className?: string,
 }) => {
+    const { value, className } = props;
+
     const handleClick = () => {
-        navigator.clipboard.writeText(value.trim())
-        toast.success('已複製')
-    }
+        navigator.clipboard.writeText(value.trim());
+        toast.success('已複製');
+    };
 
     return (
         <Copy 
@@ -27,6 +26,6 @@ const ButtonCopy = ({
             )}
         />
     );
-}
+};
  
 export default ButtonCopy;

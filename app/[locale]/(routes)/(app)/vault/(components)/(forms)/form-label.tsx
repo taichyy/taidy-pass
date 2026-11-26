@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import toast from "react-hot-toast";
 import { FormEvent, useState } from "react";
@@ -14,71 +14,71 @@ import DialogDoubleCheck from "@/components/dialog-double-check";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const FormLabel = ({
-    labels,
-}: {
-    labels: TLabel[]
+const FormLabel = (props: {
+    labels: TLabel[];
 }) => {
-    const router = useRouter()
+    const { labels } = props;
 
-    const { setDoubleCheckOpen } = useDoubleCheckStore()
+    const router = useRouter();
 
-    const [mode, setMode] = useState<"put" | "post" | "delete" | null>(null)
+    const { setDoubleCheckOpen } = useDoubleCheckStore();
 
-    const [id, setId] = useState<string>("")
-    const [key, setKey] = useState<string>("")
-    const [name, setName] = useState<string>("")
+    const [mode, setMode] = useState<"put" | "post" | "delete" | null>(null);
+
+    const [id, setId] = useState<string>("");
+    const [key, setKey] = useState<string>("");
+    const [name, setName] = useState<string>("");
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!e.target) {
             return;
         }
 
         if (!mode) {
-            toast.error("請選擇操作模式！")
+            toast.error("請選擇操作模式！");
             return;
         }
 
-        let url = `/api/labels/`
+        let url = `/api/labels/`;
         if (mode === "put") {
-            url += id
+            url += id;
         } else if (mode === "post") {
-            url += ""
+            url += "";
         }
 
         const form = e.target as HTMLFormElement;
-        const key = (form.elements.namedItem("key") as HTMLInputElement).value
-        const name = (form.elements.namedItem("name") as HTMLInputElement).value
+        const key = (form.elements.namedItem("key") as HTMLInputElement).value;
+        const name = (form.elements.namedItem("name") as HTMLInputElement).value;
 
         const body = {
             key,
             name,
-        }
+        };
 
         try {
             const req = await fetch(url, {
                 method: mode,
                 body: JSON.stringify(body)
-            })
+            });
 
-            const res = await req.json()
+            const res = await req.json();
 
             if (!res.status) {
                 if (res.type === "duplicated") {
-                    toast.error("鍵值重複！")
+                    toast.error("鍵值重複！");
                     return;
                 }
             }
 
-            router.refresh()
-            toast.success("分類標籤新增成功！")
+            router.refresh();
+            toast.success("分類標籤新增成功！");
         } catch (err) {
-            console.log(err)
-            toast.error("分類標籤新增失敗！")
+            console.log(err);
+            toast.error("分類標籤新增失敗！");
         }
-    }
+    };
 
     const handleDelete = async () => {
         if (!id) return;
@@ -87,20 +87,20 @@ const FormLabel = ({
         try {
             const req = await fetch(`/api/labels/${id}`, {
                 method: "DELETE"
-            })
+            });
 
-            const res = await req.json()
+            const res = await req.json();
 
             if (!res.status) {
-                toast.error("刪除失敗！")
+                toast.error("刪除失敗！");
                 return;
             }
 
-            router.refresh()
+            router.refresh();
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
-    }
+    };
 
     return (
         <div>
@@ -111,10 +111,10 @@ const FormLabel = ({
                             <button
                                 type="button"
                                 onClick={() => {
-                                    setId("")
-                                    setKey("")
-                                    setName("")
-                                    setMode("post")
+                                    setId("");
+                                    setKey("");
+                                    setName("");
+                                    setMode("post");
                                 }}
                             >
                                 <PlusCircle
@@ -134,10 +134,10 @@ const FormLabel = ({
                                 <div className="flex items-center gap-0.5">
                                     <Badge
                                         onClick={() => {
-                                            setMode("put")
-                                            label._id && setId(label._id)
-                                            setKey(label.key)
-                                            setName(label.name)
+                                            setMode("put");
+                                            label._id && setId(label._id);
+                                            setKey(label.key);
+                                            setName(label.name);
                                         }}
                                         className="text-sm cursor-pointer"
                                     >
@@ -150,8 +150,8 @@ const FormLabel = ({
                                                 type="button"
                                                 onClick={() => {
                                                     if (label._id) {
-                                                        setDoubleCheckOpen("label-delete-admin", true)
-                                                        setId(label._id)
+                                                        setDoubleCheckOpen("label-delete-admin", true);
+                                                        setId(label._id);
                                                     }
                                                 }}
                                             >
@@ -207,6 +207,6 @@ const FormLabel = ({
             />
         </div>
     );
-}
+};
 
 export default FormLabel;

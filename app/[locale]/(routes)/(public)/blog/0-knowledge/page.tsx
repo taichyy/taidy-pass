@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import {
     AlignLeft,
     GalleryVerticalEnd,
@@ -7,8 +9,6 @@ import {
     ListChecks,
     RefreshCcw,
 } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -273,6 +273,6 @@ const ZeroKnowledgePage = () => {
                 </div>
 
     );
-}
+};
 
 export default ZeroKnowledgePage;

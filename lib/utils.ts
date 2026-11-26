@@ -1,14 +1,14 @@
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 import { NextResponse } from "next/server";
-import { type ClassValue, clsx } from "clsx"
+import { type ClassValue, clsx } from "clsx";
 
 export const MAX_AGE = 60 * 60 * 24 * 14;
 
-export function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs))
-}
+export const cn = (...inputs: ClassValue[]) => {
+    return twMerge(clsx(inputs));
+};
 
-export async function generateUserPrivateKey() {
+export const generateUserPrivateKey = async () => {
     const rawKey = window.crypto.getRandomValues(new Uint8Array(32)); // 256-bit key
     const base64Key = btoa(String.fromCharCode.apply(null, Array.from(rawKey)));
 
@@ -24,7 +24,7 @@ export async function generateUserPrivateKey() {
         key: cryptoKey,      // 真正的 CryptoKey（可以用在前端加密資料）
         base64Key,           // 要顯示給使用者保存
     };
-}
+};
 
 export const fetcher = async (url: string, queryParams?: any) => {
     // Construct the URL with query parameters
@@ -38,7 +38,7 @@ export const fetcher = async (url: string, queryParams?: any) => {
         throw new Error('Network response was not ok');
     }
     return response.json();
-}
+};
 
 export const poster = async (
     url: string,
@@ -80,7 +80,7 @@ export const poster = async (
     return response.json();
 };
 
-export async function deriveRawKey(password: string, salt: string): Promise<string> {
+export const deriveRawKey = async (password: string, salt: string): Promise<string> => {
     const encoder = new TextEncoder();
 
     const keyMaterial = await window.crypto.subtle.importKey(
@@ -106,7 +106,7 @@ export async function deriveRawKey(password: string, salt: string): Promise<stri
     const keyArray = new Uint8Array(derivedBits);
     return btoa(Array.from(keyArray).map(c => String.fromCharCode(c)).join(""));
 
-}
+};
 
 // Closure, as response template
 export const Response = () => {
@@ -117,14 +117,14 @@ export const Response = () => {
         type: null,
         message: null,
         data: null,
-    }
+    };
 
     const setStatus = (newStatus: number | null) => status = newStatus;
     const setResponse = (newResponse: {
         status?: boolean,
         type?: string | null,
         message?: string | null,
-        data?: any
+        data?: any,
     }) => response = { ...response, ...newResponse };
 
      const getResponse = () => {
@@ -137,5 +137,5 @@ export const Response = () => {
         setStatus,
         setResponse,
         getResponse,
-    }
-}
+    };
+};

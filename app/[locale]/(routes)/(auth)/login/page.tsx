@@ -1,7 +1,7 @@
-import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 
+import { Link } from "@/i18n/navigation";
 import LogoText from "@/components/logo-text";
 import { Button } from "@/components/ui/button";
 import FormVerify from "./(components)/form-veriry";
@@ -12,12 +12,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const LoginPage = async (
     props:{
         searchParams: Promise<{
-            mode?: "register" | "login"
-        }>
+            mode?: "register" | "login";
+        }>;
     }
 ) => {
-    const searchParams = await props.searchParams;
-    const { mode } = searchParams;
+    const { mode } = await props.searchParams;
 
     const imageSrc = mode === "register" ? "/register.png" : "/login.png";
 
@@ -66,6 +65,6 @@ const LoginPage = async (
             </Card>
         </main>
     );
-}
+};
 
 export default LoginPage;

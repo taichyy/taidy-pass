@@ -1,13 +1,13 @@
-import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 
-const BlogLayout = ({
-    children,
-}: {
+const BlogLayout = (props: {
     children: React.ReactNode;
 }) => {
+    const { children } = props;
+
     return (
         <>
             <section className="pb-32 py-16">
@@ -29,6 +29,6 @@ const BlogLayout = ({
             </section>
         </>
     );
-}
+};
 
 export default BlogLayout;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -13,13 +13,12 @@ import { useKey } from "@/components/providers/provider-key";
 type TFormData = {
     base64Key: string;
 };
-const FormSetKey = ({
-    setOpened,
-    keychainId,
-}:{
+const FormSetKey = (props:{
     setOpened: (opened: boolean) => void;
     keychainId?: string;
 }) => {
+    const { setOpened, keychainId } = props;
+
     const router = useRouter();
 
     const { salt, setKeyOfKeychains } = useKey();
@@ -35,7 +34,7 @@ const FormSetKey = ({
             value: formData.base64Key,
             label: "金鑰"
         },
-    ]
+    ];
     
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,14 +44,14 @@ const FormSetKey = ({
 
     // For Add and edit
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!e.target) {
             return;
         }
 
         const form = e.target as HTMLFormElement;
-        const base64Key = (form.elements.namedItem("base64Key") as HTMLInputElement).value
+        const base64Key = (form.elements.namedItem("base64Key") as HTMLInputElement).value;
 
         if (!base64Key) {
             toast.error("請輸入金鑰");
@@ -64,13 +63,13 @@ const FormSetKey = ({
             return;
         }
 
-        const derivedKey = await deriveRawKey(base64Key, salt)
+        const derivedKey = await deriveRawKey(base64Key, salt);
         keychainId && setKeyOfKeychains(keychainId, derivedKey);
 
         toast.success("設定成功");
         setOpened(false);
-        router.refresh()
-    }
+        router.refresh();
+    };
 
     return (
         <form onSubmit={handleSubmit} className="text-left flex flex-col gap-3">
@@ -86,7 +85,7 @@ const FormSetKey = ({
         ))}
         <div className=" flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => {
-                setOpened(false)
+                setOpened(false);
             }}>
                 取消
             </Button>
@@ -96,6 +95,6 @@ const FormSetKey = ({
         </div>
     </form>
     );
-}
+};
  
 export default FormSetKey;

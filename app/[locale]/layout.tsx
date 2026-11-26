@@ -1,7 +1,7 @@
 import { Toaster } from "react-hot-toast";
 import { notFound } from "next/navigation";
 import type { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 import { setRequestLocale } from "next-intl/server";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 
@@ -29,17 +29,16 @@ export const metadata: Metadata = {
     },
 };
 
-export function generateStaticParams() {
+export const generateStaticParams = () => {
     return routing.locales.map((locale) => ({ locale }));
-}
+};
 
-export default async function LocaleLayout({
-    children,
-    params,
-}: {
+const LocaleLayout = async (props: {
     children: React.ReactNode;
     params: Promise<{ locale: string }>;
-}) {
+}) => {
+    const { children, params } = props;
+
     const { locale } = await params;
     if (!hasLocale(routing.locales, locale)) notFound();
 
@@ -64,4 +63,6 @@ export default async function LocaleLayout({
             </body>
         </html>
     );
-}
+};
+
+export default LocaleLayout;

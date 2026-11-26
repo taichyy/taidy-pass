@@ -1,29 +1,28 @@
-"use client"
+"use client";
 
-import { Link } from "@/i18n/navigation";
 import { Fragment, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { HiBars3BottomRight } from "react-icons/hi2";
 
 import { cn } from "@/lib/utils";
 import { TNavItem } from "@/lib/types";
+import { Link } from "@/i18n/navigation";
 import LogoText from "@/components/logo-text";
 import { LanguageToggle } from "@/components/language-toggle";
 
 type Props = {
-    navLinks: TNavItem[]
+    navLinks: TNavItem[];
     setShowNav: (showNav: boolean) => void;
-}
+};
 
-const Nav = ({
-    navLinks,
-    setShowNav
-}: Props) => {
-    const pathname = usePathname()
+const Nav = (props: Props) => {
+    const { navLinks, setShowNav } = props;
+
+    const pathname = usePathname();
 
     useEffect(() => {
-        setShowNav(false)
-    }, [pathname])
+        setShowNav(false);
+    }, [pathname]);
 
     return (
         <div className={`fixed top-0 left-0 bg-white dark:bg-gray-900 shadow-md w-full transition-all duration-200 h-[12vh] z-[1000]`}>
@@ -72,6 +71,6 @@ const Nav = ({
             </div>
         </div>
     );
-}
+};
 
 export default Nav;

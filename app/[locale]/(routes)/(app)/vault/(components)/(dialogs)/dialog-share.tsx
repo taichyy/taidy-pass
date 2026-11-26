@@ -1,5 +1,7 @@
 import { Share } from "lucide-react";
 
+import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
     Dialog,
     DialogContent,
@@ -8,8 +10,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const DialogShare = () => {
     return (
@@ -37,6 +37,6 @@ const DialogShare = () => {
             </DialogContent>
         </Dialog>
     );
-}
+};
 
 export default DialogShare;

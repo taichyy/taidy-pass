@@ -1,8 +1,12 @@
 "use client";
+
 import { useState } from "react";
 import { KeyedMutator } from "swr";
 import { Trash2Icon } from "lucide-react";
 
+import { Separator } from "@/components/ui/separator";
+import FormDeleteKeychain from "../(forms)/form-delete-keychain";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
     Dialog,
     DialogContent,
@@ -11,19 +15,14 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
-import FormDeleteKeychain from "../(forms)/form-delete-keychain";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const DialogDeleteKeyChain = ({
-    keychainId,
-    keychainName,
-    mutate
-}: {
+const DialogDeleteKeyChain = (props: {
     keychainId: string; 
     keychainName: string;
     mutate?: KeyedMutator<any>;
 }) => {
+    const { keychainId, keychainName, mutate } = props;
+
     const [opened, setOpened] = useState(false);
 
     return (

@@ -1,11 +1,11 @@
 import Footer from "./(components)/footer";
 import NavResponsive from "./(components)/navbar/nav-responsive";
 
-const PublicLayout = ({
-    children,
-}: {
-    children: React.ReactNode
+const PublicLayout = (props: {
+    children: React.ReactNode;
 }) => {
+    const { children } = props;
+
     return (
         // Hide data-aos first inisialization x-bar.
         <div className="overflow-x-hidden">
@@ -14,6 +14,6 @@ const PublicLayout = ({
             <Footer />
         </div>
     );
-}
+};
 
 export default PublicLayout;

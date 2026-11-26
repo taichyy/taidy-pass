@@ -402,7 +402,7 @@ const dynamicTranslations: Array<[RegExp, (...matches: string[]) => string]> = [
     ],
 ];
 
-export function translateText(value: string, locale: Locale): string {
+export const translateText = (value: string, locale: Locale): string => {
     if (locale === "zh-TW" || !value) return value;
 
     const whitespaceMatch = value.match(/^(\s*)([\s\S]*?)(\s*)$/);
@@ -430,8 +430,8 @@ export function translateText(value: string, locale: Locale): string {
     }
 
     return value;
-}
+};
 
-export function isLocale(value: string | null | undefined): value is Locale {
+export const isLocale = (value: string | null | undefined): value is Locale => {
     return value === "zh-TW" || value === "en";
-}
+};

@@ -1,5 +1,9 @@
 import { Settings } from "lucide-react";
 
+import { TLabel } from "@/lib/types";
+import FormLabel from "../(forms)/form-label";
+import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
     Dialog,
     DialogContent,
@@ -8,19 +12,14 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { TLabel } from "@/lib/types";
-import FormLabel from "../(forms)/form-label";
-import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Keep this component server component, because it is confidential.
-const DialogAdminSettings = async ({
-    role,
-    labels,
-}: {
+const DialogAdminSettings = async (props: {
     role: "user" | "admin",
-    labels: TLabel[]
+    labels: TLabel[],
 }) => {
+    const { role, labels } = props;
+
     // Double safe check
     if (!role || role == "user") return null;
 
@@ -64,6 +63,6 @@ const DialogAdminSettings = async ({
             )}
         </>
     );
-}
+};
 
 export default DialogAdminSettings;

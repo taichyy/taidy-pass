@@ -1,7 +1,11 @@
 "use client";
+
 import { KeyedMutator } from "swr";
 import { useState, ReactNode } from "react";
 
+import { TLabel } from "@/lib/types";
+import FormAccount from "../(forms)/form-account";
+import { Separator } from "@/components/ui/separator";
 import {
     Dialog,
     DialogContent,
@@ -10,23 +14,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { TLabel } from "@/lib/types";
-import FormAccount from "../(forms)/form-account";
-import { Separator } from "@/components/ui/separator";
 
-const DialogAccount = ({
-    labels,
-    id,
-    mutate,
-    keychainId,
-    children,
-}: {
+const DialogAccount = (props: {
     labels?: TLabel[];
     id?: string;
     mutate?: KeyedMutator<any>;
     keychainId?: string;
     children: ReactNode;
 }) => {
+    const { labels, id, mutate, keychainId, children } = props;
+
     const [opened, setOpened] = useState(false);
 
     const isEdit = !!id;

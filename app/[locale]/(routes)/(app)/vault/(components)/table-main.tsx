@@ -1,83 +1,73 @@
-"use client"
+"use client";
 
-import axios from "axios"
-import useSWR, { KeyedMutator } from "swr"
-import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import axios from "axios";
+import useSWR, { KeyedMutator } from "swr";
+import { useRouter } from "next/navigation";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { HiQuestionMarkCircle } from "react-icons/hi2"
-import { ChevronsUpDown, Edit, Eye, EyeOff, FolderOutput, Import, Key, Link2, LockKeyhole, Pencil, PlusCircle } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { HiQuestionMarkCircle } from "react-icons/hi2";
+import { ChevronsUpDown, Edit, Eye, EyeOff, FolderOutput, Import, Key, Link2, LockKeyhole, Pencil, PlusCircle } from "lucide-react";
 
+import { poster } from "@/lib/utils";
+import { getUserId } from "@/lib/actions";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import LabelsSelector from "./labels-selector";
+import { Button } from "@/components/ui/button";
+import { useHideStore } from "@/lib/stores/use-hide";
+import { encrypt, decrypt } from "@/lib/vault-crypto";
+import DialogSetKey from "./(dialogs)/dialog-set-key";
+import DialogAccount from "./(dialogs)/dialog-account";
+import DialogKeyChain from "./(dialogs)/dialog-keychain";
+import { TAccount, TKeychain, TLabel } from "@/lib/types";
+import ButtonCopy from "@/components/buttons/button-copy";
+import { useKey } from "@/components/providers/provider-key";
+import { ThemeModeToggle } from "@/components/theme-mode-toggle";
+import DialogDoubleCheck from "@/components/dialog-double-check";
+import DialogDeleteKeyChain from "./(dialogs)/dialog-delete-keychain";
+import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { getUserId } from "@/lib/actions"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import LabelsSelector from "./labels-selector"
-import { poster } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { encrypt, decrypt } from "@/lib/vault-crypto"
-import { useHideStore } from "@/lib/stores/use-hide"
-import DialogSetKey from "./(dialogs)/dialog-set-key"
-import DialogAccount from "./(dialogs)/dialog-account"
-import DialogKeyChain from "./(dialogs)/dialog-keychain"
-import { TAccount, TKeychain, TLabel } from "@/lib/types"
-import ButtonCopy from "@/components/buttons/button-copy"
-import { useKey } from "@/components/providers/provider-key"
-import { ThemeModeToggle } from "@/components/theme-mode-toggle"
-import DialogDoubleCheck from "@/components/dialog-double-check"
-import DialogDeleteKeyChain from "./(dialogs)/dialog-delete-keychain"
-import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+} from "@/components/ui/collapsible";
 
 type TAPIKeychain = {
     status: boolean,
     message: string,
     type?: string,
-    data: TKeychain[]
-}
+    data: TKeychain[],
+};
 type TAPIAccounts = {
     status: boolean,
     message: string,
     type?: string,
-    data: TAccount[]
-}
+    data: TAccount[],
+};
 
-const Icon = ({
-    hide,
-    onClick,
-    className,
-}: {
+const Icon = (props: {
     hide: boolean,
     onClick: () => void,
-    className?: string
+    className?: string,
 }) => {
-    const props = {
+    const { hide, onClick, className } = props;
+
+    const iconProps = {
         onClick,
         className,
-    }
+    };
 
     return (
         hide
-            ? <Eye {...props} />
-            : <EyeOff {...props} />
-    )
-}
+            ? <Eye {...iconProps} />
+            : <EyeOff {...iconProps} />
+    );
+};
 
 // This is not the main, but a sub-component, main below.
-const CollapsibleArea = ({
-    keychainId,
-    keychainName,
-    labels,
-    hide,
-    search,
-    searchKeys,
-    mutateKeyChains,
-}: {
+const CollapsibleArea = (props: {
     keychainId?: string,
     keychainName?: string,
     labels: TLabel[],
@@ -86,22 +76,24 @@ const CollapsibleArea = ({
     searchKeys: string[],
     mutateKeyChains?: KeyedMutator<any>;
 }) => {
-    const { key, keyOfKeychains, setKeyOfKeychains } = useKey()
-    const { setDoubleCheckOpen } = useDoubleCheckStore()
+    const { keychainId, keychainName, labels, hide, search, searchKeys, mutateKeyChains } = props;
+
+    const { key, keyOfKeychains, setKeyOfKeychains } = useKey();
+    const { setDoubleCheckOpen } = useDoubleCheckStore();
 
     // If the keychain is expanded
-    const [open, setOpen] = useState(!keychainId)
+    const [open, setOpen] = useState(!keychainId);
     const [hasOpened, setHasOpened] = useState(false);
     // Derived state for key insertion
-    const [keyInserted, setKeyInserted] = useState(false)
-    const [insertedKeyVal, setInsertedKeyVal] = useState<string | null>(null)
+    const [keyInserted, setKeyInserted] = useState(false);
+    const [insertedKeyVal, setInsertedKeyVal] = useState<string | null>(null);
     // Accounts
-    const [accounts, setAccounts] = useState<TAccount[]>([])
-    const [filtered, setFiltered] = useState<TAccount[]>([])
+    const [accounts, setAccounts] = useState<TAccount[]>([]);
+    const [filtered, setFiltered] = useState<TAccount[]>([]);
     // Display all used labels in the keychain
-    const [allUsedLabels, setAllUsedLabels] = useState<string[]>([])
+    const [allUsedLabels, setAllUsedLabels] = useState<string[]>([]);
     // Check if the key chain is set correctly.
-    const [keyCorrect, setKeyCorrect] = useState<boolean | null>(keychainId ? null : true)
+    const [keyCorrect, setKeyCorrect] = useState<boolean | null>(keychainId ? null : true);
 
     // If it's a custom keychain, check if there is a key in keyOfKeychains.
     useEffect(() => {
@@ -112,7 +104,7 @@ const CollapsibleArea = ({
             setInsertedKeyVal(keychainKey);
             setOpen(true);
         }
-    }, [keychainId, keyOfKeychains])
+    }, [keychainId, keyOfKeychains]);
 
     // If it's a default keychain, check if there is a key.
     useEffect(() => {
@@ -120,7 +112,7 @@ const CollapsibleArea = ({
             setKeyInserted(true);
             setInsertedKeyVal(key);
         }
-    }, [key, keychainId])
+    }, [key, keychainId]);
 
     // Effeciency issue: if the keychain is not opened for the 1st time, it won't fetch data.
     useEffect(() => {
@@ -130,28 +122,28 @@ const CollapsibleArea = ({
     }, [open]);
 
     // Data fetching part.
-    const paramsAcc = { method: "get" }
-    const bodyAcc: any = { labels: searchKeys }
+    const paramsAcc = { method: "get" };
+    const bodyAcc: any = { labels: searchKeys };
     if (keychainId) {
-        bodyAcc.keychainId = keychainId
+        bodyAcc.keychainId = keychainId;
     }
     const { data: fetched, isLoading, mutate } = useSWR<TAPIAccounts>(
         keyInserted && hasOpened && ["/api/accounts", paramsAcc, bodyAcc],
         ([url, params, body]) => poster(url, params, body),
         { dedupingInterval: 30000, revalidateOnFocus: false },
-    )
-    const encryptedAccounts = fetched?.data
+    );
+    const encryptedAccounts = fetched?.data;
 
     useEffect(() => {
         accounts && setFiltered(accounts.filter(record =>
             (record.title.toLowerCase().includes(search.toLowerCase()) || record.username.toLowerCase().includes(search.toLowerCase()))
-        ))
-    }, [search])
+        ));
+    }, [search]);
 
     useEffect(() => {
         if (!encryptedAccounts || !insertedKeyVal) return;
 
-        let cancelled = false
+        let cancelled = false;
 
         const run = async () => {
             const decrypted = await Promise.all(encryptedAccounts.map(async (record) => ({
@@ -160,9 +152,9 @@ const CollapsibleArea = ({
                 username: await decrypt(record.username, insertedKeyVal),
                 password: await decrypt(record.password, insertedKeyVal),
                 remark: record.remark ? await decrypt(record.remark, insertedKeyVal) : "",
-            })))
+            })));
 
-            if (cancelled) return
+            if (cancelled) return;
 
             const keyIsCorrect = !!(decrypted.find(record => record.type == "validation" && record.username == "validation")) || !keychainId;
             setKeyCorrect(keyIsCorrect);
@@ -176,8 +168,8 @@ const CollapsibleArea = ({
 
             const usedLabels = keyIsCorrect ? Array.from(new Set(decrypted.map(record => record.label).flat())) as string[] : [];
 
-            const finalAccounts = keyIsCorrect ? decrypted : []
-            setAccounts(finalAccounts)
+            const finalAccounts = keyIsCorrect ? decrypted : [];
+            setAccounts(finalAccounts);
             setFiltered(
                 search
                     ? finalAccounts.filter(record =>
@@ -185,22 +177,22 @@ const CollapsibleArea = ({
                         record.username.toLowerCase().includes(search.toLowerCase())
                     )
                     : finalAccounts
-            )
-            setAllUsedLabels(usedLabels)
-        }
+            );
+            setAllUsedLabels(usedLabels);
+        };
 
-        run()
-        return () => { cancelled = true }
-    }, [encryptedAccounts, insertedKeyVal])
+        run();
+        return () => { cancelled = true; };
+    }, [encryptedAccounts, insertedKeyVal]);
 
     useEffect(() => {
-        mutate()
-    }, [searchKeys])
+        mutate();
+    }, [searchKeys]);
 
     const handleStarToggle = async (id: string) => {
-        const userId = await getUserId()
+        const userId = await getUserId();
 
-        if (!userId) return
+        if (!userId) return;
 
         const update = async (id: string) => {
             try {
@@ -210,15 +202,15 @@ const CollapsibleArea = ({
                     data: {
                         userId,
                     },
-                })
+                });
 
                 // Only update the local state for efficiency, and put the starred items at the top.
                 setFiltered(prev => {
                     const updated = prev.map(item => {
                         if (item._id === id) {
-                            return { ...item, starred: !item.starred }
+                            return { ...item, starred: !item.starred };
                         }
-                        return item
+                        return item;
                     });
 
                     // Sort: starred items at the top
@@ -227,32 +219,32 @@ const CollapsibleArea = ({
             } catch (error) {
                 console.error("Error toggling star:", error);
             }
-        }
+        };
 
-        update(id)
-    }
+        update(id);
+    };
 
     // 匯出功能
     const handleExport = () => {
         // 匯出該 keychain 下所有帳號（已解密）
-        const exportData = accounts.map(({ _id, ...rest }) => rest)
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = `${keychainName || "default-keychain"}.json`
-        a.click()
-        URL.revokeObjectURL(url)
-    }
+        const exportData = accounts.map(({ _id, ...rest }) => rest);
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${keychainName || "default-keychain"}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
 
     // 匯入功能（修正版，input 用 ref 控制）
-    const inputRef = useRef<HTMLInputElement>(null)
+    const inputRef = useRef<HTMLInputElement>(null);
     const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (!file || !insertedKeyVal) return
+        const file = e.target.files?.[0];
+        if (!file || !insertedKeyVal) return;
         try {
-            const text = await file.text()
-            const importData = JSON.parse(text)
+            const text = await file.text();
+            const importData = JSON.parse(text);
             // 重新加密（使用已驗證的 AES-GCM）
             const encrypted = await Promise.all(importData.map(async (record: any) => ({
                 ...record,
@@ -261,18 +253,18 @@ const CollapsibleArea = ({
                 password: await encrypt(record.password, insertedKeyVal),
                 remark: record.remark ? await encrypt(record.remark, insertedKeyVal) : "",
                 keychainId: keychainId || null,
-            })))
-            await axios.post("/api/accounts", encrypted)
-            mutate()
-            alert("匯入成功！")
+            })));
+            await axios.post("/api/accounts", encrypted);
+            mutate();
+            alert("匯入成功！");
         } catch (err) {
-            alert("匯入失敗，檔案格式錯誤或加密金鑰不符")
-            console.error(err)
+            alert("匯入失敗，檔案格式錯誤或加密金鑰不符");
+            console.error(err);
         } finally {
             // 清空 input value 以便重複上傳同一檔案
-            e.target.value = ""
+            e.target.value = "";
         }
-    }
+    };
 
     return (
         <Collapsible
@@ -355,7 +347,7 @@ const CollapsibleArea = ({
                                     <LockKeyhole
                                         className="cursor-pointer"
                                         onClick={() => {
-                                            setDoubleCheckOpen("re-lock-keychain", true)
+                                            setDoubleCheckOpen("re-lock-keychain", true);
                                         }}
                                     />
                                 </TooltipTrigger>
@@ -368,12 +360,12 @@ const CollapsibleArea = ({
                                 title="重新上鎖鑰匙圈"
                                 desc="這將會清除目前鑰匙圈的內容，並且需要重新輸入金鑰才能再次存取。"
                                 doFunction={() => {
-                                    setOpen(false)
-                                    setFiltered([])
-                                    setAccounts([])
-                                    setKeyInserted(false)
-                                    setInsertedKeyVal(null)
-                                    keychainId && setKeyOfKeychains(keychainId, null)
+                                    setOpen(false);
+                                    setFiltered([]);
+                                    setAccounts([]);
+                                    setKeyInserted(false);
+                                    setInsertedKeyVal(null);
+                                    keychainId && setKeyOfKeychains(keychainId, null);
                                 }}
                             />
                         </>
@@ -441,7 +433,7 @@ const CollapsibleArea = ({
                                         <div className="flex justify-between flex-col flex-wrap mt-2">
                                             {item.linkedAccountId ? (
                                                 (() => {
-                                                    const src = accounts.find(a => a._id === item.linkedAccountId)
+                                                    const src = accounts.find(a => a._id === item.linkedAccountId);
                                                     return (
                                                         <div className="flex items-center gap-1 flex-1 w-full text-sm text-muted-foreground">
                                                             <Link2 size={16} />
@@ -449,7 +441,7 @@ const CollapsibleArea = ({
                                                                 透過「{src?.title || "其他鑰匙圈中的帳號"}」外部登入
                                                             </span>
                                                         </div>
-                                                    )
+                                                    );
                                                 })()
                                             ) : (
                                                 <>
@@ -531,34 +523,33 @@ const CollapsibleArea = ({
                 </div>
             )}
         </Collapsible>
-    )
-}
+    );
+};
 
-const TableMain = ({
-    labels,
-    children,
-}: {
+const TableMain = (props: {
     labels: TLabel[],
-    children?: React.ReactNode
+    children?: React.ReactNode,
 }) => {
-    const router = useRouter()
-    const { key, clearKeys } = useKey()
+    const { labels, children } = props;
 
-    const { hide, setHide } = useHideStore()
+    const router = useRouter();
+    const { key, clearKeys } = useKey();
 
-    const [force, setForce] = useState(false)
-    const [isMounted, setIsMounted] = useState(false)
-    const [search, setSearch] = useState("")
-    const [searchKeys, setSearchKeys] = useState<string[]>([])
+    const { hide, setHide } = useHideStore();
 
-    const paramsKeychain = { method: "get" }
-    const bodyKeychain = {}
+    const [force, setForce] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+    const [search, setSearch] = useState("");
+    const [searchKeys, setSearchKeys] = useState<string[]>([]);
+
+    const paramsKeychain = { method: "get" };
+    const bodyKeychain = {};
     const { data: fetched, isLoading, mutate } = useSWR<TAPIKeychain>(
         ["/api/keychains", paramsKeychain, bodyKeychain],
         ([url, params, body]) => poster(url, params, body),
         { dedupingInterval: 30000, revalidateOnFocus: false },
-    )
-    const keychains = fetched?.data
+    );
+    const keychains = fetched?.data;
 
     // If there isn't a key, logout the user by hitting DELETE.
     // Generally, this would be handled by the middleware with auto-redirect, just in case.
@@ -572,25 +563,25 @@ const TableMain = ({
                         "Content-Type": "application/json",
                     },
                 }
-            )
+            );
         } catch (error) {
             console.error("Logout error when user key is empty at vault table-main:", error);
         }
 
         // Wipe the derived vault key/salt from browser storage on forced logout.
-        clearKeys()
+        clearKeys();
 
         // Let the middleware handle the redirect.
-        router.refresh()
-    }
+        router.refresh();
+    };
     useEffect(() => {
-        (!key || key == "") && setForce(true)
-    }, [key])
+        (!key || key == "") && setForce(true);
+    }, [key]);
 
     // Prevents hydration mismatch
     useEffect(() => {
-        setIsMounted(true)
-    }, [])
+        setIsMounted(true);
+    }, []);
     if (!isMounted) {
         return null;
     }
@@ -622,7 +613,7 @@ const TableMain = ({
             <Input
                 defaultValue={search}
                 onChange={(e) => {
-                    setSearch(e.target.value)
+                    setSearch(e.target.value);
                 }}
                 placeholder="搜尋......"
                 className="h-[50px] text-base bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
@@ -662,6 +653,6 @@ const TableMain = ({
             />
         </div>
     );
-}
+};
 
 export default TableMain;

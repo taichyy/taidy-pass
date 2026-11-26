@@ -10,7 +10,7 @@ type KeyContextType = {
     keyOfKeychains?: {
         // key -> _id of specefic custom keychain
         [key: string]: string;
-    }
+    };
     setKeyOfKeychains: (key: string, keychain: string | null) => void;
     // Wipes the derived vault key + salt (called on logout / session end).
     clearKeys: () => void;
@@ -37,7 +37,9 @@ const readSensitive = (name: string): string => {
     return sessionStorage.getItem(name) || "";
 };
 
-export const ProviderKey = ({ children }: { children: ReactNode }) => {
+export const ProviderKey = (props: { children: ReactNode }) => {
+    const { children } = props;
+
     // This should not be user-entered key, but a derived key (encoded with salt)
     const key = readSensitive("user-derive-key");
     // Fetched at login or register
@@ -47,10 +49,10 @@ export const ProviderKey = ({ children }: { children: ReactNode }) => {
 
     const setKey = (derivedKey: string) => {
         sessionStorage.setItem("user-derive-key", derivedKey);
-    }
+    };
     const setSalt = (salt: string) => {
         sessionStorage.setItem("user-salt", salt);
-    }
+    };
     const setKeyOfKeychains = (key: string, keychain: string | null) => {
         const existingKeys = keyOfKeychains || {};
         const updatedKeys = { ...existingKeys, [key]: keychain };

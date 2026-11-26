@@ -9,8 +9,8 @@ export const USER_PLAN_LIMITS = {
     // Max sticky notes per user
     notes: 15,
     // System labels: unlimited. Custom labels are admin-only (see labels route).
-}
+};
 
-export type TPlanLimits = typeof USER_PLAN_LIMITS
+export type TPlanLimits = typeof USER_PLAN_LIMITS;
 
-export const isLimited = (role: string) => role !== "admin"
+export const isLimited = (role: string) => role !== "admin";

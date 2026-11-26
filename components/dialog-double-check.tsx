@@ -1,54 +1,48 @@
-"use client"
+"use client";
 
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
+import { Button } from "./ui/button";
+import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "./ui/button";
-import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
+} from "@/components/ui/dialog";
 
-const DialogDoubleCheck = ({
-    id,
-    title,
-    desc,
-    doFunction,
-    disabled = false,
-    server = false,
-    force,
-}: {
+const DialogDoubleCheck = (props: {
     id: string,
     title: string,
     desc?: string,
-    doFunction: any
+    doFunction: any,
     disabled?: boolean,
     server?: boolean,
-    force?: boolean
+    force?: boolean,
 }) => {
-    const router = useRouter()
+    const { id, title, desc, doFunction, disabled = false, server = false, force } = props;
 
-    const { open, setDoubleCheckOpen } = useDoubleCheckStore()
+    const router = useRouter();
 
-    const currentOpen = open[id] || false
+    const { open, setDoubleCheckOpen } = useDoubleCheckStore();
+
+    const currentOpen = open[id] || false;
 
     const handleSubmit = async () => {
         try {
-            await doFunction()
+            await doFunction();
 
-            server && router.refresh()
-            toast.success("操作成功！")
+            server && router.refresh();
+            toast.success("操作成功！");
         } catch (err) {
-            console.error("Error in function in DialogDoubleCheck: " + err)
-            toast.error("發生錯誤，請稍後再試！")
+            console.error("Error in function in DialogDoubleCheck: " + err);
+            toast.error("發生錯誤，請稍後再試！");
         } finally {
-            setDoubleCheckOpen(id, false)
+            setDoubleCheckOpen(id, false);
         }
-    }
+    };
 
     return (
         <Dialog onOpenChange={(e) => setDoubleCheckOpen(id, e)} open={force || currentOpen}>
@@ -85,6 +79,6 @@ const DialogDoubleCheck = ({
             </DialogContent>
         </Dialog>
     );
-}
+};
 
 export default DialogDoubleCheck;

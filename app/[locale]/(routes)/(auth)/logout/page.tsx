@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 import useSWR from "swr";
-import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect} from "react";
 import { useRouter } from "next/navigation";
 
+import { Link } from "@/i18n/navigation";
 import { cn, poster } from "@/lib/utils";
 import LogoText from "@/components/logo-text";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import { useKey } from "@/components/providers/provider-key";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const LogoutPage = () => {
-    const router = useRouter()
+    const router = useRouter();
     const { keyOfKeychains, clearKeys } = useKey();
 
     const [isMounted, setIsMounted] = useState(false);
@@ -44,23 +44,23 @@ const LogoutPage = () => {
         try {
             await fetch("/api/session", { method: "DELETE" });
 
-            toast.success("登出成功！")
+            toast.success("登出成功！");
         } catch (err) {
-            console.error("Error in function in DialogDoubleCheck: " + err)
-            toast.error("發生錯誤，請稍後再試！")
+            console.error("Error in function in DialogDoubleCheck: " + err);
+            toast.error("發生錯誤，請稍後再試！");
         } finally {
             // Wipe the derived vault key/salt from browser storage — the
             // session cookie alone being cleared would leave the decryption
             // key behind on this device.
-            clearKeys()
-            router.push("/")
+            clearKeys();
+            router.push("/");
         }
-    }
+    };
 
     // Prevents hydration mismatch
     useEffect(() => {
-        setIsMounted(true)
-    }, [])
+        setIsMounted(true);
+    }, []);
     if (!isMounted) {
         return null;
     }
@@ -144,6 +144,6 @@ const LogoutPage = () => {
             </Card>
         </main>
     );
-}
+};
 
 export default LogoutPage;

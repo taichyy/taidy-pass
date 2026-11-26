@@ -1,6 +1,9 @@
-import { Link } from "@/i18n/navigation";
 import { CheckCircle } from "lucide-react";
 
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
+import YrMoSwitch from "./(components)/yr-mo-switch";
+import { Separator } from "@/components/ui/separator";
 import {
     Card,
     CardContent,
@@ -8,9 +11,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import YrMoSwitch from "./(components)/yr-mo-switch";
-import { Separator } from "@/components/ui/separator";
 
 interface PricingPlan {
     id: string;
@@ -91,7 +91,7 @@ const PricingPage = async (
             moreTag: true,
             comingSoon: true,
         },
-    ]
+    ];
 
     return (
         <section className="py-16 lg:py-24">
@@ -176,6 +176,6 @@ const PricingPage = async (
             </div>
         </section>
     );
-}
+};
 
 export default PricingPage;

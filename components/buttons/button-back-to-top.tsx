@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { ArrowUpCircle } from "lucide-react"
+import { useEffect, useState } from "react";
+import { ArrowUpCircle } from "lucide-react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const ButtonBackToTop = () => {
-    const [isVisible, setIsVisible] = useState(false)
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
             // Show if scrolled down 100px
-            setIsVisible(window.scrollY > 100)
-        }
+            setIsVisible(window.scrollY > 100);
+        };
 
         const checkIfScrollable = () => {
             // Show if page is scrollable
-            const isPageScrollable = document.body.scrollHeight > window.innerHeight
-            setIsVisible(isPageScrollable && window.scrollY > 100)
-        }
+            const isPageScrollable = document.body.scrollHeight > window.innerHeight;
+            setIsVisible(isPageScrollable && window.scrollY > 100);
+        };
 
-        window.addEventListener("scroll", handleScroll)
-        window.addEventListener("resize", checkIfScrollable)
+        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("resize", checkIfScrollable);
         // Initial check on mount
-        checkIfScrollable() 
+        checkIfScrollable(); 
 
         return () => {
-            window.removeEventListener("scroll", handleScroll)
-            window.removeEventListener("resize", checkIfScrollable)
-        }
-    }, [])
+            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("resize", checkIfScrollable);
+        };
+    }, []);
 
     return (
         <ArrowUpCircle
@@ -40,7 +40,7 @@ const ButtonBackToTop = () => {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label="Back to top"
         />
-    )
-}
+    );
+};
 
-export default ButtonBackToTop
+export default ButtonBackToTop;

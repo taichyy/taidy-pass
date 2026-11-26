@@ -5,7 +5,7 @@ import { Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/providers/provider-i18n";
 
-export function LanguageToggle() {
+export const LanguageToggle = () => {
     const { locale, toggleLocale } = useI18n();
     const nextLanguage = locale === "zh-TW" ? "English" : "Traditional Chinese";
 
@@ -25,4 +25,4 @@ export function LanguageToggle() {
             </span>
         </Button>
     );
-}
+};

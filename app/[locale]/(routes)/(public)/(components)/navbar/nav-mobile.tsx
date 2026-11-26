@@ -1,21 +1,19 @@
-import { Link } from '@/i18n/navigation'
 import { Fragment } from 'react';
-import { CgClose } from 'react-icons/cg'
+import { CgClose } from 'react-icons/cg';
 
 import { TNavItem } from '@/lib/types';
+import { Link } from '@/i18n/navigation';
 
 type Props = {
     showNav: boolean;
-    navLinks: TNavItem[]
+    navLinks: TNavItem[];
     setShowNav: (showNav: boolean) => void;
-}
+};
 
-const NavMobile = ({
-    showNav,
-    navLinks,
-    setShowNav
-}: Props) => {
-    const navOpen = showNav ? "translate-x-0" : "-translate-x-full"
+const NavMobile = (props: Props) => {
+    const { showNav, navLinks, setShowNav } = props;
+
+    const navOpen = showNav ? "translate-x-0" : "-translate-x-full";
 
     return (
         <div>
@@ -57,7 +55,7 @@ const NavMobile = ({
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default NavMobile
+export default NavMobile;

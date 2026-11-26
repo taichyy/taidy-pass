@@ -1,7 +1,7 @@
-import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 
+import { Link } from "@/i18n/navigation";
 import LogoText from "@/components/logo-text";
 import { Button } from "@/components/ui/button";
 import FormForgot from "./(components)/form-forgot";
@@ -57,6 +57,6 @@ const ForgotPage = () => {
             </Card>
         </main>
     );
-}
+};
 
 export default ForgotPage;
