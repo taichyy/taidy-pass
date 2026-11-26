@@ -8,7 +8,7 @@ const UncontrolledInput = (props: {
     remark?: string,
     placeholder?: string,
     defaultValue?: string,
-    required?: boolean,
+    required?: boolean
 }) => {
     const { id, label, type, remark, placeholder, defaultValue, required = false } = props;
 
@@ -35,6 +35,6 @@ const UncontrolledInput = (props: {
             />
         </div>
     );
-};
+}
  
 export default UncontrolledInput;

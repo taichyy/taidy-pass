@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
     AlignLeft,
@@ -273,6 +273,6 @@ const ZeroKnowledgePage = () => {
                 </div>
 
     );
-};
+}
 
 export default ZeroKnowledgePage;

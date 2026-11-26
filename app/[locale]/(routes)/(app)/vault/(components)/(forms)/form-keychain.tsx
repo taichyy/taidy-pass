@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import toast from "react-hot-toast";
 import { FormEvent, useState } from "react";
@@ -26,7 +26,7 @@ const ButtonKeyGenerator = (props: {
 
     const Icon = show ? EyeOffIcon : Eye;
 
-    const before = !userKey && mode == "copy";
+    const before = !userKey && mode == "copy"
 
     const generate = async () => {
         setLoading(true);
@@ -119,7 +119,7 @@ const FormKeychain = (props:{
 }) => {
     const { mutate, setOpened } = props;
 
-    const { salt } = useKey();
+    const { salt } = useKey()
     const [copied, setCopied] = useState<boolean>(false);
     const [userKey, setUserKey] = useState<string | null>(null);
 
@@ -136,7 +136,7 @@ const FormKeychain = (props:{
             value: formData.name,
             label: "鑰匙圈名稱"
         },
-    ];
+    ]
     
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,10 +146,10 @@ const FormKeychain = (props:{
 
     // For Add and edit
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        const url = `/api/keychains/`;
-        const method = "POST";
+        const url = `/api/keychains/`
+        const method = "POST"
 
         if (!e.target) {
             return;
@@ -166,9 +166,9 @@ const FormKeychain = (props:{
         }
 
         const form = e.target as HTMLFormElement;
-        const name = (form.elements.namedItem("name") as HTMLInputElement).value;
+        const name = (form.elements.namedItem("name") as HTMLInputElement).value
 
-        const derivedKey = await deriveRawKey(userKey, salt);
+        const derivedKey = await deriveRawKey(userKey, salt)
 
         if (!derivedKey) {
             toast.error("創建失敗，請重新登入，若問題持續存在，請聯繫管理員。");
@@ -180,7 +180,7 @@ const FormKeychain = (props:{
         const validationRecord = await encryptRecord(
             { type: "validation", title: "validation", username: "validation", password: "validation" },
             derivedKey,
-        );
+        )
 
         try {
             const req = await fetch(url, {
@@ -189,22 +189,22 @@ const FormKeychain = (props:{
                     name,
                     validationRecord,
                 })
-            });
-            const res = await req.json().catch(() => ({}));
+            })
+            const res = await req.json().catch(() => ({}))
 
             if (!req.ok || res?.status === false) {
-                toast.error(res?.message || "新增失敗");
-                return;
+                toast.error(res?.message || "新增失敗")
+                return
             }
 
-            toast.success("新增成功");
-            setOpened(false);
-            mutate && mutate();
+            toast.success("新增成功")
+            setOpened(false)
+            mutate && mutate()
         } catch (err) {
-            console.log(err);
-            toast.error("新增失敗");
+            console.log(err)
+            toast.error("新增失敗")
         }
-    };
+    }
 
     const copyToClipboard = async (key?: string) => {
         if (!key || key.length < 1) {
@@ -243,8 +243,8 @@ const FormKeychain = (props:{
         )}
         <div className=" flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => {
-                setCopied(false);
-                setOpened(false);
+                setCopied(false)
+                setOpened(false)
             }}>
                 取消
             </Button>
@@ -264,6 +264,6 @@ const FormKeychain = (props:{
         </div>
     </form>
     );
-};
+}
  
 export default FormKeychain;

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const ThemeModeToggle = () => {
-    const { setTheme } = useTheme();
+    const { setTheme } = useTheme()
 
     const themes = [
         { 
@@ -27,7 +27,7 @@ export const ThemeModeToggle = () => {
             theme: "system",
             desc: "系統設定",
         },
-    ];
+    ]
 
     return (
         <DropdownMenu>
@@ -46,5 +46,5 @@ export const ThemeModeToggle = () => {
                 ))}
             </DropdownMenuContent>
         </DropdownMenu>
-    );
+    )
 };

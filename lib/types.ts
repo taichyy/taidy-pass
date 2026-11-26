@@ -1,34 +1,34 @@
 export type TAccount = {
     // Optional, because it is used for creating new records
-    _id?: string,
+    _id?: string
     type?: string,
-    title: string,
-    username: string,
-    password: string,
-    remark?: string,
-    label?: string[],
-    starred?: boolean,
-    keychainId?: string | null,
-    linkedAccountId?: string | null,
+    title: string
+    username: string
+    password: string
+    remark?: string
+    label?: string[]
+    starred?: boolean
+    keychainId?: string | null
+    linkedAccountId?: string | null
 };
 
 export type TNote = {
-    _id?: string;
-    title?: string;
-    context?: string;
-    order?: number;
+    _id?: string
+    title?: string
+    context?: string
+    order?: number
 };
 
 export type TLabel = {
-    _id?: string;
-    key: string;
-    name: string;
+    _id?: string
+    key: string
+    name: string
 };
 
 export type TKeychain = {
-    _id?: string;
-    name: string;
-    userId: string;
+    _id?: string
+    name: string
+    userId: string
 };
 
 export type TJWTPayload = {
@@ -37,7 +37,7 @@ export type TJWTPayload = {
     username: string,
     role: "admin" | "user",
     iat: number,
-    exp: number,
+    exp: number
 };
 
 export type TNavItem = {

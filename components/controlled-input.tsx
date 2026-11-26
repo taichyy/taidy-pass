@@ -38,6 +38,6 @@ const ControlledInput = (props: {
             />
         </div>
     );
-};
+}
  
 export default ControlledInput;

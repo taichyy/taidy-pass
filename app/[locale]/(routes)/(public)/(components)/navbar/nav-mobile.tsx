@@ -6,14 +6,14 @@ import { Link } from "@/i18n/navigation";
 
 type Props = {
     showNav: boolean;
-    navLinks: TNavItem[];
+    navLinks: TNavItem[]
     setShowNav: (showNav: boolean) => void;
-};
+}
 
 const NavMobile = (props: Props) => {
     const { showNav, navLinks, setShowNav } = props;
 
-    const navOpen = showNav ? "translate-x-0" : "-translate-x-full";
+    const navOpen = showNav ? "translate-x-0" : "-translate-x-full"
 
     return (
         <div>
@@ -55,7 +55,7 @@ const NavMobile = (props: Props) => {
                 />
             </div>
         </div>
-    );
-};
+    )
+}
 
 export default NavMobile;

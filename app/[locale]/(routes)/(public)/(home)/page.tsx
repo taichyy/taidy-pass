@@ -10,13 +10,13 @@ type TMain = {
     description?: string;
     buttonText?: string;
     buttonUrl?: string;
-};
+}
 const main : TMain = {
     title: "隱私性最高的密碼管理器",
     description: "我們採用 0-Knowledge 架構，除了你以外，沒有人知道你的密碼。",
     buttonText: "瞭解更多",
     buttonUrl: "/blog/0-knowledge",
-};
+}
 
 // Review section.
 type TReview = {
@@ -24,7 +24,7 @@ type TReview = {
     role: string;
     avatar: string;
     quote: string;
-};
+}
 const reviewTitle = "用戶怎麼說？";
 const reviews: TReview[] = [
     {
@@ -45,19 +45,19 @@ const reviews: TReview[] = [
         avatar: "https://i.pravatar.cc/100?img=3",
         quote: "簡單好用又有中文介面，推薦給爸媽也能輕鬆上手。",
     },
-];
+]
 
 // Why choose us section.
 type TWhyChoose = {
     label: string;
     Icon: any;
-};
+}
 const whyChooseTitle = "為什麼選擇我們？";
 const whyChooseDesc = "只要保存好您的金鑰，我們就能幫您保護所有密碼。這是我們的承諾。";
 const iconProps = {
     className: "text-primary/70",
     size: 52,
-};
+}
 const whyChoose: TWhyChoose[] = [
     { label: "確保最高安全等級", Icon: <Lock {...iconProps} /> },
     { label: "多設備無縫存取，方便快捷", Icon: <Cloudy {...iconProps} /> },

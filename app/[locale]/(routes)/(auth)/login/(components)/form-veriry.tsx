@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -12,19 +12,19 @@ import { useKey } from "@/components/providers/provider-key";
 import UncontrolledInput from "@/components/uncontrolled-input";
 
 const FormVerify = (props: {
-    mode?: "register" | "login";
+    mode?: "register" | "login"
 }) => {
     const { mode = "login" } = props;
 
-    const router = useRouter();
+    const router = useRouter()
 
-    const { setSalt, setKey } = useKey();
-    const [isLoading, setIsLoading] = useState(false);
+    const { setSalt, setKey } = useKey()
+    const [isLoading, setIsLoading] = useState(false)
 
-    const formMode = mode || "login";
+    const formMode = mode || "login"
 
-    const apiUrl = formMode == "register" ? "/api/users" : "/api/session";
-    const successUrl = "/vault";
+    const apiUrl = formMode == "register" ? "/api/users" : "/api/session"
+    const successUrl = "/vault"
     const texts = formMode == "register" ? {
         href: "/login?mode=login",
         linkDesc: "已經有帳號了？",
@@ -39,92 +39,92 @@ const FormVerify = (props: {
         button: "登入",
         apiSuccess: "登入成功",
         apiError: "登入失敗",
-    };
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsLoading(true);
+        e.preventDefault()
+        setIsLoading(true)
 
-        const form = e.target as HTMLFormElement;
-        const email = form['email']?.value;
-        const username = form['username'].value;
-        const password = form['password'].value;
-        const confirmPassword = form['confirm-password']?.value;
+        const form = e.target as HTMLFormElement
+        const email = form['email']?.value
+        const username = form['username'].value
+        const password = form['password'].value
+        const confirmPassword = form['confirm-password']?.value
 
         // Val check
         if (formMode == "register" && password !== confirmPassword) {
-            toast.error('密碼不一致');
-            setIsLoading(false);
-            return;
+            toast.error('密碼不一致')
+            setIsLoading(false)
+            return
         }
 
         if (!username || !password) {
-            toast.error('請填寫所有欄位');
-            setIsLoading(false);
-            return;
+            toast.error('請填寫所有欄位')
+            setIsLoading(false)
+            return
         }
 
         const body: any = {
             username,
             password,
-        };
+        }
         if (formMode == "register") {
-            body.email = email;
+            body.email = email
         }
 
         try {
             const req = await fetch(apiUrl, {
                 body: JSON.stringify(body),
                 method: "POST"
-            });
+            })
 
-            const res = await req.json();
-            const { status, type, data, message } = res || {};
-            const { salt } = data || {};
+            const res = await req.json()
+            const { status, type, data, message } = res || {}
+            const { salt } = data || {}
 
             if (status) {
                 if (formMode == "register") {
                     if (type == "user") {
-                        toast.error("使用者已存在");
+                        toast.error("使用者已存在")
                     } else {
-                        toast.success(texts.apiSuccess);
-                        router.push(successUrl);
+                        toast.success(texts.apiSuccess)
+                        router.push(successUrl)
                     }
                 } else if (formMode == "login") {
-                    setSalt(salt);
+                    setSalt(salt)
 
-                    const key = await deriveRawKey(password, salt);
-                    setKey(key);
+                    const key = await deriveRawKey(password, salt)
+                    setKey(key)
 
-                    toast.success(texts.apiSuccess);
+                    toast.success(texts.apiSuccess)
 
                     // Let the middlewares handle the redirect
-                    router.refresh();
+                    router.refresh()
                 }
             } else {
-                let msg = "";
+                let msg = ""
                 if (type == "rate_limit") {
-                    msg = "嘗試次數過多，請稍後再試";
+                    msg = "嘗試次數過多，請稍後再試"
                 } else if (type == "validation") {
                     // Surface the server-side validation reason directly.
-                    msg = message || (formMode == "register" ? "註冊失敗，請稍後再試" : "登入失敗");
+                    msg = message || (formMode == "register" ? "註冊失敗，請稍後再試" : "登入失敗")
                 } else if (formMode == "register") {
-                    msg = "註冊失敗，請稍後再試";
+                    msg = "註冊失敗，請稍後再試"
                 } else {
                     // Login: a single generic message for both wrong username and
                     // wrong password, so the form can't be used to enumerate users.
-                    msg = "帳號或密碼錯誤";
+                    msg = "帳號或密碼錯誤"
                 }
 
-                toast.error(msg);
+                toast.error(msg)
             }
         } catch (error) {
-            console.error(error);
-            toast.error(texts.apiError);
+            console.error(error)
+            toast.error(texts.apiError)
         }
 
-        setIsLoading(false);
-    };
+        setIsLoading(false)
+    }
 
     return (
         <form onSubmit={handleSubmit} className="  flex flex-col justify-between w-full">
@@ -219,7 +219,7 @@ const FormVerify = (props: {
                 </Button>
             </div>
         </form>
-    );
-};
+    )
+}
 
 export default FormVerify;

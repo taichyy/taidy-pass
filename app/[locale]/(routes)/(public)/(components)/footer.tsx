@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/navigation";
@@ -59,8 +59,8 @@ const DialogTerms = () => {
                 </DialogHeader>
             </DialogContent>
         </Dialog>
-    );
-};
+    )
+}
 
 const DialogPrivacy = () => {
     const { t } = useI18n();
@@ -108,8 +108,8 @@ const DialogPrivacy = () => {
                 </DialogHeader>
             </DialogContent>
         </Dialog>
-    );
-};
+    )
+}
 
 const Footer = (props: {
     menuItems?: MenuItem[];

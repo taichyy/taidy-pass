@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 const DesignedByFreepik = (props:{
-    className?: string;
+    className?: string
 }) => {
     const { className } = props;
 
@@ -19,6 +19,6 @@ const DesignedByFreepik = (props:{
             >Freepik</a>
         </span>
     );
-};
+}
  
 export default DesignedByFreepik;

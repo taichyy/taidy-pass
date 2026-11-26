@@ -1,5 +1,5 @@
 const AuthLayout = (props: {
-    children: React.ReactNode;
+    children: React.ReactNode
 }) => {
     const { children } = props;
 
@@ -9,6 +9,6 @@ const AuthLayout = (props: {
             {children}
         </main>
     );
-};
+}
  
 export default AuthLayout;

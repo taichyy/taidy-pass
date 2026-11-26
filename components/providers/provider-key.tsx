@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { createContext, ReactNode, useContext } from "react";
 
@@ -10,7 +10,7 @@ type KeyContextType = {
     keyOfKeychains?: {
         // key -> _id of specefic custom keychain
         [key: string]: string;
-    };
+    }
     setKeyOfKeychains: (key: string, keychain: string | null) => void;
     // Wipes the derived vault key + salt (called on logout / session end).
     clearKeys: () => void;
@@ -49,10 +49,10 @@ export const ProviderKey = (props: { children: ReactNode }) => {
 
     const setKey = (derivedKey: string) => {
         sessionStorage.setItem("user-derive-key", derivedKey);
-    };
+    }
     const setSalt = (salt: string) => {
         sessionStorage.setItem("user-salt", salt);
-    };
+    }
     const setKeyOfKeychains = (key: string, keychain: string | null) => {
         const existingKeys = keyOfKeychains || {};
         const updatedKeys = { ...existingKeys, [key]: keychain };

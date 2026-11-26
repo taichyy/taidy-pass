@@ -2,7 +2,7 @@ import Footer from "./(components)/footer";
 import NavResponsive from "./(components)/navbar/nav-responsive";
 
 const PublicLayout = (props: {
-    children: React.ReactNode;
+    children: React.ReactNode
 }) => {
     const { children } = props;
 
@@ -14,6 +14,6 @@ const PublicLayout = (props: {
             <Footer />
         </div>
     );
-};
+}
 
 export default PublicLayout;

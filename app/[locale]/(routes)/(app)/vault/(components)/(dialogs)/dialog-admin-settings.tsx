@@ -16,7 +16,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 // Keep this component server component, because it is confidential.
 const DialogAdminSettings = async (props: {
     role: "user" | "admin",
-    labels: TLabel[],
+    labels: TLabel[]
 }) => {
     const { role, labels } = props;
 
@@ -63,6 +63,6 @@ const DialogAdminSettings = async (props: {
             )}
         </>
     );
-};
+}
 
 export default DialogAdminSettings;

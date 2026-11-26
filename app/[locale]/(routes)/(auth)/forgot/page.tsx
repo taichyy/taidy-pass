@@ -57,6 +57,6 @@ const ForgotPage = () => {
             </Card>
         </main>
     );
-};
+}
 
 export default ForgotPage;

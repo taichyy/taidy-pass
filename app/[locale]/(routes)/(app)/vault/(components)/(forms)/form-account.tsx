@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { toast } from "react-hot-toast";
 import { Key, Link2 } from "lucide-react";
@@ -26,9 +26,9 @@ type TFormData = {
     keychainId?: string;
 };
 
-type TMode = "credentials" | "external";
+type TMode = "credentials" | "external"
 const FormAccount = (props: {
-    labels?: TLabel[];
+    labels?: TLabel[]
     id?: string; // Required for edit mode
     mutate?: KeyedMutator<any>;
     opened: boolean;
@@ -39,7 +39,7 @@ const FormAccount = (props: {
 
     const isEdit = !!id;
 
-    const { key, keyOfKeychains } = useKey();
+    const { key, keyOfKeychains } = useKey()
 
     let insertedKeyVal: string | undefined;
 
@@ -56,7 +56,7 @@ const FormAccount = (props: {
         insertedKeyVal = key;
     }
 
-    const { setDoubleCheckOpen } = useDoubleCheckStore();
+    const { setDoubleCheckOpen } = useDoubleCheckStore()
 
     const [loading, setLoading] = useState(false);
     const [searchKeys, setSearchKeys] = useState<string[]>([]);
@@ -81,14 +81,14 @@ const FormAccount = (props: {
     }, [opened]);
 
     // EDIT mode as default value.
-    let btnText = "編輯";
-    let successText = "編輯成功！";
-    let errorText = "編輯失敗！";
+    let btnText = "編輯"
+    let successText = "編輯成功！"
+    let errorText = "編輯失敗！"
 
     if (!isEdit) {
-        btnText = "新增";
-        successText = "新增成功！";
-        errorText = "新增失敗，請稍後再試！";
+        btnText = "新增"
+        successText = "新增成功！"
+        errorText = "新增失敗，請稍後再試！"
     }
 
     // Fetch existing data for edit mode.
@@ -116,7 +116,7 @@ const FormAccount = (props: {
     // Populate form only when we have fresh data from the network.
     // Decryption is async (WebCrypto), so we resolve all fields then set state.
     useEffect(() => {
-        let cancelled = false;
+        let cancelled = false
         const run = async () => {
             if (data && isEdit && insertedKeyVal && !isLoading) {
                 setSearchKeys(data.label || []);
@@ -135,7 +135,7 @@ const FormAccount = (props: {
             }
         };
         run();
-        return () => { cancelled = true; };
+        return () => { cancelled = true };
     }, [data, isLoading, id]);
 
     // Handle form input changes
@@ -161,16 +161,16 @@ const FormAccount = (props: {
 
     // Switch between credentials / external tabs
     const handleSwitchMode = (next: TMode) => {
-        if (next === mode) return;
-        setMode(next);
+        if (next === mode) return
+        setMode(next)
         if (next === "credentials") {
             // Leaving external → drop linkage
-            setLinkedAccountId(null);
+            setLinkedAccountId(null)
         } else {
             // Leaving credentials → clear local credentials
-            setFormData(prev => ({ ...prev, username: "", password: "" }));
+            setFormData(prev => ({ ...prev, username: "", password: "" }))
         }
-    };
+    }
 
     // For Add and edit
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -179,41 +179,41 @@ const FormAccount = (props: {
         }
         
         setLoading(true);
-        e.preventDefault();
+        e.preventDefault()
 
-        const userId = await getUserId();
+        const userId = await getUserId()
 
-        if (!userId) return;
+        if (!userId) return
 
-        const url = isEdit ? `/api/accounts/${id}?mode=account` : `/api/accounts/`;
-        const method = isEdit ? "PUT" : "POST";
+        const url = isEdit ? `/api/accounts/${id}?mode=account` : `/api/accounts/`
+        const method = isEdit ? "PUT" : "POST"
 
-        const clientKey = insertedKeyVal || "";
+        const clientKey = insertedKeyVal || ""
 
         if (!e.target) {
             return;
         }
 
         const form = e.target as HTMLFormElement;
-        const title = (form.elements.namedItem("title") as HTMLInputElement).value;
-        const remark = (form.elements.namedItem("remark") as HTMLInputElement)?.value || "";
-        const isExternal = mode === "external";
+        const title = (form.elements.namedItem("title") as HTMLInputElement).value
+        const remark = (form.elements.namedItem("remark") as HTMLInputElement)?.value || ""
+        const isExternal = mode === "external"
         const username = isExternal
             ? ""
-            : (form.elements.namedItem("username") as HTMLInputElement)?.value || "";
+            : (form.elements.namedItem("username") as HTMLInputElement)?.value || ""
         const password = isExternal
             ? ""
-            : (form.elements.namedItem("password") as HTMLInputElement)?.value || "";
+            : (form.elements.namedItem("password") as HTMLInputElement)?.value || ""
 
         if (isExternal && !linkedAccountId) {
-            toast.error("請選擇要連結的外部帳號。");
-            setLoading(false);
-            return;
+            toast.error("請選擇要連結的外部帳號。")
+            setLoading(false)
+            return
         }
         if (!isExternal && !username) {
-            toast.error("帳號為必填。");
-            setLoading(false);
-            return;
+            toast.error("帳號為必填。")
+            setLoading(false)
+            return
         }
 
         const obj: any = {
@@ -224,37 +224,37 @@ const FormAccount = (props: {
             label: searchKeys,
             userId,
             linkedAccountId: isExternal ? linkedAccountId : null,
-        };
-        if ( keychainId ) {
-            obj.keychainId = keychainId;
         }
-        const encryptedObj = await encryptRecord(obj, clientKey);
+        if ( keychainId ) {
+            obj.keychainId = keychainId
+        }
+        const encryptedObj = await encryptRecord(obj, clientKey)
 
         try {
             const req = await fetch(url, {
                 method,
                 body: JSON.stringify(encryptedObj)
-            });
+            })
 
             const res = await req.json();
 
 
             if (res.type == "error") {
-                toast.error(errorText);
+                toast.error(errorText)
             } else if (res.status === false) {
-                toast.error(res.message || errorText);
+                toast.error(res.message || errorText)
             } else {               
-                toast.success(successText);
-                setOpened(false);
-                mutate && mutate();
+                toast.success(successText)
+                setOpened(false)
+                mutate && mutate()
             }
         } catch (err) {
-            console.log(err);
-            toast.error(errorText);
+            console.log(err)
+            toast.error(errorText)
         }
 
         setLoading(false);
-    };
+    }
 
     // Handle delete (only for edit mode)
     const handleDelete = async () => {
@@ -266,7 +266,7 @@ const FormAccount = (props: {
                 }
             );
 
-            mutate && mutate();
+            mutate && mutate()
             setOpened(false);
         } catch (err) {
             console.error(err);
@@ -276,7 +276,7 @@ const FormAccount = (props: {
     const tabs: { id: TMode; label: string; icon: React.ReactNode }[] = [
         { id: "credentials", label: "帳密登入", icon: <Key size={14} /> },
         { id: "external", label: "外部登入", icon: <Link2 size={14} /> },
-    ];
+    ]
 
     return (
         <>

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useEffect, useState } from "react";
 
@@ -7,23 +7,23 @@ import { cn } from "@/lib/utils";
 export const StickyHeaderWrapper = (props: { children: React.ReactNode }) => {
     const { children } = props;
 
-    const [isSticky, setIsSticky] = useState(false);
+    const [isSticky, setIsSticky] = useState(false)
 
     useEffect(() => {
-        const sentinel = document.querySelector("#sticky-sentinel");
+        const sentinel = document.querySelector("#sticky-sentinel")
         const observer = new IntersectionObserver(
             ([entry]) => {
-                setIsSticky(!entry.isIntersecting);
+                setIsSticky(!entry.isIntersecting)
             },
             { threshold: [1] }
-        );
+        )
 
-        if (sentinel) observer.observe(sentinel);
+        if (sentinel) observer.observe(sentinel)
 
         return () => {
-            if (sentinel) observer.unobserve(sentinel);
-        };
-    }, []);
+            if (sentinel) observer.unobserve(sentinel)
+        }
+    }, [])
 
     return (
         <>
@@ -39,5 +39,5 @@ export const StickyHeaderWrapper = (props: { children: React.ReactNode }) => {
                 {children}
             </div>
         </>
-    );
+    )
 };

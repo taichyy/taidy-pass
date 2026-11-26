@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useRouter } from "next/navigation";
 
@@ -25,6 +25,6 @@ const YrMoSwitch = (props:{
             年費
         </div>
     );
-};
+}
 
 export default YrMoSwitch;

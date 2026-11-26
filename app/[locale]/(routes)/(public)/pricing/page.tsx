@@ -91,7 +91,7 @@ const PricingPage = async (
             moreTag: true,
             comingSoon: true,
         },
-    ];
+    ]
 
     return (
         <section className="py-16 lg:py-24">
@@ -176,6 +176,6 @@ const PricingPage = async (
             </div>
         </section>
     );
-};
+}
 
 export default PricingPage;

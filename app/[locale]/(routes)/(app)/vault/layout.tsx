@@ -1,5 +1,5 @@
 const VaultLayout = (props:{
-    children: React.ReactNode;
+    children: React.ReactNode
 }) => {
     const { children } = props;
 
@@ -8,6 +8,6 @@ const VaultLayout = (props:{
             {children}
         </main>
     );
-};
+}
  
 export default VaultLayout;

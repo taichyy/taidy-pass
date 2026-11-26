@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useState } from "react";
 
@@ -7,7 +7,7 @@ import NavMobile from "./nav-mobile";
 import { TNavItem } from "@/lib/types";
 
 const NavResponsive = () => {
-    const [showNav, setShowNav] = useState(false);
+    const [showNav, setShowNav] = useState(false)
     
     const navLinks: TNavItem[] = [
         {
@@ -30,14 +30,14 @@ const NavResponsive = () => {
             url: "/login",
             label: "進入系統",
         },
-    ];
+    ]
 
     return (
         <div className='relative mb-[12vh]'>
             <Nav setShowNav={setShowNav} navLinks={navLinks} />
             <NavMobile showNav={showNav} setShowNav={setShowNav} navLinks={navLinks} />
         </div>
-    );
-};
+    )
+}
 
 export default NavResponsive;

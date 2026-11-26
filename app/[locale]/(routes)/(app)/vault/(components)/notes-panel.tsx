@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import useSWR from "swr";
 import axios from "axios";
@@ -25,23 +25,23 @@ import DialogDoubleCheck from "@/components/dialog-double-check";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 
 type TAPINotes = {
-    status: boolean;
-    message: string;
-    type?: string;
-    data: TNote[];
-};
+    status: boolean
+    message: string
+    type?: string
+    data: TNote[]
+}
 
 type NoteCardProps = {
-    note: TNote;
-    onEdit: (note: TNote) => void;
-    onDelete: (id: string) => void;
+    note: TNote
+    onEdit: (note: TNote) => void
+    onDelete: (id: string) => void
     // Drag handlers
-    onDragStart: (id: string) => void;
-    onDragOver: (id: string) => void;
-    onDragEnd: () => void;
-    isDragging: boolean;
-    isDragOver: boolean;
-};
+    onDragStart: (id: string) => void
+    onDragOver: (id: string) => void
+    onDragEnd: () => void
+    isDragging: boolean
+    isDragOver: boolean
+}
 
 const NoteCard = (props: NoteCardProps) => {
     const { note, onEdit, onDelete, onDragStart, onDragOver, onDragEnd, isDragging, isDragOver } = props;
@@ -50,18 +50,18 @@ const NoteCard = (props: NoteCardProps) => {
         <Card
             draggable
             onDragStart={(e) => {
-                e.dataTransfer.effectAllowed = "move";
-                onDragStart(note._id!);
+                e.dataTransfer.effectAllowed = "move"
+                onDragStart(note._id!)
             }}
             onDragOver={(e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = "move";
-                onDragOver(note._id!);
+                e.preventDefault()
+                e.dataTransfer.dropEffect = "move"
+                onDragOver(note._id!)
             }}
             onDragEnd={onDragEnd}
             onDrop={(e) => {
-                e.preventDefault();
-                onDragEnd();
+                e.preventDefault()
+                onDragEnd()
             }}
             className={`p-3 bg-yellow-50 dark:bg-yellow-950/40 border-yellow-200 dark:border-yellow-900 transition-all
                 ${isDragging ? "opacity-40" : "opacity-100"}
@@ -104,35 +104,35 @@ const NoteCard = (props: NoteCardProps) => {
                 </div>
             </div>
         </Card>
-    );
-};
+    )
+}
 
 type NoteFormProps = {
-    initial?: TNote | null;
-    onSubmit: (data: { title: string; context: string }) => Promise<void>;
-    onCancel: () => void;
-};
+    initial?: TNote | null
+    onSubmit: (data: { title: string; context: string }) => Promise<void>
+    onCancel: () => void
+}
 
 const NoteForm = (props: NoteFormProps) => {
     const { initial, onSubmit, onCancel } = props;
 
-    const [title, setTitle] = useState(initial?.title || "");
-    const [context, setContext] = useState(initial?.context || "");
-    const [submitting, setSubmitting] = useState(false);
+    const [title, setTitle] = useState(initial?.title || "")
+    const [context, setContext] = useState(initial?.context || "")
+    const [submitting, setSubmitting] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
         if (!title.trim() && !context.trim()) {
-            toast.error("便利貼不能為空");
-            return;
+            toast.error("便利貼不能為空")
+            return
         }
-        setSubmitting(true);
+        setSubmitting(true)
         try {
-            await onSubmit({ title, context });
+            await onSubmit({ title, context })
         } finally {
-            setSubmitting(false);
+            setSubmitting(false)
         }
-    };
+    }
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-2 p-3 bg-yellow-50 dark:bg-yellow-950/40 border border-yellow-200 dark:border-yellow-900 rounded-md">
@@ -158,30 +158,30 @@ const NoteForm = (props: NoteFormProps) => {
                 </Button>
             </div>
         </form>
-    );
-};
+    )
+}
 
 const NotesPanel = () => {
-    const { key } = useKey();
-    const { setDoubleCheckOpen } = useDoubleCheckStore();
+    const { key } = useKey()
+    const { setDoubleCheckOpen } = useDoubleCheckStore()
 
-    const hasKey = !!key;
+    const hasKey = !!key
 
     const { data: fetched, mutate, isLoading } = useSWR<TAPINotes>(
         hasKey ? ["/api/notes", { method: "get" }, {}] : null,
         ([url, params, body]) => poster(url as string, params, body),
         { dedupingInterval: 30000, revalidateOnFocus: false }
-    );
+    )
 
     // Local ordered copy so drag operations are immediate. Decryption is async
     // (WebCrypto), so we decrypt in an effect and store the result.
-    const [items, setItems] = useState<TNote[]>([]);
+    const [items, setItems] = useState<TNote[]>([])
     useEffect(() => {
-        let cancelled = false;
+        let cancelled = false
         const run = async () => {
             if (!fetched?.data || !key) {
-                if (!cancelled) setItems([]);
-                return;
+                if (!cancelled) setItems([])
+                return
             }
             const decrypted = await Promise.all(
                 fetched.data.map(async (n) => ({
@@ -190,109 +190,109 @@ const NotesPanel = () => {
                     title: await decrypt(n.title || "", key),
                     context: await decrypt(n.context || "", key),
                 }))
-            );
-            if (!cancelled) setItems(decrypted);
-        };
-        run();
-        return () => { cancelled = true; };
-    }, [fetched, key]);
+            )
+            if (!cancelled) setItems(decrypted)
+        }
+        run()
+        return () => { cancelled = true }
+    }, [fetched, key])
 
-    const [adding, setAdding] = useState(false);
-    const [editing, setEditing] = useState<TNote | null>(null);
-    const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+    const [adding, setAdding] = useState(false)
+    const [editing, setEditing] = useState<TNote | null>(null)
+    const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 
     // Drag-and-drop state
-    const [draggingId, setDraggingId] = useState<string | null>(null);
-    const [dragOverId, setDragOverId] = useState<string | null>(null);
+    const [draggingId, setDraggingId] = useState<string | null>(null)
+    const [dragOverId, setDragOverId] = useState<string | null>(null)
 
-    const handleDragStart = (id: string) => setDraggingId(id);
+    const handleDragStart = (id: string) => setDraggingId(id)
     const handleDragOver = (id: string) => {
-        if (!draggingId || draggingId === id) return;
-        setDragOverId(id);
+        if (!draggingId || draggingId === id) return
+        setDragOverId(id)
         setItems((prev) => {
-            const from = prev.findIndex((i) => i._id === draggingId);
-            const to = prev.findIndex((i) => i._id === id);
-            if (from === -1 || to === -1) return prev;
-            const next = [...prev];
-            const [moved] = next.splice(from, 1);
-            next.splice(to, 0, moved);
-            return next;
-        });
-    };
+            const from = prev.findIndex((i) => i._id === draggingId)
+            const to = prev.findIndex((i) => i._id === id)
+            if (from === -1 || to === -1) return prev
+            const next = [...prev]
+            const [moved] = next.splice(from, 1)
+            next.splice(to, 0, moved)
+            return next
+        })
+    }
     const handleDragEnd = async () => {
-        const wasDragging = draggingId;
-        setDraggingId(null);
-        setDragOverId(null);
-        if (!wasDragging) return;
+        const wasDragging = draggingId
+        setDraggingId(null)
+        setDragOverId(null)
+        if (!wasDragging) return
 
         // Capture the new order of IDs from the current local state
-        const newOrder = items.map((i) => i._id);
+        const newOrder = items.map((i) => i._id)
 
         // Persist order
         try {
             await axios.put("/api/notes?method=reorder", {
                 ids: newOrder,
-            });
+            })
             // Re-sort the encrypted SWR cache to match the new order,
             // so the decryptedNotes memo stays in sync without a network re-fetch.
             mutate(
                 (cur) => {
-                    if (!cur?.data) return cur;
+                    if (!cur?.data) return cur
                     const sorted = newOrder
                         .map((id) => cur.data.find((n) => n._id === id))
-                        .filter(Boolean) as typeof cur.data;
-                    return { ...cur, data: sorted };
+                        .filter(Boolean) as typeof cur.data
+                    return { ...cur, data: sorted }
                 },
                 { revalidate: false }
-            );
+            )
         } catch (err) {
-            console.error("Reorder failed:", err);
-            toast.error("重新排序失敗");
-            mutate();
+            console.error("Reorder failed:", err)
+            toast.error("重新排序失敗")
+            mutate()
         }
-    };
+    }
 
     const handleCreate = async ({ title, context }: { title: string; context: string }) => {
         if (!key) {
-            toast.error("請先輸入金鑰");
-            return;
+            toast.error("請先輸入金鑰")
+            return
         }
         try {
             await axios.post("/api/notes", {
                 title: await encrypt(title, key),
                 context: await encrypt(context, key),
-            });
-            toast.success("新增成功");
-            setAdding(false);
-            mutate();
+            })
+            toast.success("新增成功")
+            setAdding(false)
+            mutate()
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || "新增失敗");
+            toast.error(err?.response?.data?.message || "新增失敗")
         }
-    };
+    }
 
     const handleUpdate = async ({ title, context }: { title: string; context: string }) => {
-        if (!editing?._id) return;
+        if (!editing?._id) return
         if (!key) {
-            toast.error("請先輸入金鑰");
-            return;
+            toast.error("請先輸入金鑰")
+            return
         }
         try {
             await axios.put(`/api/notes/${editing._id}`, {
                 title: await encrypt(title, key),
                 context: await encrypt(context, key),
-            });
-            toast.success("已更新");
-            setEditing(null);
-            mutate();
+            })
+            toast.success("已更新")
+            setEditing(null)
+            mutate()
         } catch (err) {
-            toast.error("更新失敗");
+            toast.error("更新失敗")
         }
-    };
+    }
 
     const handleDelete = async (id: string) => {
-        await axios.delete(`/api/notes/${id}`);
-        mutate();
-    };
+        await axios.delete(`/api/notes/${id}`)
+        mutate()
+    }
 
     return (
         <div className="flex flex-col h-full w-full">
@@ -353,8 +353,8 @@ const NotesPanel = () => {
                             note={note}
                             onEdit={(n) => setEditing(n)}
                             onDelete={(id) => {
-                                setPendingDeleteId(id);
-                                setDoubleCheckOpen("delete-note", true);
+                                setPendingDeleteId(id)
+                                setDoubleCheckOpen("delete-note", true)
                             }}
                             onDragStart={handleDragStart}
                             onDragOver={handleDragOver}
@@ -372,18 +372,18 @@ const NotesPanel = () => {
                 desc="此操作無法復原，確定要刪除這張便利貼嗎？"
                 doFunction={async () => {
                     if (pendingDeleteId) {
-                        await handleDelete(pendingDeleteId);
-                        setPendingDeleteId(null);
+                        await handleDelete(pendingDeleteId)
+                        setPendingDeleteId(null)
                     }
                 }}
             />
         </div>
-    );
-};
+    )
+}
 
 // Floating action button + dialog. Visible only on small screens.
 export const NotesMobileTrigger = () => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -405,7 +405,7 @@ export const NotesMobileTrigger = () => {
                 </div>
             </DialogContent>
         </Dialog>
-    );
+    )
 };
 
 export default NotesPanel;

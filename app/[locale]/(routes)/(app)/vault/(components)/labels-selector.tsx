@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 import { cn } from "@/lib/utils";
 import { TLabel } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 
 const LabelsSelector = (props: {
-    labels: TLabel[];
-    value: string[];
-    setValue: (value: string[]) => void;
+    labels: TLabel[]
+    value: string[]
+    setValue: (value: string[]) => void
 }) => {
     const { labels, value, setValue } = props;
 
@@ -40,6 +40,6 @@ const LabelsSelector = (props: {
             })}
         </>
     );
-};
+}
 
 export default LabelsSelector;

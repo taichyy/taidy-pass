@@ -20,16 +20,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 const VaultPage = async () => {
     const jwtSecret = requireEnv("JWT_SECRET");
 
-    const token = (await cookies()).get("token")?.value;
-    const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret));
+    const token = (await cookies()).get("token")?.value
+    const decoded = await jwtVerify(token || "", new TextEncoder().encode(jwtSecret))
 
-    const jwt = decoded?.payload as TJWTPayload;
+    const jwt = decoded?.payload as TJWTPayload
 
-    const role: "user" | "admin" = jwt.role || "user";
-    const username: string = jwt.username || "";
+    const role: "user" | "admin" = jwt.role || "user"
+    const username: string = jwt.username || ""
 
-    await connect();
-    const labels: TLabel[] = JSON.parse(JSON.stringify(await Label.find({}).lean()));
+    await connect()
+    const labels: TLabel[] = JSON.parse(JSON.stringify(await Label.find({}).lean()))
 
     return (
         <>
@@ -108,7 +108,7 @@ const VaultPage = async () => {
             </div>
         </>
 
-    );
-};
+    )
+}
 
 export default VaultPage;

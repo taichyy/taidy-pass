@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -9,27 +9,27 @@ import { useKey } from "@/components/providers/provider-key";
 import UncontrolledInput from "@/components/uncontrolled-input";
 
 const FormForgot = () => {
-    const router = useRouter();
+    const router = useRouter()
 
-    const { setSalt, setKey } = useKey();
-    const [isLoading, setIsLoading] = useState(false);
+    const { setSalt, setKey } = useKey()
+    const [isLoading, setIsLoading] = useState(false)
 
-    const apiUrl = "/api/session";
-    const successUrl = "/vault";
+    const apiUrl = "/api/session"
+    const successUrl = "/vault"
     const texts = {
         href: "/login?mode=login",
         button: "註冊",
         apiSuccess: "註冊成功",
         apiError: "註冊失敗",
-    };
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsLoading(true);
+        e.preventDefault()
+        setIsLoading(true)
 
-        const form = e.target as HTMLFormElement;
-        const email = form['email']?.value;
-        const verificationPwd = form['verification-password'].value;
+        const form = e.target as HTMLFormElement
+        const email = form['email']?.value
+        const verificationPwd = form['verification-password'].value
 
         // Val check
         // if (formMode == "register" && password !== confirmPassword) {
@@ -39,9 +39,9 @@ const FormForgot = () => {
         // }
 
         if (!email || !verificationPwd) {
-            toast.error('請填寫所有欄位');
-            setIsLoading(false);
-            return;
+            toast.error('請填寫所有欄位')
+            setIsLoading(false)
+            return
         }
 
         // const body: any = {
@@ -56,11 +56,11 @@ const FormForgot = () => {
             const req = await fetch(apiUrl, {
                 // body: JSON.stringify(body),
                 method: "POST"
-            });
+            })
 
-            const res = await req.json();
-            const { status, type, data } = res || {};
-            const { salt } = data || {};
+            const res = await req.json()
+            const { status, type, data } = res || {}
+            const { salt } = data || {}
 
             if (status) {
                 // if (formMode == "register") {
@@ -82,7 +82,7 @@ const FormForgot = () => {
                 //     router.refresh()
                 // }
             } else {
-                let msg = "";
+                let msg = ""
                 // if (formMode == "register") {
                 //     if (type == "database") {
                 //         msg = "註冊失敗，請稍後再試"
@@ -97,15 +97,15 @@ const FormForgot = () => {
                 //     }
                 // }
 
-                toast.error(msg);
+                toast.error(msg)
             }
         } catch (error) {
-            console.error(error);
-            toast.error(texts.apiError);
+            console.error(error)
+            toast.error(texts.apiError)
         }
 
-        setIsLoading(false);
-    };
+        setIsLoading(false)
+    }
 
     return (
         <form onSubmit={handleSubmit} className=" text-slate-800 dark:text-slate-200 flex flex-col justify-between w-full">
@@ -129,7 +129,7 @@ const FormForgot = () => {
                 </Button>
             </div>
         </form>
-    );
-};
+    )
+}
 
 export default FormForgot;

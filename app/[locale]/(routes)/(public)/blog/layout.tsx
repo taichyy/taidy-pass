@@ -29,6 +29,6 @@ const BlogLayout = (props: {
             </section>
         </>
     );
-};
+}
 
 export default BlogLayout;

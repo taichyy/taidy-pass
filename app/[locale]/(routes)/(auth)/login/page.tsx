@@ -12,8 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const LoginPage = async (
     props:{
         searchParams: Promise<{
-            mode?: "register" | "login";
-        }>;
+            mode?: "register" | "login"
+        }>
     }
 ) => {
     const { mode } = await props.searchParams;
@@ -65,6 +65,6 @@ const LoginPage = async (
             </Card>
         </main>
     );
-};
+}
 
 export default LoginPage;

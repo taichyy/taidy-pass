@@ -37,6 +37,6 @@ const DialogShare = () => {
             </DialogContent>
         </Dialog>
     );
-};
+}
 
 export default DialogShare;

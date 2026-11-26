@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import toast from "react-hot-toast";
 import axios, { AxiosError } from "axios";
@@ -16,7 +16,7 @@ const FormDeleteKeychain = (props: {
 }) => {
     const { keychainName, keychainId, mutate, setOpened } = props;
 
-    const { salt } = useKey();
+    const { salt } = useKey()
 
     const [loading, setLoading] = useState(false);
 
@@ -33,7 +33,7 @@ const FormDeleteKeychain = (props: {
             label: "登入密碼",
             placeholder: "請輸入您的登入密碼以確認",
         },
-    ];
+    ]
 
     // For Add and edit
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -41,8 +41,8 @@ const FormDeleteKeychain = (props: {
             return;
         }
 
-        setLoading(true);
-        e.preventDefault();
+        setLoading(true)
+        e.preventDefault()
 
         if (!salt) {
             toast.error("無法取得加密鹽值，請重新登入");
@@ -56,12 +56,12 @@ const FormDeleteKeychain = (props: {
             return;
         }
 
-        const url = `/api/keychains/${keychainId}`;
-        const method = "DELETE";
+        const url = `/api/keychains/${keychainId}`
+        const method = "DELETE"
 
         const form = e.target as HTMLFormElement;
-        const name = (form.elements.namedItem("name") as HTMLInputElement).value;
-        const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+        const name = (form.elements.namedItem("name") as HTMLInputElement).value
+        const password = (form.elements.namedItem("password") as HTMLInputElement).value
 
         if (name !== keychainName) {
             toast.error(`鑰匙圈名稱不正確，請輸入「${keychainName}」以確認刪除`);
@@ -76,11 +76,11 @@ const FormDeleteKeychain = (props: {
                 data: JSON.stringify({
                     password,
                 })
-            });
+            })
 
-            toast.success("刪除成功");
-            setOpened(false);
-            mutate && mutate();
+            toast.success("刪除成功")
+            setOpened(false)
+            mutate && mutate()
         } catch (err) {
             let errorMessage = "刪除失敗，請稍後再試";
 
@@ -104,9 +104,9 @@ const FormDeleteKeychain = (props: {
             toast.error(errorMessage);
             console.error("Error deleting keychain:", err);
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <form onSubmit={handleSubmit} className="text-left flex flex-col gap-3">
@@ -141,6 +141,6 @@ const FormDeleteKeychain = (props: {
             </div>
         </form>
     );
-};
+}
 
 export default FormDeleteKeychain;

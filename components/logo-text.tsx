@@ -17,6 +17,6 @@ const LogoText = () => {
             </h1>
         </Link>
     );
-};
+}
 
 export default LogoText;

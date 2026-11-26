@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { Fragment, useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -11,18 +11,18 @@ import LogoText from "@/components/logo-text";
 import { LanguageToggle } from "@/components/language-toggle";
 
 type Props = {
-    navLinks: TNavItem[];
+    navLinks: TNavItem[]
     setShowNav: (showNav: boolean) => void;
-};
+}
 
 const Nav = (props: Props) => {
     const { navLinks, setShowNav } = props;
 
-    const pathname = usePathname();
+    const pathname = usePathname()
 
     useEffect(() => {
-        setShowNav(false);
-    }, [pathname]);
+        setShowNav(false)
+    }, [pathname])
 
     return (
         <div className={`fixed top-0 left-0 bg-white dark:bg-gray-900 shadow-md w-full transition-all duration-200 h-[12vh] z-[1000]`}>
@@ -71,6 +71,6 @@ const Nav = (props: Props) => {
             </div>
         </div>
     );
-};
+}
 
 export default Nav;

@@ -31,7 +31,7 @@ const proxy = async (request: NextRequest) => {
     }
 
     return handleI18nRouting(request);
-};
+}
 
 const hasValidToken = async (token: string) => {
     try {
@@ -40,13 +40,13 @@ const hasValidToken = async (token: string) => {
     } catch {
         return false;
     }
-};
+}
 
 const redirectTo = (request: NextRequest, locale: "zh-TW" | "en", pathname: string) => {
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}${pathname}`;
     return NextResponse.redirect(url);
-};
+}
 
 export const config = {
     matcher: "/((?!api|_next|_vercel|.*\\..*).*)",

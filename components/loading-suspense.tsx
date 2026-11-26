@@ -4,7 +4,7 @@ import { ReactNode, Suspense } from "react";
 import { cn } from "@/lib/utils";
 
 const LoadingUI = (props:{
-    type?: "block" | "fixed";
+    type?: "block" | "fixed"
 }) => {
     const { type } = props;
 
@@ -15,13 +15,13 @@ const LoadingUI = (props:{
         )}>
             <SyncLoader color="#F97316" />
         </div>
-    );
-};
+    )
+}
 
 const LoadingSuspense = (props: {
-    children: ReactNode;
-    suspenseKey?: string;
-    type?: "block" | "fixed";
+    children: ReactNode
+    suspenseKey?: string
+    type?: "block" | "fixed"
 }) => {
     const { children, suspenseKey, type = "block" } = props;
 
@@ -30,6 +30,6 @@ const LoadingSuspense = (props: {
             {children}
         </Suspense>
     );
-};
+}
 
 export default LoadingSuspense;

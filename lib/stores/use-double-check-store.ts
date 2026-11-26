@@ -6,6 +6,6 @@ export const useDoubleCheckStore = create<{
 }>((set) => ({
     open: {},
     setDoubleCheckOpen: (key: string, status: boolean) => {
-        useDoubleCheckStore.setState(prev => ({ open: { ...prev.open, [key]: status } }));
+        useDoubleCheckStore.setState(prev => ({ open: { ...prev.open, [key]: status } }))
     }
 }));

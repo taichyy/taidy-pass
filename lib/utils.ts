@@ -5,7 +5,7 @@ import { type ClassValue, clsx } from "clsx";
 export const MAX_AGE = 60 * 60 * 24 * 14;
 
 export const cn = (...inputs: ClassValue[]) => {
-    return twMerge(clsx(inputs));
+    return twMerge(clsx(inputs))
 };
 
 export const generateUserPrivateKey = async () => {
@@ -117,14 +117,14 @@ export const Response = () => {
         type: null,
         message: null,
         data: null,
-    };
+    }
 
     const setStatus = (newStatus: number | null) => status = newStatus;
     const setResponse = (newResponse: {
         status?: boolean,
         type?: string | null,
         message?: string | null,
-        data?: any,
+        data?: any
     }) => response = { ...response, ...newResponse };
 
      const getResponse = () => {
@@ -137,5 +137,5 @@ export const Response = () => {
         setStatus,
         setResponse,
         getResponse,
-    };
+    }
 };
