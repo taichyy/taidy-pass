@@ -1,8 +1,8 @@
-import { Fragment } from 'react';
-import { CgClose } from 'react-icons/cg';
+import { Fragment } from "react";
+import { CgClose } from "react-icons/cg";
 
-import { TNavItem } from '@/lib/types';
-import { Link } from '@/i18n/navigation';
+import { TNavItem } from "@/lib/types";
+import { Link } from "@/i18n/navigation";
 
 type Props = {
     showNav: boolean;

@@ -8,6 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import { HiQuestionMarkCircle } from "react-icons/hi2";
 import { ChevronsUpDown, Edit, Eye, EyeOff, FolderOutput, Import, Key, Link2, LockKeyhole, Pencil, PlusCircle } from "lucide-react";
 
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { poster } from "@/lib/utils";
 import { getUserId } from "@/lib/actions";
 import { Card } from "@/components/ui/card";
@@ -28,11 +33,6 @@ import DialogDoubleCheck from "@/components/dialog-double-check";
 import DialogDeleteKeyChain from "./(dialogs)/dialog-delete-keychain";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 type TAPIKeychain = {
     status: boolean,

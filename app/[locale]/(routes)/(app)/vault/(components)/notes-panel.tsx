@@ -6,6 +6,13 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { GripVertical, Pencil, Plus, StickyNote, Trash2 } from "lucide-react";
 
+import {
+    Dialog,
+    DialogTitle,
+    DialogHeader,
+    DialogContent,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { TNote } from "@/lib/types";
 import { poster } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
@@ -16,13 +23,6 @@ import { Separator } from "@/components/ui/separator";
 import { useKey } from "@/components/providers/provider-key";
 import DialogDoubleCheck from "@/components/dialog-double-check";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 
 type TAPINotes = {
     status: boolean;

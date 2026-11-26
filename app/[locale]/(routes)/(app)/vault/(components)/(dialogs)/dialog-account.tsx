@@ -3,17 +3,17 @@
 import { KeyedMutator } from "swr";
 import { useState, ReactNode } from "react";
 
+import {
+    Dialog,
+    DialogTitle,
+    DialogHeader,
+    DialogContent,
+    DialogTrigger,
+    DialogDescription,
+} from "@/components/ui/dialog";
 import { TLabel } from "@/lib/types";
 import FormAccount from "../(forms)/form-account";
 import { Separator } from "@/components/ui/separator";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 
 const DialogAccount = (props: {
     labels?: TLabel[];

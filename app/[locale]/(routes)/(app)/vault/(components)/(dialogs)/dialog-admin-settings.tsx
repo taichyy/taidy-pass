@@ -1,17 +1,17 @@
 import { Settings } from "lucide-react";
 
+import {
+    Dialog,
+    DialogTitle,
+    DialogHeader,
+    DialogContent,
+    DialogTrigger,
+    DialogDescription,
+} from "@/components/ui/dialog";
 import { TLabel } from "@/lib/types";
 import FormLabel from "../(forms)/form-label";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 
 // Keep this component server component, because it is confidential.
 const DialogAdminSettings = async (props: {

@@ -4,17 +4,17 @@ import { useState } from "react";
 import { KeyedMutator } from "swr";
 import { FolderKey } from "lucide-react";
 
+import {
+    Dialog,
+    DialogTitle,
+    DialogHeader,
+    DialogContent,
+    DialogTrigger,
+    DialogDescription,
+} from "@/components/ui/dialog";
 import FormKeychain from "../(forms)/form-keychain";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 
 const DialogKeyChain = (props: {
     mutate?: KeyedMutator<any>;

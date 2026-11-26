@@ -4,17 +4,17 @@ import { useState } from "react";
 import { KeyedMutator } from "swr";
 import { Trash2Icon } from "lucide-react";
 
+import {
+    Dialog,
+    DialogTitle,
+    DialogHeader,
+    DialogContent,
+    DialogTrigger,
+    DialogDescription,
+} from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import FormDeleteKeychain from "../(forms)/form-delete-keychain";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 
 const DialogDeleteKeyChain = (props: {
     keychainId: string; 

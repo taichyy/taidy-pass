@@ -3,15 +3,15 @@
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-import { Button } from "./ui/button";
-import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 import {
     Dialog,
+    DialogTitle,
+    DialogHeader,
     DialogContent,
     DialogDescription,
-    DialogHeader,
-    DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "./ui/button";
+import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 
 const DialogDoubleCheck = (props: {
     id: string,

@@ -1,16 +1,16 @@
 "use client";
 
+import {
+    useRef,
+    useMemo,
+    useState,
+    useEffect,
+    useContext,
+    useCallback,
+    createContext,
+} from "react";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
-import {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
 
 import {
     Locale,

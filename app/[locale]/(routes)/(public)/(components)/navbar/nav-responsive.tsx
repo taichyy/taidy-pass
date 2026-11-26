@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import Nav from './nav';
-import NavMobile from './nav-mobile';
-import { TNavItem } from '@/lib/types';
+import Nav from "./nav";
+import NavMobile from "./nav-mobile";
+import { TNavItem } from "@/lib/types";
 
 const NavResponsive = () => {
     const [showNav, setShowNav] = useState(false);
