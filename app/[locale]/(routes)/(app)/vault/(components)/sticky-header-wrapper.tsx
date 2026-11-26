@@ -1,10 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-export function StickyHeaderWrapper({ children }: { children: React.ReactNode }) {
+export const StickyHeaderWrapper = (props: { children: React.ReactNode }) => {
+    const { children } = props;
+
     const [isSticky, setIsSticky] = useState(false)
 
     useEffect(() => {
@@ -38,4 +40,4 @@ export function StickyHeaderWrapper({ children }: { children: React.ReactNode })
             </div>
         </>
     )
-}
+};

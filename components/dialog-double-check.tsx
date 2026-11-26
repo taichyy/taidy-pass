@@ -5,23 +5,15 @@ import { useRouter } from "next/navigation";
 
 import {
     Dialog,
+    DialogTitle,
+    DialogHeader,
     DialogContent,
     DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 
-const DialogDoubleCheck = ({
-    id,
-    title,
-    desc,
-    doFunction,
-    disabled = false,
-    server = false,
-    force,
-}: {
+const DialogDoubleCheck = (props: {
     id: string,
     title: string,
     desc?: string,
@@ -30,6 +22,8 @@ const DialogDoubleCheck = ({
     server?: boolean,
     force?: boolean
 }) => {
+    const { id, title, desc, doFunction, disabled = false, server = false, force } = props;
+
     const router = useRouter()
 
     const { open, setDoubleCheckOpen } = useDoubleCheckStore()

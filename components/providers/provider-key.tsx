@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { createContext, ReactNode, useContext } from "react";
 
@@ -37,7 +37,9 @@ const readSensitive = (name: string): string => {
     return sessionStorage.getItem(name) || "";
 };
 
-export const ProviderKey = ({ children }: { children: ReactNode }) => {
+export const ProviderKey = (props: { children: ReactNode }) => {
+    const { children } = props;
+
     // This should not be user-entered key, but a derived key (encoded with salt)
     const key = readSensitive("user-derive-key");
     // Fetched at login or register

@@ -1,15 +1,7 @@
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-const ControlledInput = ({
-    id,
-    label,
-    type,
-    value,
-    onChange,
-    remark,
-    placeholder,
-}: {
+const ControlledInput = (props: {
     id: string,
     label: string,
     type: 
@@ -20,6 +12,8 @@ const ControlledInput = ({
     remark?: string,
     placeholder?: string,
 }) => {
+    const { id, label, type, value, onChange, remark, placeholder } = props;
+
     return (
         <div className="flex flex-col space-y-0.5 w-full">
             <Label 

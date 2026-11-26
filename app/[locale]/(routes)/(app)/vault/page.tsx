@@ -1,21 +1,21 @@
-import { Link } from "@/i18n/navigation";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
 import connect from "@/lib/db";
 import Label from "@/models/Label";
 import { requireEnv } from "@/lib/env";
+import { Link } from "@/i18n/navigation";
 import LogoText from "@/components/logo-text";
 import { TJWTPayload, TLabel } from "@/lib/types";
 import TableMain from "./(components)/table-main";
+import { LanguageToggle } from "@/components/language-toggle";
 import ButtonBackToTop from "@/components/buttons/button-back-to-top";
 import { StickyHeaderWrapper } from "./(components)/sticky-header-wrapper";
 import NotesPanel, { NotesMobileTrigger } from "./(components)/notes-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DialogAdminSettings from "./(components)/(dialogs)/dialog-admin-settings";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { LanguageToggle } from "@/components/language-toggle";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const VaultPage = async () => {
     const jwtSecret = requireEnv("JWT_SECRET");

@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export const useDoubleCheckStore = create<{
     open: Record<string, boolean>,

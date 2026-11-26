@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-const DesignedByFreepik = ({
-    className,
-}:{
+const DesignedByFreepik = (props:{
     className?: string
 }) => {
+    const { className } = props;
+
     return (
         <span className={cn(
             "text-[11px] flex gap-1 text-slate-400/70",

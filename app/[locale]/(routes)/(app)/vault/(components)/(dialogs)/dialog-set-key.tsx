@@ -1,26 +1,26 @@
-"use client";
+"use client"
+
 import { useState } from "react";
 import { Key, X } from "lucide-react";
 
 import {
     Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
     DialogTitle,
+    DialogHeader,
+    DialogContent,
     DialogTrigger,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import FormSetKey from "../(forms)/form-set-key";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const DialogSetKey = ({
-    keychainId,
-    keyCorrect,
-}: {
+const DialogSetKey = (props: {
     keychainId?: string;
     keyCorrect: boolean | null;
 }) => {
+    const { keychainId, keyCorrect } = props;
+
     const [opened, setOpened] = useState(false);
 
     const triedAndFailed = keyCorrect === false;

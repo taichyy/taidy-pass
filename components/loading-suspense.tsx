@@ -3,11 +3,11 @@ import { ReactNode, Suspense } from "react";
 
 import { cn } from "@/lib/utils";
 
-const LoadingUI = ({
-    type,
-}:{
+const LoadingUI = (props:{
     type?: "block" | "fixed"
 }) => {
+    const { type } = props;
+
     return (
         <div className={cn(
             "flex justify-center items-center",
@@ -18,15 +18,13 @@ const LoadingUI = ({
     )
 }
 
-const LoadingSuspense = ({
-    children,
-    suspenseKey,
-    type = "block",
-}: {
+const LoadingSuspense = (props: {
     children: ReactNode
     suspenseKey?: string
     type?: "block" | "fixed"
 }) => {
+    const { children, suspenseKey, type = "block" } = props;
+
     return (
         <Suspense key={suspenseKey} fallback={<LoadingUI type={type} />}>
             {children}

@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { Key, Link2 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { Key, Link2 } from "lucide-react";
 import useSWR, { KeyedMutator } from "swr";
 import { useState, useEffect, FormEvent } from "react";
 
-import { cn, fetcher } from "@/lib/utils";
 import { TLabel } from "@/lib/types";
+import { cn, fetcher } from "@/lib/utils";
 import { getUserId } from "@/lib/actions";
 import LabelsSelector from "../labels-selector";
 import { Button } from "@/components/ui/button";
@@ -27,14 +27,7 @@ type TFormData = {
 };
 
 type TMode = "credentials" | "external"
-const FormAccount = ({
-    labels,
-    id,
-    mutate,
-    opened,
-    setOpened,
-    keychainId,
-}: {
+const FormAccount = (props: {
     labels?: TLabel[]
     id?: string; // Required for edit mode
     mutate?: KeyedMutator<any>;
@@ -42,6 +35,8 @@ const FormAccount = ({
     setOpened: (open: boolean) => void;
     keychainId?: string;
 }) => {
+    const { labels, id, mutate, opened, setOpened, keychainId } = props;
+
     const isEdit = !!id;
 
     const { key, keyOfKeychains } = useKey()

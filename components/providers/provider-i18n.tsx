@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 import {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
     useRef,
+    useMemo,
     useState,
+    useEffect,
+    useContext,
+    useCallback,
+    createContext,
 } from "react";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
@@ -27,7 +27,9 @@ type I18nContextValue = {
 const I18nContext = createContext<I18nContextValue | null>(null);
 const translatedAttributes = ["aria-label", "placeholder", "title", "alt"] as const;
 
-export function ProviderI18n({ children }: { children: React.ReactNode }) {
+export const ProviderI18n = (props: { children: React.ReactNode }) => {
+    const { children } = props;
+
     const routedLocale = useLocale() as Locale;
     const pathname = usePathname();
     const [locale, setLocaleState] = useState<Locale>(routedLocale);
@@ -154,10 +156,10 @@ export function ProviderI18n({ children }: { children: React.ReactNode }) {
             {children}
         </I18nContext.Provider>
     );
-}
+};
 
-export function useI18n() {
+export const useI18n = () => {
     const context = useContext(I18nContext);
     if (!context) throw new Error("useI18n must be used within ProviderI18n");
     return context;
-}
+};

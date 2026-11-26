@@ -1,8 +1,8 @@
-const AuthLayout = ({
-    children,
-}: {
+const AuthLayout = (props: {
     children: React.ReactNode
 }) => {
+    const { children } = props;
+
     return (
         // Hide data-aos first inisialization x-bar.
         <main className="overflow-x-hidden">

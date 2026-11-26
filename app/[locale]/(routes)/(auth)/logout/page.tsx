@@ -1,12 +1,12 @@
 "use client"
 
 import useSWR from "swr";
-import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect} from "react";
 import { useRouter } from "next/navigation";
 
+import { Link } from "@/i18n/navigation";
 import { cn, poster } from "@/lib/utils";
 import LogoText from "@/components/logo-text";
 import { Button } from "@/components/ui/button";

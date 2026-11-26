@@ -1,28 +1,28 @@
 "use client"
 
-import axios from "axios"
-import useSWR from "swr"
-import toast from "react-hot-toast"
-import { useEffect, useState } from "react"
-import { GripVertical, Pencil, Plus, StickyNote, Trash2 } from "lucide-react"
+import useSWR from "swr";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { GripVertical, Pencil, Plus, StickyNote, Trash2 } from "lucide-react";
 
 import {
     Dialog,
-    DialogContent,
-    DialogHeader,
     DialogTitle,
+    DialogHeader,
+    DialogContent,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { poster } from "@/lib/utils"
-import { TNote } from "@/lib/types"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { encrypt, decrypt } from "@/lib/vault-crypto"
-import { Separator } from "@/components/ui/separator"
-import { useKey } from "@/components/providers/provider-key"
-import DialogDoubleCheck from "@/components/dialog-double-check"
-import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store"
+} from "@/components/ui/dialog";
+import { TNote } from "@/lib/types";
+import { poster } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { encrypt, decrypt } from "@/lib/vault-crypto";
+import { Separator } from "@/components/ui/separator";
+import { useKey } from "@/components/providers/provider-key";
+import DialogDoubleCheck from "@/components/dialog-double-check";
+import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 
 type TAPINotes = {
     status: boolean
@@ -43,16 +43,9 @@ type NoteCardProps = {
     isDragOver: boolean
 }
 
-const NoteCard = ({
-    note,
-    onEdit,
-    onDelete,
-    onDragStart,
-    onDragOver,
-    onDragEnd,
-    isDragging,
-    isDragOver,
-}: NoteCardProps) => {
+const NoteCard = (props: NoteCardProps) => {
+    const { note, onEdit, onDelete, onDragStart, onDragOver, onDragEnd, isDragging, isDragOver } = props;
+
     return (
         <Card
             draggable
@@ -120,7 +113,9 @@ type NoteFormProps = {
     onCancel: () => void
 }
 
-const NoteForm = ({ initial, onSubmit, onCancel }: NoteFormProps) => {
+const NoteForm = (props: NoteFormProps) => {
+    const { initial, onSubmit, onCancel } = props;
+
     const [title, setTitle] = useState(initial?.title || "")
     const [context, setContext] = useState(initial?.context || "")
     const [submitting, setSubmitting] = useState(false)
@@ -386,8 +381,6 @@ const NotesPanel = () => {
     )
 }
 
-export default NotesPanel
-
 // Floating action button + dialog. Visible only on small screens.
 export const NotesMobileTrigger = () => {
     const [open, setOpen] = useState(false)
@@ -413,4 +406,6 @@ export const NotesMobileTrigger = () => {
             </DialogContent>
         </Dialog>
     )
-}
+};
+
+export default NotesPanel;

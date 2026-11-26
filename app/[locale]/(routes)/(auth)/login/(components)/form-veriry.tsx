@@ -1,21 +1,21 @@
 "use client"
 
-import { Link } from "@/i18n/navigation"
-import { useState } from "react"
-import toast from "react-hot-toast"
-import { useRouter } from "next/navigation"
-import { FlaskConical } from "lucide-react"
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { FlaskConical } from "lucide-react";
 
-import { deriveRawKey } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { useKey } from "@/components/providers/provider-key"
-import UncontrolledInput from "@/components/uncontrolled-input"
+import { Link } from "@/i18n/navigation";
+import { deriveRawKey } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useKey } from "@/components/providers/provider-key";
+import UncontrolledInput from "@/components/uncontrolled-input";
 
-export default function FormVerify({
-    mode = "login",
-}: {
+const FormVerify = (props: {
     mode?: "register" | "login"
-}) {
+}) => {
+    const { mode = "login" } = props;
+
     const router = useRouter()
 
     const { setSalt, setKey } = useKey()
@@ -221,3 +221,5 @@ export default function FormVerify({
         </form>
     )
 }
+
+export default FormVerify;

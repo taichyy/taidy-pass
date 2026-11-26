@@ -1,11 +1,11 @@
 "use server"
 
-import { jwtVerify } from "jose"
-import { cookies } from "next/headers"
+import { jwtVerify } from "jose";
+import { cookies } from "next/headers";
 
-import connect from "./db"
-import User from "@/models/User"
-import { requireEnv } from "./env"
+import connect from "./db";
+import User from "@/models/User";
+import { requireEnv } from "./env";
 
 export const getUserId = async (request?: any): Promise<string> => {
     const jwtSecret = requireEnv("JWT_SECRET");
@@ -25,7 +25,7 @@ export const getUserId = async (request?: any): Promise<string> => {
     const userId = decoded.payload.userId
 
     return userId as string || ""
-}
+};
 
 // Role is read from the DATABASE, not the JWT claim, so a role change (e.g. an
 // admin demoting a user) takes effect immediately instead of only after the
@@ -42,7 +42,7 @@ export const getUserRole = async (request?: any): Promise<"user" | "admin" | "">
     } catch {
         return ""
     }
-}
+};
 
 export const tokenIsValid = async (request?: any): Promise<boolean> => {
     try {
@@ -80,7 +80,7 @@ export const tokenIsValid = async (request?: any): Promise<boolean> => {
         console.log(error)
         return false
     }
-}
+};
 
 export const apiProtect = async () => {
     let roleList = ["admin", "user"]
@@ -105,4 +105,4 @@ export const apiProtect = async () => {
         userOnly,
         getCheckResult
     }
-}
+};

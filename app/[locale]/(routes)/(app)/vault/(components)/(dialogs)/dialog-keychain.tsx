@@ -1,25 +1,26 @@
-"use client";
+"use client"
+
 import { useState } from "react";
 import { KeyedMutator } from "swr";
 import { FolderKey } from "lucide-react";
 
 import {
     Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
     DialogTitle,
+    DialogHeader,
+    DialogContent,
     DialogTrigger,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import FormKeychain from "../(forms)/form-keychain";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const DialogKeyChain = ({
-    mutate
-}: {
+const DialogKeyChain = (props: {
     mutate?: KeyedMutator<any>;
 }) => {
+    const { mutate } = props;
+
     const [opened, setOpened] = useState(false);
 
     return (

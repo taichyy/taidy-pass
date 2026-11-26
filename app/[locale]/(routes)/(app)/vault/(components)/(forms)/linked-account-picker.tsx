@@ -1,14 +1,14 @@
 "use client"
 
-import { Link2, X, Search } from "lucide-react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { Link2, X, Search } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { poster } from "@/lib/utils"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { decrypt } from "@/lib/vault-crypto"
-import { useKey } from "@/components/providers/provider-key"
+import { poster } from "@/lib/utils";
+import { decrypt } from "@/lib/vault-crypto";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useKey } from "@/components/providers/provider-key";
 
 export type TLinkedOption = {
     _id: string
@@ -17,7 +17,7 @@ export type TLinkedOption = {
     password: string
     keychainId: string | null
     keychainLabel: string
-}
+};
 
 type Props = {
     currentKeychainId?: string
@@ -27,13 +27,9 @@ type Props = {
     defaultLabel?: string
 }
 
-const LinkedAccountPicker = ({
-    currentKeychainId,
-    excludeId,
-    value,
-    onPick,
-    defaultLabel,
-}: Props) => {
+const LinkedAccountPicker = (props: Props) => {
+    const { currentKeychainId, excludeId, value, onPick, defaultLabel } = props;
+
     const { key: defaultKey, keyOfKeychains } = useKey()
 
     const [open, setOpen] = useState(false)
@@ -242,4 +238,4 @@ const LinkedAccountPicker = ({
     )
 }
 
-export default LinkedAccountPicker
+export default LinkedAccountPicker;

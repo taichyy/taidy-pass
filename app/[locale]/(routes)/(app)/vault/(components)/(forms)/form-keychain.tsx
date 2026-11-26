@@ -13,15 +13,13 @@ import { useKey } from "@/components/providers/provider-key";
 import { deriveRawKey, generateUserPrivateKey } from "@/lib/utils";
 
 // This is not the main component, but a subcomponent for the button, main below.
-const ButtonKeyGenerator = ({
-    copied,
-    userKey,
-    setUserKey,
-}: {
+const ButtonKeyGenerator = (props: {
     copied: boolean;
     userKey: string | null;
     setUserKey: (key: string | null) => void;
 }) => {
+    const { copied, userKey, setUserKey } = props;
+
     const [mode, setMode] = useState<"copy" | "generate">("generate");
     const [show, setShow] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
@@ -115,13 +113,12 @@ type TFormData = {
     name: string;
     secret: string;
 };
-const FormKeychain = ({
-    mutate,
-    setOpened,
-}:{
+const FormKeychain = (props:{
     mutate?: () => void;
     setOpened: (opened: boolean) => void;
 }) => {
+    const { mutate, setOpened } = props;
+
     const { salt } = useKey()
     const [copied, setCopied] = useState<boolean>(false);
     const [userKey, setUserKey] = useState<string | null>(null);

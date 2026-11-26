@@ -13,13 +13,12 @@ import { useKey } from "@/components/providers/provider-key";
 type TFormData = {
     base64Key: string;
 };
-const FormSetKey = ({
-    setOpened,
-    keychainId,
-}:{
+const FormSetKey = (props:{
     setOpened: (opened: boolean) => void;
     keychainId?: string;
 }) => {
+    const { setOpened, keychainId } = props;
+
     const router = useRouter();
 
     const { salt, setKeyOfKeychains } = useKey();

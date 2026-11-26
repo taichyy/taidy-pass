@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
 import {
     AlignLeft,
-    GalleryVerticalEnd,
     Lightbulb,
     ListChecks,
     RefreshCcw,
+    GalleryVerticalEnd,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";

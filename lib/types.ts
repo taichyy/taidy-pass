@@ -10,26 +10,26 @@ export type TAccount = {
     starred?: boolean
     keychainId?: string | null
     linkedAccountId?: string | null
-}
+};
 
 export type TNote = {
     _id?: string
     title?: string
     context?: string
     order?: number
-}
+};
 
 export type TLabel = {
     _id?: string
     key: string
     name: string
-}
+};
 
 export type TKeychain = {
     _id?: string
     name: string
     userId: string
-}
+};
 
 export type TJWTPayload = {
     userId: string,
@@ -38,10 +38,10 @@ export type TJWTPayload = {
     role: "admin" | "user",
     iat: number,
     exp: number
-}
+};
 
 export type TNavItem = {
     id: string,
     url: string,
     label: string,
-}
+};

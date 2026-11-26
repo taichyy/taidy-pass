@@ -1,11 +1,10 @@
-"use client";
-
-import { Link } from "@/i18n/navigation";
+"use client"
 
 import { cn } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import LogoText from "@/components/logo-text";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useI18n } from "@/components/providers/provider-i18n";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface MenuItem {
     title: string;
@@ -112,49 +111,51 @@ const DialogPrivacy = () => {
     )
 }
 
-const Footer = ({
-    menuItems = [
-        // {
-        //     "title": "資源",
-        //     "title": "",
-        //     "links": [
-        //         { "text": "協助", "url": "#" },
-        //         { "text": "銷售", "url": "#" },
-        //         { "text": "廣告", "url": "#" }
-        //     ]
-        // },
-        {
-            "title": "產品",
-            "links": [
-                // { "text": "概覽", "url": "#" },
-                // { "text": "價格", "url": "#" },
-                // { "text": "市集", "url": "#" },
-                // { "text": "功能", "url": "#" },
-                // { "text": "整合", "url": "#" },
-                { "text": "價格方案", "url": "/pricing" }
-            ]
-        },
-        {
-            "title": "公司",
-            "links": [
-                { "text": "關於我們", "url": "/about" },
-                { "text": "聯絡我們", "url": "/contact" },
-            ]
-        },
-        {
-            "title": "相關文章",
-            "links": [
-                { "text": "0-Knowledge 架構", "url": "/blog/0-knowledge" },
-                // { "text": "Instagram", "url": "#" },
-                // { "text": "LinkedIn", "url": "#" }
-            ]
-        },
-    ],
-    copyright = copyrightText,
-}: {
+const Footer = (props: {
     menuItems?: MenuItem[];
     copyright?: string;
 }) => {
+    const {
+        menuItems = [
+            // {
+            //     "title": "資源",
+            //     "title": "",
+            //     "links": [
+            //         { "text": "協助", "url": "#" },
+            //         { "text": "銷售", "url": "#" },
+            //         { "text": "廣告", "url": "#" }
+            //     ]
+            // },
+            {
+                "title": "產品",
+                "links": [
+                    // { "text": "概覽", "url": "#" },
+                    // { "text": "價格", "url": "#" },
+                    // { "text": "市集", "url": "#" },
+                    // { "text": "功能", "url": "#" },
+                    // { "text": "整合", "url": "#" },
+                    { "text": "價格方案", "url": "/pricing" }
+                ]
+            },
+            {
+                "title": "公司",
+                "links": [
+                    { "text": "關於我們", "url": "/about" },
+                    { "text": "聯絡我們", "url": "/contact" },
+                ]
+            },
+            {
+                "title": "相關文章",
+                "links": [
+                    { "text": "0-Knowledge 架構", "url": "/blog/0-knowledge" },
+                    // { "text": "Instagram", "url": "#" },
+                    // { "text": "LinkedIn", "url": "#" }
+                ]
+            },
+        ],
+        copyright = copyrightText,
+    } = props;
+
     return (
         <section className="py-32">
             <div className="container">

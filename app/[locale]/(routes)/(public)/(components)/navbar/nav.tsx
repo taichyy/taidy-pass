@@ -1,12 +1,12 @@
 "use client"
 
-import { Link } from "@/i18n/navigation";
 import { Fragment, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { HiBars3BottomRight } from "react-icons/hi2";
 
 import { cn } from "@/lib/utils";
 import { TNavItem } from "@/lib/types";
+import { Link } from "@/i18n/navigation";
 import LogoText from "@/components/logo-text";
 import { LanguageToggle } from "@/components/language-toggle";
 
@@ -15,10 +15,9 @@ type Props = {
     setShowNav: (showNav: boolean) => void;
 }
 
-const Nav = ({
-    navLinks,
-    setShowNav
-}: Props) => {
+const Nav = (props: Props) => {
+    const { navLinks, setShowNav } = props;
+
     const pathname = usePathname()
 
     useEffect(() => {

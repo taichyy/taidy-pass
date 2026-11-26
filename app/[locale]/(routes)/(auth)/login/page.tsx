@@ -1,7 +1,7 @@
-import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 
+import { Link } from "@/i18n/navigation";
 import LogoText from "@/components/logo-text";
 import { Button } from "@/components/ui/button";
 import FormVerify from "./(components)/form-veriry";
@@ -16,8 +16,7 @@ const LoginPage = async (
         }>
     }
 ) => {
-    const searchParams = await props.searchParams;
-    const { mode } = searchParams;
+    const { mode } = await props.searchParams;
 
     const imageSrc = mode === "register" ? "/register.png" : "/login.png";
 

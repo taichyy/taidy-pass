@@ -14,11 +14,11 @@ import DialogDoubleCheck from "@/components/dialog-double-check";
 import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const FormLabel = ({
-    labels,
-}: {
+const FormLabel = (props: {
     labels: TLabel[]
 }) => {
+    const { labels } = props;
+
     const router = useRouter()
 
     const { setDoubleCheckOpen } = useDoubleCheckStore()

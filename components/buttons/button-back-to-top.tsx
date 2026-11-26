@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { ArrowUpCircle } from "lucide-react"
+import { useEffect, useState } from "react";
+import { ArrowUpCircle } from "lucide-react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const ButtonBackToTop = () => {
     const [isVisible, setIsVisible] = useState(false)
@@ -43,4 +43,4 @@ const ButtonBackToTop = () => {
     )
 }
 
-export default ButtonBackToTop
+export default ButtonBackToTop;

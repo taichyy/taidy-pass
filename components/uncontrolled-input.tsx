@@ -1,15 +1,7 @@
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-const UncontrolledInput = ({
-    id,
-    label,
-    type,
-    remark,
-    placeholder,
-    defaultValue,
-    required = false
-}: {
+const UncontrolledInput = (props: {
     id: string,
     label: string,
     type: string,
@@ -18,6 +10,8 @@ const UncontrolledInput = ({
     defaultValue?: string,
     required?: boolean
 }) => {
+    const { id, label, type, remark, placeholder, defaultValue, required = false } = props;
+
     return (
         <div className="flex flex-col space-y-0.5 w-full">
             <Label 

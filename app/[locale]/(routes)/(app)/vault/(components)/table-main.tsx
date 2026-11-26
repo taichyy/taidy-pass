@@ -1,38 +1,38 @@
 "use client"
 
-import axios from "axios"
-import useSWR, { KeyedMutator } from "swr"
-import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import axios from "axios";
+import useSWR, { KeyedMutator } from "swr";
+import { useRouter } from "next/navigation";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { HiQuestionMarkCircle } from "react-icons/hi2"
-import { ChevronsUpDown, Edit, Eye, EyeOff, FolderOutput, Import, Key, Link2, LockKeyhole, Pencil, PlusCircle } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { HiQuestionMarkCircle } from "react-icons/hi2";
+import { ChevronsUpDown, Edit, Eye, EyeOff, FolderOutput, Import, Key, Link2, LockKeyhole, Pencil, PlusCircle } from "lucide-react";
 
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { getUserId } from "@/lib/actions"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import LabelsSelector from "./labels-selector"
-import { poster } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { encrypt, decrypt } from "@/lib/vault-crypto"
-import { useHideStore } from "@/lib/stores/use-hide"
-import DialogSetKey from "./(dialogs)/dialog-set-key"
-import DialogAccount from "./(dialogs)/dialog-account"
-import DialogKeyChain from "./(dialogs)/dialog-keychain"
-import { TAccount, TKeychain, TLabel } from "@/lib/types"
-import ButtonCopy from "@/components/buttons/button-copy"
-import { useKey } from "@/components/providers/provider-key"
-import { ThemeModeToggle } from "@/components/theme-mode-toggle"
-import DialogDoubleCheck from "@/components/dialog-double-check"
-import DialogDeleteKeyChain from "./(dialogs)/dialog-delete-keychain"
-import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+} from "@/components/ui/collapsible";
+import { poster } from "@/lib/utils";
+import { getUserId } from "@/lib/actions";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import LabelsSelector from "./labels-selector";
+import { Button } from "@/components/ui/button";
+import { useHideStore } from "@/lib/stores/use-hide";
+import { encrypt, decrypt } from "@/lib/vault-crypto";
+import DialogSetKey from "./(dialogs)/dialog-set-key";
+import DialogAccount from "./(dialogs)/dialog-account";
+import DialogKeyChain from "./(dialogs)/dialog-keychain";
+import { TAccount, TKeychain, TLabel } from "@/lib/types";
+import ButtonCopy from "@/components/buttons/button-copy";
+import { useKey } from "@/components/providers/provider-key";
+import { ThemeModeToggle } from "@/components/theme-mode-toggle";
+import DialogDoubleCheck from "@/components/dialog-double-check";
+import DialogDeleteKeyChain from "./(dialogs)/dialog-delete-keychain";
+import { useDoubleCheckStore } from "@/lib/stores/use-double-check-store";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type TAPIKeychain = {
     status: boolean,
@@ -47,37 +47,27 @@ type TAPIAccounts = {
     data: TAccount[]
 }
 
-const Icon = ({
-    hide,
-    onClick,
-    className,
-}: {
+const Icon = (props: {
     hide: boolean,
     onClick: () => void,
     className?: string
 }) => {
-    const props = {
+    const { hide, onClick, className } = props;
+
+    const iconProps = {
         onClick,
         className,
     }
 
     return (
         hide
-            ? <Eye {...props} />
-            : <EyeOff {...props} />
+            ? <Eye {...iconProps} />
+            : <EyeOff {...iconProps} />
     )
 }
 
 // This is not the main, but a sub-component, main below.
-const CollapsibleArea = ({
-    keychainId,
-    keychainName,
-    labels,
-    hide,
-    search,
-    searchKeys,
-    mutateKeyChains,
-}: {
+const CollapsibleArea = (props: {
     keychainId?: string,
     keychainName?: string,
     labels: TLabel[],
@@ -86,6 +76,8 @@ const CollapsibleArea = ({
     searchKeys: string[],
     mutateKeyChains?: KeyedMutator<any>;
 }) => {
+    const { keychainId, keychainName, labels, hide, search, searchKeys, mutateKeyChains } = props;
+
     const { key, keyOfKeychains, setKeyOfKeychains } = useKey()
     const { setDoubleCheckOpen } = useDoubleCheckStore()
 
@@ -534,13 +526,12 @@ const CollapsibleArea = ({
     )
 }
 
-const TableMain = ({
-    labels,
-    children,
-}: {
+const TableMain = (props: {
     labels: TLabel[],
     children?: React.ReactNode
 }) => {
+    const { labels, children } = props;
+
     const router = useRouter()
     const { key, clearKeys } = useKey()
 

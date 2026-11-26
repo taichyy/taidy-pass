@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 
 import { Switch } from "@/components/ui/switch";
 
-const YrMoSwitch = ({
-    isYearly,
-}:{
+const YrMoSwitch = (props:{
     isYearly: boolean;
 }) => {
+    const { isYearly } = props;
+
     const router = useRouter();
 
     return (

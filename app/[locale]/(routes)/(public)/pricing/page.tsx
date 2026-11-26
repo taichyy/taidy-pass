@@ -1,13 +1,13 @@
-import { Link } from "@/i18n/navigation";
 import { CheckCircle } from "lucide-react";
 
 import {
     Card,
-    CardContent,
+    CardTitle,
     CardFooter,
     CardHeader,
-    CardTitle,
+    CardContent,
 } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import YrMoSwitch from "./(components)/yr-mo-switch";
 import { Separator } from "@/components/ui/separator";

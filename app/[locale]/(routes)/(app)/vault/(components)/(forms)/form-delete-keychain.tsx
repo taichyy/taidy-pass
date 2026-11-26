@@ -8,17 +8,14 @@ import { Button } from "@/components/ui/button";
 import { useKey } from "@/components/providers/provider-key";
 import UncontrolledInput from "@/components/uncontrolled-input";
 
-const FormDeleteKeychain = ({
-    keychainName,
-    keychainId,
-    mutate,
-    setOpened,
-}: {
+const FormDeleteKeychain = (props: {
     keychainName: string,
     keychainId: string;
     mutate?: () => void;
     setOpened: (opened: boolean) => void;
 }) => {
+    const { keychainName, keychainId, mutate, setOpened } = props;
+
     const { salt } = useKey()
 
     const [loading, setLoading] = useState(false);

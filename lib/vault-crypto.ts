@@ -55,7 +55,7 @@ export const encrypt = async (plaintext: string, key: string): Promise<string> =
     combined.set(ciphertext, iv.length)
 
     return V2_PREFIX + bytesToBase64(combined)
-}
+};
 
 // Decrypts both the new authenticated format and legacy CryptoJS values.
 // Returns "" on any failure (mirrors the previous AESDecrypt behaviour).
@@ -83,7 +83,7 @@ export const decrypt = async (ciphertext: string | null, key: string): Promise<s
         console.error("Vault decryption error:", error)
         return ""
     }
-}
+};
 
 export const encryptRecord = async (record: TAccount, key: string): Promise<TAccount> => {
     const { title, username, password, remark } = record
@@ -95,7 +95,7 @@ export const encryptRecord = async (record: TAccount, key: string): Promise<TAcc
         password: await encrypt(password, key),
         remark: remark ? await encrypt(remark, key) : "",
     }
-}
+};
 
 export const encryptRecordNote = async (record: TNote, key: string): Promise<TNote> => {
     const { title, context } = record
@@ -105,4 +105,4 @@ export const encryptRecordNote = async (record: TNote, key: string): Promise<TNo
         title: title ? await encrypt(title, key) : "",
         context: context ? await encrypt(context, key) : "",
     }
-}
+};

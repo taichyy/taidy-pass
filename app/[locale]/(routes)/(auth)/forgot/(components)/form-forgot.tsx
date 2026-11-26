@@ -1,14 +1,14 @@
 "use client"
 
-import { useState } from "react"
-import toast from "react-hot-toast"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button"
-import { useKey } from "@/components/providers/provider-key"
-import UncontrolledInput from "@/components/uncontrolled-input"
+import { Button } from "@/components/ui/button";
+import { useKey } from "@/components/providers/provider-key";
+import UncontrolledInput from "@/components/uncontrolled-input";
 
-export default function FormForgot() {
+const FormForgot = () => {
     const router = useRouter()
 
     const { setSalt, setKey } = useKey()
@@ -131,3 +131,5 @@ export default function FormForgot() {
         </form>
     )
 }
+
+export default FormForgot;

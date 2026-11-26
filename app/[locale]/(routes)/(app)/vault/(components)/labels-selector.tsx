@@ -4,15 +4,13 @@ import { cn } from "@/lib/utils";
 import { TLabel } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 
-const LabelsSelector = ({
-    labels,
-    value,
-    setValue,
-}: {
+const LabelsSelector = (props: {
     labels: TLabel[]
     value: string[]
     setValue: (value: string[]) => void
 }) => {
+    const { labels, value, setValue } = props;
+
     return (
         <>
             {labels.map((label, index) => {
